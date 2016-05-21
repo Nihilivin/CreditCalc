@@ -1,0 +1,140 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    border : 0;
+    box-sizing: border-box;
+
+    /* Better text styling */
+    font: 20px Verdana, sans-serif;
+}
+
+
+html {
+    height: 100%;
+    background: #222;
+
+}
+
+/* main box, universal width */
+#calculator {
+    overflow: auto;
+    width: 350px; /*all elements are positionned relative to this value*/
+    height: auto;
+
+    margin: 100px auto; /*makes the table centered*/
+    padding: 20px;
+
+    background: #111;
+
+    display: table;
+}
+
+/* for each line in the calculator box */
+.table{
+    display: table;
+}
+.table-row {
+    display: table-row;
+    overflow: auto;
+    width: 100%;
+    margin: 5px;
+}
+.table-cell{
+    display: table-cell;
+    vertical-align: top;
+
+    &:first-child{
+        width: 100%;
+    }
+}
+
+label{
+    color: #EEE;
+    margin: 20px 0 5px;
+    height: 20px;
+    line-height: 20px;
+    display: inline-block;
+}
+.table-row:first-child label{
+    margin-top: 0;
+}
+
+/* Applying same to the keys */
+.cbutton {
+    overflow: auto;
+    float: right;
+
+    cursor: pointer;
+
+    min-width: 40px;
+    height: auto;
+
+    background: #339966;
+    color: #DDD;
+
+    line-height: 40px;
+    text-align: center;
+
+    /* prevent selection of text inside keys */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* Smoothing out hover and active states using css3 transitions */
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #40bf80;
+        color: white;
+    }
+    &:disabled {
+        background: darken(desaturate(#339966, 75%),25%);
+    }
+}
+.midheight{
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+}
+
+.cvalue{
+    width: 100%;
+    height: 40px;
+    max-width: 100%;
+
+    padding: 0% 4% ;
+
+    background: #DDD;
+
+    /* Typography */
+    line-height: 40px;
+    color: black;
+    text-align: right;
+    box-shadow:0 0 10px 2px transparent;
+    transition: 0.5s all;
+
+    &:focus{
+        background: #FFF;
+    }
+    &:invalid:not(:focus){
+        box-shadow:0 0 10px 2px #ff3333;
+        transition: 0.5s all;
+    }
+    &.calculated{
+        box-shadow:0 0 10px 2px #339966;
+        color:#339966;
+        transition: 0.5s all;
+    }
+}
+.unit{
+    line-height: 40px;
+    height: 40px;
+    background: #fff;
+    display: inline-block;
+    padding: 0 15px;
+    background: #eeeeee;
+    margin-right: -1px;// Ensure to cover border gap
+}

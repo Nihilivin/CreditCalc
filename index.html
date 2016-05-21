@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.min.css" media="all">
+        <!--  <script src="eval.js"></script> -->
+        <title>Calculateur de crédit</title>
+    </head>
+    <body>
+        <form>
+            <div id="calculator" class="table">
+                <div class="table-row" id="amount-label">
+                    <div class="table-cell">
+                        <label for="amount-value">Montant</label>
+                    </div>
+                </div>
+                <div class="table-row" id="amount">
+                    <div class="table-cell">
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <input type="text" class="cvalue" id ="amount-value" 
+                                       placeholder="200 000" tabindex="1">
+                            </div>
+                            <div class="table-cell">
+                                <span class="unit">&#8364;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton midheight" id="amount-plus">+</button>
+                        <button type="button" class="cbutton midheight" id="amount-minus">-</button>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton" id="amount-button">GO</button>
+                    </div>
+                </div>
+                <div class="table-row" id="duration-label">
+                    <div class="table-cell">
+                        <label for="duration-value">Dur&eacute;e (ann&eacute;es)</label>
+                    </div>
+                </div>
+                <div class="table-row" id="duration">
+                    <div class="table-cell">
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <input type="text" class="cvalue" id="duration-value" 
+                                       placeholder="20" tabindex="2">
+                            </div>
+                            <div class="table-cell">
+                                <span class="unit">an(s)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton midheight" id="duration-plus">+</button>
+                        <button type="button" class="cbutton midheight" id="duration-minus">-</button>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton" id="duration-button">GO</button>
+                    </div>
+                </div>
+                <div class="table-row" id="rate-label">
+                    <div class="table-cell">
+                        <label for="rate-value">Taux</label>
+                    </div>
+                </div>
+                <div class="table-row" id="rate">
+                    <div class="table-cell">
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <input type="text" class="cvalue" id="rate-value" 
+                                       placeholder="2,5" tabindex="3">
+                            </div>
+                            <div class="table-cell">
+                                <span class="unit">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton midheight" id="rate-plus">+</button>
+                        <button type="button" class="cbutton midheight" id="rate-minus">-</button>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton" id="rate-button">GO</button>
+                    </div>
+                </div>
+                <div class="table-row" id="payment-label">
+                    <div class="table-cell">
+                        <label for="payment-value">Mensualit&eacute;</label>
+                    </div>
+                </div>
+                <div class="table-row" id="payment">
+                    <div class="table-cell">
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <input type="text" class="cvalue" id="payment-value" 
+                                       placeholder="1 500" tabindex="4">
+                            </div>
+                            <div class="table-cell">
+                                <span class="unit">&#8364;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton midheight" id="payment-plus">+</button>
+                        <button type="button" class="cbutton midheight" id="payment-minus">-</button>
+                    </div>
+                    <div class="table-cell">
+                        <button type="button" class="cbutton" id="payment-button">GO</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <script src="eval.js"></script>
+    </body>
+</html>
