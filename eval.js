@@ -1,6 +1,10 @@
 'use strict';
 
 /**
+ * @file eval.js
+ */
+
+/**
  * @callback EventFunction
  * @param {object} event Event object emitted
  */

@@ -29,6 +29,10 @@
             <pre class="prettyprint source linenums"><code>'use strict';
 
 /**
+ * @file eval.js
+ */
+
+/**
  * @callback EventFunction
  * @param {object} event Event object emitted
  */
@@ -123,9 +127,8 @@ function Calculator(){
 }
 Calculator.prototype = {
     calc_amount: function(){
-        var n = -this.duration,
-            r = this.rate/(12);
-        return (this.payment * (1 - Math.pow((1 + r), n)))/r;
+        var mensualRate = this.rate / 1200;
+        return this.payment * ((1 - (1 / Math.pow(1 + mensualRate, 12 * this.duration))) / mensualRate);
     },
     calc_duration: function(){
         var r = this.rate/(12);
@@ -148,7 +151,7 @@ Calculator.prototype = {
      * @see {@link https://fr.wikipedia.org/wiki/Mensualité#Calcul_formel}
      */
     calc_payment: function(){
-        var  mensualRate = this.rate/1200;
+        var mensualRate = this.rate / 1200;
         return (this.amount * mensualRate) / (1 - (1 / Math.pow((1 + mensualRate), 12 * this.duration)));
     }
 }
@@ -224,13 +227,13 @@ var formElems = {};
  * @readonly
  * @enum {string}
  */
-var calculatorVariables = Object.keys({"amount":0,"duration":1,"rate":2,"payment":3});
-//calculatorVariables = calculatorVariables);
+var calculatorVariables = {"amount":0,"duration":1,"rate":2,"payment":3};
+calculatorVariables = Object.keys(calculatorVariables);
 
 function formatDisplayable(value){
     value += "";
     var parts = value.match(/^(\d*)(?:[.,](\d*))?$/);
-    console.log(parts);
+    console.log(value, parts);
     var regexReplacePost = /(.*\d)(\d{3})/;
     while(parts[1].match(regexReplacePost)){
         parts[1] = parts[1].replace(regexReplacePost, "$1 $2");
@@ -268,7 +271,8 @@ for(var i in calculatorVariables){
                 console.log(calculator);
                 var result = calculator["calc_"+type]();
                 var valueContainer = formElems[type].value;
-                valueContainer.value = result;
+                console.log(result);
+                valueContainer.value = formatDisplayable(preciseValue(type, result));
                 valueContainer.classList.add("calculated");
                 enableCalcButtons();
             }
@@ -305,7 +309,7 @@ for(var i in calculatorVariables){
                         bounds = [1,10]
                     } break;
                 }
-                target.value = formatDisplayable(Math.max(bounds[0], Math.min(bounds[1], preciseValue(type,target.value) + step * factor)));
+                target.value = formatDisplayable(Math.max(bounds[0], Math.min(bounds[1], preciseValue(type,getNumFieldValue(target.value) + step * factor))));
             }
         })());
         attach(formElems[j].value,"focus", function(){
@@ -328,6 +332,8 @@ for(var i in calculatorVariables){
         attach(formElems[j].value,"blur", function(){
             if(isParsableNumber(this.value))
                 this.value = formatDisplayable(preciseValue(j, this.value));
+            else if(this.value == "")
+                this.setCustomValidity("");
             else
                 this.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
         });
@@ -344,10 +350,10 @@ for(var i in calculatorVariables){
  */
 function preciseValue(type, value){
     value = getNumFieldValue(value);
-    if(["amount","payment","rate"].indexOf(type) != -1)
-        return Math.ceil(value * 100) / 100;
-    else if(type == "duration")
-        return Math.floor(value);
+    if(["amount","payment","rate"].indexOf(type) != -1) {
+        return (parseFloat((Math.ceil(value * 100)).toFixed(0)) / 100).toFixed(2);
+    } else if(type == "duration")
+        return Math.floor(value).toFixed(0);
 }
 enableCalcButtons();
 function enableCalcButtons(){
@@ -356,6 +362,9 @@ function enableCalcButtons(){
             return value != type &amp;&amp; isParsableNumber(formElems[value].value.value)
         }).length != 3
     }
+    gei("pager-button-1_2").disabled = Object.keys(formElems).filter(function(value){
+        return isParsableNumber(formElems[value].value.value)
+    }).length != 4
 }
 function isParsableNumber(value){
     if(value.length > 0){
@@ -376,9 +385,22 @@ function getVarValue(type){
     }
     return 0;
 }
+/**
+ * @description convert a {@link isParsableNumber parsable string} into a float.
+ * @author Gerkin
+ * @param   {string|number} str The value to ensure float
+ * @returns {number} Numeric value
+ */
 function getNumFieldValue(str){
     return parseFloat((str+"").replace(/ /g, "").replace(/,/g, ".") || 0);
 }
+
+attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(function(){
+    var body = document.querySelector("body");
+    return function(e){
+        body.setAttribute("data-page", this.getAttribute("data-page-target"));
+    };
+})());
 </code></pre>
         </article>
     </section>
@@ -389,13 +411,13 @@ function getNumFieldValue(str){
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#preciseValue">preciseValue</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#preciseValue">preciseValue</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri May 20 2016 16:36:44 GMT-1000 (TAHT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri May 20 2016 22:43:39 GMT-1000 (TAHT)
 </footer>
 
 <script> prettyPrint(); </script>
