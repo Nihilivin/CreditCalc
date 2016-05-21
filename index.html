@@ -5,7 +5,7 @@
         <title>Calculateur de crédit</title>
     </head>
     <body>
-        <form>
+        <div class="page" id="page-1">
             <div id="calculator" class="table">
                 <div class="table-row" id="amount-label">
                     <div class="table-cell">
@@ -108,7 +108,38 @@
                     </div>
                 </div>
             </div>
-        </form>
+            <button type="button" id="pager-button-1_2" class="pager-button pager-button-bottom" data-page-target="2" disabled="disabled">
+                &#8964;
+            </button>
+        </div>
+        <div class="page" id="page-2">
+            <button type="button" class="pager-button pager-button-top" data-page-target="1">
+                &#8963;
+            </button>
+            <div id="page-2-inner">
+                <table>
+                    <tr>
+                        <th colspan="2">Montant remboursé</th>
+                        <th>Intérêts payés</th>
+                    </tr>
+                    <tr>
+                        <td>Début Sept 2016</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2016</td>
+                        <td><span>123456€</span><span></span></td>
+                        <td><span></span><span>123456€</span></td>
+                    </tr>
+                    <tr>
+                        <td>Fin Sept 2026</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <script src="eval.js"></script>
     </body>
 </html>

@@ -9,11 +9,70 @@
     font: 20px Verdana, sans-serif;
 }
 
+@green: #339966;
+@darkgrey: #222;
+@almostblack: #111;
 
 html {
     height: 100%;
-    background: #222;
+    overflow: hidden;
+}
+body{
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    transition: all 1s ease;
 
+    &,&[data-page="1"]{
+        bottom:0;
+    }
+    &[data-page="2"]{
+        bottom:100%;
+    }
+}
+
+.page{
+    height: 100%;
+    position: relative;
+
+    &#page-1{
+        background: @darkgrey;
+    }
+    &#page-2{
+        background: @almostblack;
+        padding: 48px 10px 0;
+
+        &,*{
+            color:#DDD;
+        }
+    }
+}
+.pager-button{
+    position: absolute;
+    border: 1px solid @almostblack;
+    text-align: center;
+    background: lighten(@almostblack, 10%);
+    padding: 0;
+    font-size: 40px;
+    color:@almostblack!important;
+    
+    &:disabled{
+        opacity: 0;
+    }
+    &.pager-button-bottom{
+        bottom: 0;
+        height: auto;
+    }
+    &.pager-button-top{
+        top: 0;
+        height: auto;
+    }
+    &.pager-button-bottom,
+    &.pager-button-top{
+        width:50%;
+        left: 50%;
+        transform: translate(-50%,0);
+    }
 }
 
 /* main box, universal width */
@@ -22,10 +81,14 @@ html {
     width: 350px; /*all elements are positionned relative to this value*/
     height: auto;
 
-    margin: 100px auto; /*makes the table centered*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
     padding: 20px;
 
-    background: #111;
+    background: @almostblack;
 
     display: table;
 }
@@ -33,6 +96,9 @@ html {
 /* for each line in the calculator box */
 .table{
     display: table;
+}
+.table,table{
+        width: 100%;
 }
 .table-row {
     display: table-row;
@@ -70,11 +136,12 @@ label{
     min-width: 40px;
     height: auto;
 
-    background: #339966;
+    background: @green;
     color: #DDD;
 
     line-height: 40px;
     text-align: center;
+    transition: all 1s ease;
 
     /* prevent selection of text inside keys */
     -webkit-user-select: none;
@@ -91,7 +158,7 @@ label{
         color: white;
     }
     &:disabled {
-        background: darken(desaturate(#339966, 75%),25%);
+        background: darken(desaturate(@green, 75%),25%);
     }
 }
 .midheight{
@@ -124,8 +191,8 @@ label{
         transition: 0.5s all;
     }
     &.calculated{
-        box-shadow:0 0 10px 2px #339966;
-        color:#339966;
+        box-shadow:0 0 10px 2px @green;
+        color:@green;
         transition: 0.5s all;
     }
 }

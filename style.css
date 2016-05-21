@@ -9,7 +9,63 @@
 }
 html {
   height: 100%;
+  overflow: hidden;
+}
+body {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+body,
+body[data-page="1"] {
+  bottom: 0;
+}
+body[data-page="2"] {
+  bottom: 100%;
+}
+.page {
+  height: 100%;
+  position: relative;
+}
+.page#page-1 {
   background: #222;
+}
+.page#page-2 {
+  background: #111;
+  padding: 48px 10px 0;
+}
+.page#page-2,
+.page#page-2 * {
+  color: #DDD;
+}
+.pager-button {
+  position: absolute;
+  border: 1px solid #111;
+  text-align: center;
+  background: #2b2b2b;
+  padding: 0;
+  font-size: 40px;
+  color: #111 !important;
+}
+.pager-button:disabled {
+  opacity: 0;
+}
+.pager-button.pager-button-bottom {
+  bottom: 0;
+  height: auto;
+}
+.pager-button.pager-button-top {
+  top: 0;
+  height: auto;
+}
+.pager-button.pager-button-bottom,
+.pager-button.pager-button-top {
+  width: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
 }
 /* main box, universal width */
 #calculator {
@@ -17,8 +73,11 @@ html {
   width: 350px;
   /*all elements are positionned relative to this value*/
   height: auto;
-  margin: 100px auto;
-  /*makes the table centered*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   padding: 20px;
   background: #111;
   display: table;
@@ -26,6 +85,10 @@ html {
 /* for each line in the calculator box */
 .table {
   display: table;
+}
+.table,
+table {
+  width: 100%;
 }
 .table-row {
   display: table-row;
@@ -61,6 +124,8 @@ label {
   color: #DDD;
   line-height: 40px;
   text-align: center;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
   /* prevent selection of text inside keys */
   -webkit-user-select: none;
   -moz-user-select: none;

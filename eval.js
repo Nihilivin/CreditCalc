@@ -17,8 +17,7 @@
  * @author Gerkin
  */
 function Calculator(){
-    var s=this,
-        amount,
+    var amount,
         duration,
         rate,
         payment;
@@ -96,9 +95,8 @@ function Calculator(){
 }
 Calculator.prototype = {
     calc_amount: function(){
-        var n = -this.duration,
-            r = this.rate/(12);
-        return (this.payment * (1 - Math.pow((1 + r), n)))/r;
+        var mensualRate = this.rate / 1200;
+        return this.payment * ((1 - (1 / Math.pow(1 + mensualRate, 12 * this.duration))) / mensualRate);
     },
     calc_duration: function(){
         var r = this.rate/(12);
@@ -121,7 +119,7 @@ Calculator.prototype = {
      * @see {@link https://fr.wikipedia.org/wiki/Mensualité#Calcul_formel}
      */
     calc_payment: function(){
-        var  mensualRate = this.rate/1200;
+        var mensualRate = this.rate / 1200;
         return (this.amount * mensualRate) / (1 - (1 / Math.pow((1 + mensualRate), 12 * this.duration)));
     }
 }
@@ -192,69 +190,138 @@ function setButtonsToDefaultColor(){
 var calculator = new Calculator();
 
 var formElems = {};
-var arr = ["amount","duration","rate","payment"];
-for(var i in arr){
-    var j = arr[i];
-    formElems[j] = {
-        calc: gei(j+"-button"),
-        value: gei(j+"-value"),
-        minus: gei(j+"-minus"),
-        plus: gei(j+"-plus")
+
+/**
+ * @readonly
+ * @enum {string}
+ */
+var calculatorVariables = {"amount":0,"duration":1,"rate":2,"payment":3};
+calculatorVariables = Object.keys(calculatorVariables);
+
+function formatDisplayable(value){
+    value += "";
+    var parts = value.match(/^(\d*)(?:[.,](\d*))?$/);
+    console.log(value, parts);
+    var regexReplacePost = /(.*\d)(\d{3})/;
+    while(parts[1].match(regexReplacePost)){
+        parts[1] = parts[1].replace(regexReplacePost, "$1 $2");
     }
-    formElems[j].value.setAttribute("data-placeholder", formElems[j].value.placeholder);
+    var returnStr = parts[1];
+    if(typeof parts[2] != "undefined"){
+        var regexReplacePre = /(\d{3})(.*\d)/;
+        returnStr += ",";
+        while(parts[2].match(regexReplacePre)){
+            parts[2] = parts[2].replace(regexReplacePre, "$1 $2");
+        }
+        returnStr += parts[2];
+    }
+    return returnStr;
+}
+for(var i in calculatorVariables){
+    (function(){
+        var j = calculatorVariables[i];
+        formElems[j] = {
+            calc: gei(j+"-button"),
+            value: gei(j+"-value"),
+            minus: gei(j+"-minus"),
+            plus: gei(j+"-plus")
+        }
+        formElems[j].value.setAttribute("data-placeholder", formElems[j].value.placeholder);
 
-    // Bind event listeners
-    attach(formElems[j].calc, "click", (function(){
-        var arrNoI = arr.filter(function(v){return v!=j});
-        var type = j;
-        return function(){
-            for(var k in arrNoI){
-                calculator[arrNoI[k]] = getValue(arrNoI[k]);
+        // Bind event listeners
+        attach(formElems[j].calc, "click", (function(){
+            var arrNoI = calculatorVariables.filter(function(v){return v!=j});
+            var type = j;
+            return function(){
+                for(var k in arrNoI){
+                    calculator[arrNoI[k]] = getVarValue(arrNoI[k]);
+                }
+                console.log(calculator);
+                var result = calculator["calc_"+type]();
+                var valueContainer = formElems[type].value;
+                console.log(result);
+                valueContainer.value = formatDisplayable(preciseValue(type, result));
+                valueContainer.classList.add("calculated");
+                enableCalcButtons();
             }
-            console.log(calculator);
-            var result = calculator["calc_"+type]();
-            var valueContainer = formElems[type].value;
-            valueContainer.value = result;
-            valueContainer.classList.add("calculated");
-            enableCalcButtons();
-        }
-    })());
-    attach([formElems[j].plus,formElems[j].minus],"click",(function(){
-        var target = formElems[j].value;
-        var type = j;
-        return function(e){
-            var factor;
-            if(e.target.id == type + "-plus")
-                factor = 1;
-            else if(e.target.id == type + "-minus")
-                factor = -1;
-            else
-                factor = 0;
-            console.log("Factor:",factor);
-        }
-    })());
-    attach(formElems[j].value,"focus", function(){
-        this.setCustomValidity("");
-        this.placeholder = '';
-        this.classList.remove("calculated");
-    })
-    attach(formElems[j].value,["blur","keyup","change","input"], function(){
-        var self = this;
-        var value = self.value.trim();
-        self.placeholder = self.getAttribute("data-placeholder");
+        })());
+        attach([formElems[j].plus,formElems[j].minus],"click",(function(){
+            var target = formElems[j].value;
+            var type = j;
+            return function(e){
+                var factor;
+                if(e.target.id == type + "-plus")
+                    factor = 1;
+                else if(e.target.id == type + "-minus")
+                    factor = -1;
+                else
+                    factor = 0;
 
-        if(!isParsableNumber(value) && value.length > 0){
-            self.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
-        } else {
-            self.setCustomValidity("");
-        }
-        enableCalcButtons();
-    });
-    attach(formElems[j].value,"blur", function(){
-        var precisionFactor = (this.id == "duration-value" ? 1 : 100);
-        if(isParsableNumber(this.value))
-            this.value = parseInt(this.value * precisionFactor) / precisionFactor;
-    });
+                var step;
+                var bounds;
+                switch(type){
+                    case "duration":{
+                        step = 1;
+                        bounds = [0,+Infinity]
+                    } break;
+
+                    case "amount":
+                    case "payment":{
+                        for(var rev = 1, tempvalue = getNumFieldValue(target.value); tempvalue > 100 - factor; rev *= 10, tempvalue /= 10);
+                        step = rev;
+                        bounds = [0,+Infinity]
+                    } break;
+
+                    case "rate":{
+                        step = 0.1;
+                        bounds = [1,10]
+                    } break;
+                }
+                target.value = formatDisplayable(Math.max(bounds[0], Math.min(bounds[1], preciseValue(type,getNumFieldValue(target.value) + step * factor))));
+            }
+        })());
+        attach(formElems[j].value,"focus", function(){
+            this.setCustomValidity("");
+            this.placeholder = '';
+            this.classList.remove("calculated");
+        })
+        attach(formElems[j].value,["blur","keyup","change","input"], function(){
+            var self = this;
+            var value = self.value.trim();
+            self.placeholder = self.getAttribute("data-placeholder");
+
+            if(!isParsableNumber(value) && value.length > 0){
+                self.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
+            } else {
+                self.setCustomValidity("");
+            }
+            enableCalcButtons();
+        });
+        attach(formElems[j].value,"blur", function(){
+            if(isParsableNumber(this.value))
+                this.value = formatDisplayable(preciseValue(j, this.value));
+            else if(this.value == "")
+                this.setCustomValidity("");
+            else
+                this.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
+        });
+    })();
+}
+
+/**
+ * @description Returns a numeric-casted value of value with the good precision
+ * @author Gerkin
+ * @param   {string} type  The type of the var. See the list of vars used
+ * @param   {string|number} value The string or numeric value to cast
+ * @returns {float} Value with the precision according to type
+ * @use getNumFieldValue
+ */
+function preciseValue(type, value){
+    value = getNumFieldValue(value);
+    if(["amount","payment","rate"].indexOf(type) != -1) {
+        return (parseFloat((Math.ceil(value * 100)).toFixed(0)) / 100).toFixed(2);
+    } else if(type == "duration")
+        return Math.floor(value).toFixed(0);
 }
 enableCalcButtons();
 function enableCalcButtons(){
@@ -263,6 +330,9 @@ function enableCalcButtons(){
             return value != type && isParsableNumber(formElems[value].value.value)
         }).length != 3
     }
+    gei("pager-button-1_2").disabled = Object.keys(formElems).filter(function(value){
+        return isParsableNumber(formElems[value].value.value)
+    }).length != 4
 }
 function isParsableNumber(value){
     if(value.length > 0){
@@ -275,85 +345,27 @@ function isParsableNumber(value){
 }
 console.log(formElems);
 
-function setButtonsToDefaultColor(){
-    //amountButton	
-}
 
-function getValue(type){
+function getVarValue(type){
     if(formElems[type] && formElems[type].value){
         formElems[type].value.classList.remove("calculated");
-        return formElems[type].value.value;
+        return getNumFieldValue(formElems[type].value.value);
     }
-    return null;
+    return 0;
+}
+/**
+ * @description convert a {@link isParsableNumber parsable string} into a float.
+ * @author Gerkin
+ * @param   {string|number} str The value to ensure float
+ * @returns {number} Numeric value
+ */
+function getNumFieldValue(str){
+    return parseFloat((str+"").replace(/ /g, "").replace(/,/g, ".") || 0);
 }
 
-function setAmount(once){
-    rateVal = getRate();
-    durationVal = getDuration();
-    paymentVal = getPayment();
-    if (rateVal != 0.0 && durationVal != 0 && paymentVal != 0.0 ) {
-        //amountField.setText(ncurrency.format(computeAmount(rateVal, paymentVal, monthsVal)));
-        amountValue.value = computeAmount(rateVal, paymentVal, durationVal)
-        //amountField.setTextColor(getResources().getColor(R.color.black));
-        setButtonsToDefaultColor();
-    }
-    if (once != 1)
-        setOtherFields("amount-value");
-}
-
-function setDuration(once){
-    rateVal = getRate();
-    amountVal = getAmount();
-    paymentVal = getPayment();
-    if (rateVal != 0.0 && amountVal != 0.0 && paymentVal != 0.0) {
-        //amountField.setText(ncurrency.format(computeAmount(rateVal, paymentVal, monthsVal)));
-        durationValue.value = computeDuration(rateVal, amountVal, paymentVal)
-        //amountField.setTextColor(getResources().getColor(R.color.black));
-        setButtonsToDefaultColor();
-    }
-    if (once != 1)
-        setOtherFields("duration-value");
-}
-
-function setRate(once){
-    amountVal = getAmount();
-    durationVal = getDuration();
-    paymentVal = getPayment();
-    if (amountVal != 0.0 && durationVal != 0 && paymentVal != 0.0 ) {
-        //amountField.setText(ncurrency.format(computeAmount(rateVal, paymentVal, monthsVal)));
-        rateValue.value = computeRate(paymentVal, amountVal, durationVal)
-        //amountField.setTextColor(getResources().getColor(R.color.black));
-        setButtonsToDefaultColor();
-    }
-    if (once != 1)
-        setOtherFields("rate-value");
-
-}
-
-function setPayment(once){
-    rateVal = getRate();
-    durationVal = getDuration();
-    amountVal = getAmount();
-    if (rateVal != 0.0 && durationVal != 0 && amountVal != 0.0) {
-        //amountField.setText(ncurrency.format(computeAmount(rateVal, paymentVal, monthsVal)));
-        paymentValue.value = computePayment(rateVal, amountVal, durationVal)
-        //amountField.setTextColor(getResources().getColor(R.color.black));
-        setButtonsToDefaultColor();
-    }
-    if (once != 1)
-        setOtherFields("payment-value");
-
-}
-/*
-function setOtherFields(v){
-    if (v!="amount-value") setAmount(1);
-    if (v!="duration-value") setDuration(1);
-    if (v!="rate-value") setRate(1);
-    if (v!="payment-value") setPayment(1);
-}
-
-amountButton.onclick = setAmount;
-durationButton.onclick = setDuration;
-rateButton.onclick = setRate;
-paymentButton.onclick = setPayment;
-*/
+attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(function(){
+    var body = document.querySelector("body");
+    return function(e){
+        body.setAttribute("data-page", this.getAttribute("data-page-target"));
+    };
+})());
