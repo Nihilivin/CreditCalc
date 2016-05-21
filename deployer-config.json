@@ -141,7 +141,7 @@
                                     {
                                         "action": "commit",
                                         "data": {
-                                            "message": "Pre-process version %version%"
+                                            "message": "Pre-process version ${ version }"
                                         }
                                     }
                                 ]

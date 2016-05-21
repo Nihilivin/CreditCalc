@@ -40,10 +40,6 @@
 'use strict';
 
 /**
- * @file eval.js
- */
-
-/**
  * @callback EventFunction
  * @param {object} event Event object emitted
  */
@@ -56,7 +52,7 @@
 
 /**
  * @class Calculator
- * @description Base class that 
+ * @description Base class that  handles calculations
  * @author Gerkin
  */
 function Calculator(){
@@ -137,14 +133,35 @@ function Calculator(){
     });
 }
 Calculator.prototype = {
+    /**
+     * @function calc_amount
+     * @memberof Calculator
+     * @description Calculates the {@link Calculator#amount amount borrowed}, according to given {@link Calculator#duration duration}, {@link Calculator#rate rate} and {@link Calculator#payment monthly payment}
+     * @author Gerkin
+     * @returns {float} The amount of the loan
+     */
     calc_amount: function(){
         var mensualRate = this.rate / 1200;
         return this.payment * ((1 - (1 / Math.pow(1 + mensualRate, 12 * this.duration))) / mensualRate);
     },
+    /**
+     * @function calc_duration
+     * @memberof Calculator
+     * @description Calculates the {@link Calculator#duration duration} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#rate rate} and {@link Calculator#payment monthly payment}
+     * @author Gerkin
+     * @returns {float} The duration of the loan
+     */
     calc_duration: function(){
         var r = this.rate / 1200;
         return Math.log(-this.payment/((r*this.amount)-this.payment))/(12*Math.log(r+1));
     },
+    /**
+     * @function calc_rate
+     * @memberof Calculator
+     * @description Calculates the {@link Calculator#rate annual rate} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#duration duration} and {@link Calculator#payment monthly payment}. Notice: this function is iterative, and may return non-exact values
+     * @author Gerkin
+     * @returns {float} The annual rate of the loan
+     */
     calc_rate: function(){
         if (this.payment*(this.duration * 12) &lt; this.amount){
             console.log("No interest")
@@ -177,10 +194,11 @@ Calculator.prototype = {
         return rate;
     },
     /**
-     * @description todo
+     * @function calc_payment
+     * @memberof Calculator
+     * @description Calculates the {@link Calculator#payment monthly payment} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#rate rate} and {@link Calculator#duration duration}
      * @author Gerkin
-     * @returns {Float} The monthly payment
-     * @see {@link https://fr.wikipedia.org/wiki/Mensualité#Calcul_formel}
+     * @returns {float} The monthly payment of the loan
      */
     calc_payment: function(){
         var mensualRate = this.rate / 1200;
@@ -243,25 +261,191 @@ function detach(a,b,c){
     }}}
 }
 
-function gei(s){return document.getElementById(s)};
-
-function setButtonsToDefaultColor(){
-
-}
-
-
-
-var calculator = new Calculator();
-
-var formElems = {};
-
 /**
+ * @function gei
+ * @description Minification shorthand for {@link DOMElement}.getElementById
+ * @author Gerkin
+ * @param {string} s The id of required element
+ * @returns {DOMElement|null} The DOMElement, or null if not found
+ */
+function gei(s){return document.getElementById(s)};
+/**
+ * @global calculator
+ * @type {Calculator}
+ * @description The main {@link Calculator} instance
+ */
+var calculator = new Calculator();
+/**
+ * @global formElems
+ * @type {object}
+ * @property {DOMElement}  calculatorVariables.calc The calcul trigger button
+ * @description The main {@link Calculator} instance
+ */
+var formElems = {};
+/**
+ * @global calculatorVariables
+ * @description The list of handled form sets
+ * @type {[string]}
  * @readonly
  * @enum {string}
  */
 var calculatorVariables = {"amount":0,"duration":1,"rate":2,"payment":3};
 calculatorVariables = Object.keys(calculatorVariables);
 
+
+/**
+ * @function _init
+ * @description Init function called once global var are initialized
+ * @author Gerkin
+ * @inner
+ */
+(function _init(){
+    for(var i in calculatorVariables){
+        (function(){
+            var j = calculatorVariables[i];
+            formElems[j] = {
+                calc: gei(j+"-button"),
+                value: gei(j+"-value"),
+                minus: gei(j+"-minus"),
+                plus: gei(j+"-plus")
+            }
+            formElems[j].value.setAttribute("data-placeholder", formElems[j].value.placeholder);
+
+            // Bind event listeners
+            attach(formElems[j].calc, "click", (function(){
+                var arrNoI = calculatorVariables.filter(function(v){return v!=j});
+                var type = j;
+                return function(){
+                    for(var k in arrNoI){
+                        calculator[arrNoI[k]] = getVarValue(arrNoI[k]);
+                    }
+                    console.log(calculator);
+                    var result = calculator["calc_"+type]();
+                    var valueContainer = formElems[type].value;
+                    console.log(result);
+                    valueContainer.value = formatDisplayable(preciseValue(type, result));
+                    valueContainer.classList.add("calculated");
+                    enableCalcButtons();
+                }
+            })());
+            attach([formElems[j].plus,formElems[j].minus],"click",(function(){
+                var target = formElems[j].value;
+                var type = j;
+                return function(e){
+                    var factor;
+                    if(e.target.id == type + "-plus")
+                        factor = 1;
+                    else if(e.target.id == type + "-minus")
+                        factor = -1;
+                    else
+                        factor = 0;
+
+                    var step;
+                    var bounds;
+                    switch(type){
+                        case "duration":{
+                            step = 1;
+                            bounds = [0,+Infinity]
+                        } break;
+
+                        case "amount":
+                        case "payment":{
+                            for(var rev = 1, tempvalue = getNumFieldValue(target.value); tempvalue > 100 - factor; rev *= 10, tempvalue /= 10);
+                            step = rev;
+                            bounds = [0,+Infinity]
+                        } break;
+
+                        case "rate":{
+                            step = 0.1;
+                            bounds = [1,10]
+                        } break;
+                    }
+                    target.value = formatDisplayable(Math.max(bounds[0], Math.min(bounds[1], preciseValue(type,getNumFieldValue(target.value) + step * factor))));
+                }
+            })());
+            /**
+             * @function clearInputStyles
+             * @description Clear class, custom validity &amp; placeholder from input
+             * @author Gerkin
+             * @inner
+             */
+            attach(formElems[j].value,"focus", function clearInputStyles(){
+                this.setCustomValidity("");
+                this.placeholder = '';
+                this.classList.remove("calculated");
+            })
+            /**
+             * @function checkInput
+             * @description Checks if the input has a parsable value, and set the custom validity. Also, it refresh calculation buttons states
+             * @author Gerkin
+             * @inner
+             */
+            attach(formElems[j].value,["blur","keyup","change","input"], function checkInput(){
+                var self = this;
+                var value = self.value.trim();
+
+                if(!isParsableNumber(value) &amp;&amp; value.length > 0){
+                    self.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
+                } else {
+                    self.setCustomValidity("");
+                }
+                enableCalcButtons();
+            });
+            /**
+             * @function formatInput
+             * @description Reformat the input value, and re-check value validity
+             * @author Gerkin
+             * @inner
+             */
+            attach(formElems[j].value,"blur", function formatInput(){
+                self.placeholder = self.getAttribute("data-placeholder");
+                if(isParsableNumber(this.value))
+                    this.value = formatDisplayable(preciseValue(j, this.value));
+                else if(this.value == "")
+                    this.setCustomValidity("");
+                else
+                    this.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
+            });
+        })();
+    }
+    enableCalcButtons();
+    attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(function(){
+        var body = document.querySelector("body");
+        /**
+         * @function switchPage
+         * @description Switch current page to button target page
+         * @author Gerkin
+         * @inner
+         */
+        return function switchPage(){
+            body.setAttribute("data-page", this.getAttribute("data-page-target"));
+        };
+    })());
+})();
+
+/**
+ * @function preciseValue
+ * @description Returns a numeric-casted value of value with the good precision
+ * @author Gerkin
+ * @param   {string} type  The type of the var. See the list of vars used
+ * @param   {string|number} value The string or numeric value to cast
+ * @returns {float} Value with the precision according to type
+ * @use getNumFieldValue
+ */
+function preciseValue(type, value){
+    value = getNumFieldValue(value);
+    if(["amount","payment","rate"].indexOf(type) != -1) {
+        return (parseFloat((Math.ceil(value * 100)).toFixed(0)) / 100).toFixed(2);
+    } else if(type == "duration")
+        return Math.floor(value).toFixed(0);
+}
+/**
+ * @function formatDisplayable
+ * @description Takes a float and format it with spaces and comma as separator
+ * @author Gerkin
+ * @param   {float} value  The numeric value to format
+ * @returns {string} Displayable string
+ */
 function formatDisplayable(value){
     value += "";
     var parts = value.match(/^(\d*)(?:[.,](\d*))?$/);
@@ -281,113 +465,11 @@ function formatDisplayable(value){
     }
     return returnStr;
 }
-for(var i in calculatorVariables){
-    (function(){
-        var j = calculatorVariables[i];
-        formElems[j] = {
-            calc: gei(j+"-button"),
-            value: gei(j+"-value"),
-            minus: gei(j+"-minus"),
-            plus: gei(j+"-plus")
-        }
-        formElems[j].value.setAttribute("data-placeholder", formElems[j].value.placeholder);
-
-        // Bind event listeners
-        attach(formElems[j].calc, "click", (function(){
-            var arrNoI = calculatorVariables.filter(function(v){return v!=j});
-            var type = j;
-            return function(){
-                for(var k in arrNoI){
-                    calculator[arrNoI[k]] = getVarValue(arrNoI[k]);
-                }
-                console.log(calculator);
-                var result = calculator["calc_"+type]();
-                var valueContainer = formElems[type].value;
-                console.log(result);
-                valueContainer.value = formatDisplayable(preciseValue(type, result));
-                valueContainer.classList.add("calculated");
-                enableCalcButtons();
-            }
-        })());
-        attach([formElems[j].plus,formElems[j].minus],"click",(function(){
-            var target = formElems[j].value;
-            var type = j;
-            return function(e){
-                var factor;
-                if(e.target.id == type + "-plus")
-                    factor = 1;
-                else if(e.target.id == type + "-minus")
-                    factor = -1;
-                else
-                    factor = 0;
-
-                var step;
-                var bounds;
-                switch(type){
-                    case "duration":{
-                        step = 1;
-                        bounds = [0,+Infinity]
-                    } break;
-
-                    case "amount":
-                    case "payment":{
-                        for(var rev = 1, tempvalue = getNumFieldValue(target.value); tempvalue > 100 - factor; rev *= 10, tempvalue /= 10);
-                        step = rev;
-                        bounds = [0,+Infinity]
-                    } break;
-
-                    case "rate":{
-                        step = 0.1;
-                        bounds = [1,10]
-                    } break;
-                }
-                target.value = formatDisplayable(Math.max(bounds[0], Math.min(bounds[1], preciseValue(type,getNumFieldValue(target.value) + step * factor))));
-            }
-        })());
-        attach(formElems[j].value,"focus", function(){
-            this.setCustomValidity("");
-            this.placeholder = '';
-            this.classList.remove("calculated");
-        })
-        attach(formElems[j].value,["blur","keyup","change","input"], function(){
-            var self = this;
-            var value = self.value.trim();
-            self.placeholder = self.getAttribute("data-placeholder");
-
-            if(!isParsableNumber(value) &amp;&amp; value.length > 0){
-                self.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
-            } else {
-                self.setCustomValidity("");
-            }
-            enableCalcButtons();
-        });
-        attach(formElems[j].value,"blur", function(){
-            if(isParsableNumber(this.value))
-                this.value = formatDisplayable(preciseValue(j, this.value));
-            else if(this.value == "")
-                this.setCustomValidity("");
-            else
-                this.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
-        });
-    })();
-}
-
 /**
- * @description Returns a numeric-casted value of value with the good precision
+ * @function enableCalcButtons
+ * @description Check each calculation &amp; pager buttons and set them disabled/enabled depending on missing &amp; provided values.
  * @author Gerkin
- * @param   {string} type  The type of the var. See the list of vars used
- * @param   {string|number} value The string or numeric value to cast
- * @returns {float} Value with the precision according to type
- * @use getNumFieldValue
  */
-function preciseValue(type, value){
-    value = getNumFieldValue(value);
-    if(["amount","payment","rate"].indexOf(type) != -1) {
-        return (parseFloat((Math.ceil(value * 100)).toFixed(0)) / 100).toFixed(2);
-    } else if(type == "duration")
-        return Math.floor(value).toFixed(0);
-}
-enableCalcButtons();
 function enableCalcButtons(){
     for(var type in formElems){
         formElems[type].calc.disabled = Object.keys(formElems).filter(function(value){
@@ -398,6 +480,13 @@ function enableCalcButtons(){
         return isParsableNumber(formElems[value].value.value)
     }).length != 4
 }
+/**
+ * @function isParsableNumber
+ * @description Check if the input string contains only understandable chars &amp; with the right format
+ * @author Gerkin
+ * @param   {string} value  The string to check
+ * @returns {boolean} True if parsable, false otherwise. Note: a string with a length of 0 is not parsable
+ */
 function isParsableNumber(value){
     if(value.length > 0){
         return !(value.match(/[^0-9,. ]/) ||
@@ -407,9 +496,13 @@ function isParsableNumber(value){
     }
     return false;
 }
-console.log(formElems);
-
-
+/**
+ * @function getVarValue
+ * @description Retrieves the input value for choosen var. Also clears some styles
+ * @author Gerkin
+ * @param   {calculatorVariables} type  The name of the var to retrieve
+ * @returns {float|0} The numeric value of the input. 0 if invalid
+ */
 function getVarValue(type){
     if(formElems[type] &amp;&amp; formElems[type].value){
         formElems[type].value.classList.remove("calculated");
@@ -418,6 +511,7 @@ function getVarValue(type){
     return 0;
 }
 /**
+ * @function getNumFieldValue
  * @description convert a {@link isParsableNumber parsable string} into a float.
  * @author Gerkin
  * @param   {string|number} str The value to ensure float
@@ -426,13 +520,6 @@ function getVarValue(type){
 function getNumFieldValue(str){
     return parseFloat((str+"").replace(/ /g, "").replace(/,/g, ".") || 0);
 }
-
-attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(function(){
-    var body = document.querySelector("body");
-    return function(e){
-        body.setAttribute("data-page", this.getAttribute("data-page-target"));
-    };
-})());
 </code></pre>
         </article>
     </section>
@@ -443,13 +530,13 @@ attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(funct
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#preciseValue">preciseValue</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html">_init</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculator">calculator</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html">checkInput</a></li><li><a href="global.html">clearInputStyles</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#enableCalcButtons">enableCalcButtons</a></li><li><a href="global.html#formatDisplayable">formatDisplayable</a></li><li><a href="global.html">formatInput</a></li><li><a href="global.html#formElems">formElems</a></li><li><a href="global.html#gei">gei</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#getVarValue">getVarValue</a></li><li><a href="global.html#isParsableNumber">isParsableNumber</a></li><li><a href="global.html#preciseValue">preciseValue</a></li><li><a href="global.html">switchPage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat May 21 2016 01:01:21 GMT-1000 (TAHT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat May 21 2016 01:46:28 GMT-1000 (TAHT)
 </footer>
 
 <script> prettyPrint(); </script>
