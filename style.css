@@ -40,6 +40,31 @@ body[data-page="2"] {
 .page#page-2 * {
   color: #DDD;
 }
+.sep {
+  border-right: 1px solid #333;
+}
+.graph-tab td .graph {
+  display: inline-block;
+  height: 100%;
+}
+.graph-tab td:nth-child(2) {
+  text-align: right;
+  width: 33%;
+}
+.graph-tab td:nth-child(2) .graph {
+  margin-left: 15px;
+  box-shadow: 0 0 5px 1px #0000cc;
+  background: #0000cc;
+}
+.graph-tab td:nth-child(3) {
+  text-align: left;
+  width: 33%;
+}
+.graph-tab td:nth-child(3) .graph {
+  margin-right: 15px;
+  box-shadow: 0 0 5px 1px #cc0000;
+  background: #cc0000;
+}
 .pager-button {
   position: absolute;
   border: 1px solid #111;
@@ -89,6 +114,7 @@ body[data-page="2"] {
 .table,
 table {
   width: 100%;
+  border-collapse: collapse;
 }
 .table-row {
   display: table-row;

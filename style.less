@@ -47,6 +47,41 @@ body{
         }
     }
 }
+
+.sep{
+    border-right: 1px solid #333;
+}
+.graph-tab td{
+    .graph{
+        display: inline-block;
+        height: 100%;
+    }
+    @box-shadow-size: 0 0 5px 1px;
+    @amount-color: #0000cc;
+    @interest-color: #cc0000;
+    @graph-margin: 15px;
+    @graph-cell-width: 33%;
+    
+    &:nth-child(2){
+        text-align: right;
+        width: @graph-cell-width;
+        .graph{
+            margin-left:@graph-margin;
+            box-shadow: @box-shadow-size @amount-color;
+            background: @amount-color;
+        }
+    }
+    &:nth-child(3){
+        text-align: left;
+        width: @graph-cell-width;
+        .graph{
+            margin-right:@graph-margin;
+            box-shadow: @box-shadow-size @interest-color;
+            background: @interest-color;
+        }
+    }
+}
+
 .pager-button{
     position: absolute;
     border: 1px solid @almostblack;
@@ -55,7 +90,7 @@ body{
     padding: 0;
     font-size: 40px;
     color:@almostblack!important;
-    
+
     &:disabled{
         opacity: 0;
     }
@@ -98,7 +133,8 @@ body{
     display: table;
 }
 .table,table{
-        width: 100%;
+    width: 100%;
+    border-collapse: collapse;
 }
 .table-row {
     display: table-row;

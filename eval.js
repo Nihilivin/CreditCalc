@@ -103,18 +103,39 @@ Calculator.prototype = {
         return this.payment * ((1 - (1 / Math.pow(1 + mensualRate, 12 * this.duration))) / mensualRate);
     },
     calc_duration: function(){
-        var r = this.rate/(12);
-        return Math.ceil((Math.log(this.payment) - Math.log(this.payment - this.amount * r))/Math.log(1+r));
+        var r = this.rate / 1200;
+        return Math.log(-this.payment/((r*this.amount)-this.payment))/(12*Math.log(r+1));
     },
     calc_rate: function(){
-        if (this.payment*this.duration < this.amount){
-            return 0.0;
+        if (this.payment*(this.duration * 12) < this.amount){
+            console.log("No interest")
+            return 0;
         }
-        var frate = 1;
-        for (i=0;i<400;i++){
-            frate=(this.payment-this.payment/Math.pow((1+frate),this.duration))/this.amount;
+        var tempCalc = new Calculator(),
+            rate = 0,
+            lastRate,
+            step = 1,
+            exit = 0;
+        tempCalc.duration = this.duration;
+        tempCalc.payment = this.payment;
+        while(step > 0.0001 && exit <= 999){
+            exit++;
+            lastRate = rate;
+            rate += step;
+            tempCalc.rate = rate;
+            var amount = tempCalc.calc_amount();
+            console.log("Checking with:",{
+                rate:rate,
+                step:step,
+            });
+            if(amount < this.amount){
+                step /= 10;
+                rate = lastRate;
+            } else if(amount == this.amout){
+                exit = 1000;
+            }
         }
-        return frate*12;
+        return rate;
     },
     /**
      * @description todo
