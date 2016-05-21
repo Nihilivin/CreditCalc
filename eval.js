@@ -1,3 +1,14 @@
+/**
+ * @file Main calculator client-side script
+ *
+ * @author Alexandre Germain
+ * @copyright 2016 GerkinDevelopment
+ * @license none none
+ * @package creditcalc
+ *
+ * @version 0.1.0
+ */
+
 'use strict';
 
 /**

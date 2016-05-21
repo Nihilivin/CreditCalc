@@ -3,8 +3,10 @@ $versions = array(
     
     "0.1" => "http://myplaceholderurl/0.1",
     
+    "[object Object]" => "http://myplaceholderurl/[object Object]",
+    
 );
-$current = "0.1";
+$current = "[object Object]";
 if(isset($_GET) && isset($_GET["version"])){
 ?>
 <!DOCTYPE html>

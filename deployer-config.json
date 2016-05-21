@@ -246,7 +246,14 @@
             }
         },
         "versions": {
-            "0.1": "http://myplaceholderurl/0.1"
+            "0.1": "http://myplaceholderurl/0.1",
+            "[object Object]": "http://myplaceholderurl/[object Object]"
+        },
+        "checksums": {
+            "./eval.js": {
+                "sha1": "096c476b058a3e5aa3797fef7252db20a21fb73b",
+                "md5": "0aa523dcc427637b9acae2ef5f5de60e"
+            }
         }
     }
 }
