@@ -4,8 +4,8 @@
   padding: 0;
   border: 0;
   box-sizing: border-box;
-  /* Better text styling */
-  font: 20px Verdana, sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
 }
 html {
   height: 100%;
