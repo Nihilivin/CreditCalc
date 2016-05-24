@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: eval.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: eval.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file Main calculator client-side script
  *
  * @author Alexandre Germain
@@ -51,7 +79,7 @@ function Calculator(){
             },
             set: function(newAmount){
                 newAmount = parseFloat(newAmount);
-                if(isFinite(newAmount) && newAmount > 0)
+                if(isFinite(newAmount) &amp;&amp; newAmount > 0)
                     amount = newAmount;
             }
         },
@@ -68,7 +96,7 @@ function Calculator(){
             },
             set: function(newRate){
                 newRate = parseFloat(newRate);
-                if(isFinite(newRate) && newRate > 0)
+                if(isFinite(newRate) &amp;&amp; newRate > 0)
                     rate = newRate;
             }
         },
@@ -85,7 +113,7 @@ function Calculator(){
             },
             set: function(newDuration){
                 newDuration = parseFloat(newDuration);
-                if(isFinite(newDuration) && newDuration > 0)
+                if(isFinite(newDuration) &amp;&amp; newDuration > 0)
                     duration = newDuration;
             }
         },
@@ -102,7 +130,7 @@ function Calculator(){
             },
             set: function(newPayment){
                 newPayment = parseFloat(newPayment);
-                if(isFinite(newPayment) && newPayment > 0)
+                if(isFinite(newPayment) &amp;&amp; newPayment > 0)
                     payment = newPayment;
             }
         }
@@ -147,18 +175,18 @@ Calculator.prototype = {
             lastRate,
             step = 1, 
             exit = 0;
-        if (self.payment*(self.duration * 12) < self.amount){
+        if (self.payment*(self.duration * 12) &lt; self.amount){
             return 0;
         }
         tempCalc.duration = self.duration;
         tempCalc.payment = self.payment;
-        while(step > 0.0001 && exit <= 999){
+        while(step > 0.0001 &amp;&amp; exit &lt;= 999){
             exit++;
             lastRate = rate;
             rate += step;
             tempCalc.rate = rate;
             var amount = tempCalc.calc_amount();
-            if(amount < self.amount){
+            if(amount &lt; self.amount){
                 step /= 10;
                 rate = lastRate;
             } else if(amount == self.amout){
@@ -198,12 +226,12 @@ function attach(a,b,c){
      * @inner
 	 * @since 0.1.0
 	 */
-    function _attach(a,b,c){a&&b&&c&&(a.addEventListener?a.addEventListener(b,c):a.attachEvent(b,c));}
+    function _attach(a,b,c){a&amp;&amp;b&amp;&amp;c&amp;&amp;(a.addEventListener?a.addEventListener(b,c):a.attachEvent(b,c));}
     if(a==null||typeof a=="undefined"||a.constructor.name!="Array")a=[a];
     if(b==null||typeof b=="undefined"||b.constructor.name!="Array")b=[b];
     if(c==null||typeof c=="undefined"||c.constructor.name!="Array")c=[c];
     var i=0,j=0,k=0,I=a.length,J=b.length,K=c.length;
-    for(i=0;i<I;i++){for(j=0;j<J;j++){for(k=0;k<K;k++){
+    for(i=0;i&lt;I;i++){for(j=0;j&lt;J;j++){for(k=0;k&lt;K;k++){
         _attach(a[i],b[j],c[k]);
     }}}
 }
@@ -226,12 +254,12 @@ function detach(a,b,c){
      * @inner
 	 * @since 0.1.0
 	 */
-    function _detach(a,b,c){a&&b&&c&&(a.removeEventListener?a.removeEventListener(b,c):a.detachEvent(b,c));}
+    function _detach(a,b,c){a&amp;&amp;b&amp;&amp;c&amp;&amp;(a.removeEventListener?a.removeEventListener(b,c):a.detachEvent(b,c));}
     if(a==null||typeof a=="undefined"||a.constructor.name!="Array")a=[a];
     if(b==null||typeof b=="undefined"||b.constructor.name!="Array")b=[b];
     if(c==null||typeof c=="undefined"||c.constructor.name!="Array")c=[c];
     var i=0,j=0,k=0,I=a.length,J=b.length,K=c.length;
-    for(i=0;i<I;i++){for(j=0;j<J;j++){for(k=0;k<K;k++){
+    for(i=0;i&lt;I;i++){for(j=0;j&lt;J;j++){for(k=0;k&lt;K;k++){
         _detach(a[i],b[j],c[k]);
     }}}
 }
@@ -321,13 +349,13 @@ calculatorVariables = Object.keys(calculatorVariables);
     }
     /**
      * @function enableCalcButtons
-     * @description Check each calculation & pager buttons and set them disabled/enabled depending on missing & provided values.
+     * @description Check each calculation &amp; pager buttons and set them disabled/enabled depending on missing &amp; provided values.
      * @author Gerkin
      */
     function enableCalcButtons(){
         for(var type in formElems){
             formElems[type].calc.disabled = Object.keys(formElems).filter(function(value){
-                return value != type && isParsableNumber(formElems[value].value.value)
+                return value != type &amp;&amp; isParsableNumber(formElems[value].value.value)
             }).length != 3
         }
         gei("pager-button-1_2").disabled = Object.keys(formElems).filter(function(value){
@@ -336,7 +364,7 @@ calculatorVariables = Object.keys(calculatorVariables);
     }
     /**
      * @function isParsableNumber
-     * @description Check if the input string contains only understandable chars & with the right format
+     * @description Check if the input string contains only understandable chars &amp; with the right format
      * @author Gerkin
      * @param   {string} value  The string to check
      * @returns {boolean} True if parsable, false otherwise. Note: a string with a length of 0 is not parsable
@@ -358,7 +386,7 @@ calculatorVariables = Object.keys(calculatorVariables);
      * @returns {float|0} The numeric value of the input. 0 if invalid
      */
     function getVarValue(type){ 
-        if(formElems[type] && formElems[type].value){
+        if(formElems[type] &amp;&amp; formElems[type].value){
             formElems[type].value.classList.remove("calculated");
             return getNumFieldValue(formElems[type].value.value);
         }
@@ -460,10 +488,10 @@ calculatorVariables = Object.keys(calculatorVariables);
                         } break;
 
                         case "rate":{
-                            console.log(getNumFieldValue(target.value) < 1 - factor*0.0001, getNumFieldValue(target.value));
+                            console.log(getNumFieldValue(target.value) &lt; 1 - factor*0.0001, getNumFieldValue(target.value));
                             if(getNumFieldValue(target.value) > 10)
                                 step = 1;
-                            else if(getNumFieldValue(target.value) < 1 - factor*0.001)
+                            else if(getNumFieldValue(target.value) &lt; 1 - factor*0.001)
                                 step = 0.01;
                             else
                                 step = 0.1;
@@ -488,7 +516,7 @@ calculatorVariables = Object.keys(calculatorVariables);
             })());
             /**
              * @function clearInputStyles
-             * @description Clear class, custom validity & placeholder from input
+             * @description Clear class, custom validity &amp; placeholder from input
              * @author Gerkin
              * @inner
              */
@@ -507,7 +535,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                 var self = this;
                 var value = self.value.trim();
 
-                if(!isParsableNumber(value) && value.length > 0){
+                if(!isParsableNumber(value) &amp;&amp; value.length > 0){
                     self.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
                 } else {
                     self.setCustomValidity("");
@@ -566,7 +594,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                 var year = dateStart.getFullYear();
                 console.log(month, year);
                 var payments = {};
-                for(var i = 0, j = paymentsList.length; i < j; i++){
+                for(var i = 0, j = paymentsList.length; i &lt; j; i++){
                     month++;
                     if(month > 11 || i == j - 1){
                         for(var k in payments[year]){
@@ -606,8 +634,9 @@ calculatorVariables = Object.keys(calculatorVariables);
 
                 // Init table
                 var firstYear = dateStart.getFullYear();
+                var yearlyOk = false;
                 var counterMonth = 0;
-                for(var counterYear = 0; counterYear < 15; counterYear++){
+                for(var counterYear = 0; counterYear &lt; 15; counterYear++){
                     // Years append
                     var curYear = (firstYear + counterYear);
                     var paymentYear = payments[curYear];
@@ -626,7 +655,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                                 }
                             )
                         );
-                        for(var yearMonths = (firstYear == curYear ? dateStart.getMonth() + 2 : 1); counterMonth < 15 && yearMonths <= 12; ++counterMonth && ++yearMonths){
+                        for(var yearMonths = (firstYear == curYear ? dateStart.getMonth() + 2 : 1); counterMonth &lt; 15 &amp;&amp; yearMonths &lt;= 12; ++counterMonth &amp;&amp; ++yearMonths){
                             var paymentMonth = paymentYear[yearMonths];
 
                             graphTableBody.appendChild(
@@ -665,8 +694,8 @@ calculatorVariables = Object.keys(calculatorVariables);
         text = text.replace(/\$\{\s*([\w\.]+)\s*\}/g, function(matched, identifier){
             var identifiers = identifier.split(".");
             var swapReplacements = replacements;
-            for(var i = 0, j = identifiers.length; i < j; i++){
-                // Search in both ancestor & current obj
+            for(var i = 0, j = identifiers.length; i &lt; j; i++){
+                // Search in both ancestor &amp; current obj
                 if(typeof replacements == "object"){
                     swapReplacements = swapReplacements[identifiers[i]];
                 } else {
@@ -680,4 +709,26 @@ calculatorVariables = Object.keys(calculatorVariables);
         });
         return text;
     }
-})();
+})();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html">_init</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculator">calculator</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html">checkInput</a></li><li><a href="global.html">clearInputStyles</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#enableCalcButtons">enableCalcButtons</a></li><li><a href="global.html#formatDisplayable">formatDisplayable</a></li><li><a href="global.html">formatInput</a></li><li><a href="global.html#formElems">formElems</a></li><li><a href="global.html#gei">gei</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#getVarValue">getVarValue</a></li><li><a href="global.html#isParsableNumber">isParsableNumber</a></li><li><a href="global.html#preciseValue">preciseValue</a></li><li><a href="global.html">setGraphDisplayMode</a></li><li><a href="global.html">switchPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon May 23 2016 17:31:06 GMT-1000 (TAHT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

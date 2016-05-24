@@ -247,7 +247,8 @@
         },
         "versions": {
             "0.1": "http://myplaceholderurl/0.1",
-            "[object Object]": "http://myplaceholderurl/[object Object]"
+            "[object Object]": "http://myplaceholderurl/[object Object]",
+            "0.2": "http://myplaceholderurl/0.2"
         },
         "checksums": {
             "./eval.js": {

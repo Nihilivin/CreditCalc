@@ -1,5 +1,6 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="style.min.css" media="all">
         <!--  <script src="eval.js"></script> -->
         <title>Calculateur de crédit</title>
@@ -21,7 +22,7 @@
                                            placeholder="200 000" tabindex="1">
                                 </div>
                                 <div class="table-cell">
-                                    <span class="unit">&#8364;</span>
+                                    <label class="unit" for="amount-value">&#8364;</label>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +47,7 @@
                                            placeholder="20" tabindex="2">
                                 </div>
                                 <div class="table-cell">
-                                    <span class="unit">an(s)</span>
+                                    <label class="unit" for="duration-value">an(s)</label>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +72,7 @@
                                            placeholder="2,5" tabindex="3">
                                 </div>
                                 <div class="table-cell">
-                                    <span class="unit">%</span>
+                                    <label class="unit" for="rate-value">%</label>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +97,7 @@
                                            placeholder="1 500" tabindex="4">
                                 </div>
                                 <div class="table-cell">
-                                    <span class="unit">&#8364;</span>
+                                    <label class="unit" for="payment-value">&#8364;</label>
                                 </div>
                             </div>
                         </div>
@@ -119,31 +120,58 @@
                 &#8963;
             </button>
             <div id="page-2-inner">
-                <table>
-                    <tr>
-                        <th colspan="2" class="sep">Montant remboursé</th>
-                        <th>Intérêts payés</th>
-                    </tr>
-                    <tr class="graph-tab">
-                        <td></td>
-                        <td class="sep"><span>123456€</span><span class="graph" style="width:15px"></span></td>
-                        <td><span class="graph" style="width:15px"></span><span>123456€</span></td>
-                    </tr>
-                    <tr>
-                        <td>Début Sept 2016</td>
-                        <td class="sep"></td>
-                        <td></td>
-                    </tr>
-                    <tr class="graph-tab">
-                        <td>2016</td>
-                        <td class="sep"><span>123456€</span><span class="graph" style="width:15px"></span></td>
-                        <td><span class="graph" style="width:15px"></span><span>123456€</span></td>
-                    </tr>
-                    <tr>
-                        <td>Fin Sept 2026</td>
-                        <td class="sep"></td>
-                        <td></td>
-                    </tr>
+                <div class="toggle" id="toggle-year_month">
+                    <input type="checkbox" name="toggle-year_month-input" id="toggle-year_month-input"/>
+                    <label for="toggle-year_month-input" class="toggle-label-left">Année</label>
+                    <label for="toggle-year_month-input" class="toggle-label-left">Mois</label>
+                </div>
+                <table id="depreciation_schedule">
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="sep">Montant remboursé</th>
+                            <th>Intérêts payés</th>
+                        </tr>
+                        <tr class="graph-tab">
+                            <td></td>
+                            <td class="sep">
+                                <div class="innerContainer">
+                                    <span class="loan-paid-value"></span><span class="graph loan-paid-graph" style="width:15px"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="innerContainer">
+                                    <span class="graph interests-paid-graph" style="width:15px"></span><span class="interests-paid-value"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="sep" colspan="2">Début Sept 2016</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="graph-tab graph-${ type } html-prototype">
+                            <td>
+                                <p class="innerContainer">${ label }</p>
+                            </td>
+                            <td class="sep">
+                                <div class="innerContainer">
+                                    <span class="loan-paid-value">${ loan_paid }</span><span class="graph loan-paid-graph" style="width:${ loan_width }"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="innerContainer">
+                                    <span class="graph interests-paid-graph" style="width:${ interests_width }"></span><span class="interests-paid-value">${ interests_paid }</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="sep" colspan="2">Fin Sept 2026</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
