@@ -587,12 +587,19 @@ calculatorVariables = Object.keys(calculatorVariables);
                         payments[year] = {};
                     payments[year][month + 1] = paymentsList[i];
                 }
-                console.log(payments);
 
                 // Retrieve prototype
                 var graphTable = gei('depreciation_schedule');
                 var graphTableBody = graphTable.querySelector("tbody");
                 var graphTablePrototype = graphTable.querySelector('.html-prototype');
+                var node = graphTableBody.firstChild;
+                while (node) {
+                    var next = node.nextElementSibling;
+                    console.log(node, node.classList);
+                    if(!node.classList || !node.classList.contains("html-prototype"))
+                        graphTableBody.removeChild(node);
+                    node = next;
+                }
 
                 (function(){
                     var total = calculator.payment * (calculator.duration * 12);
