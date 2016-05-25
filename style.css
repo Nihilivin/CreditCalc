@@ -243,12 +243,15 @@ label {
 .html-prototype {
   display: none;
 }
-#depreciation_schedule > tbody div {
-  display: block;
-  max-height: 645px;
-  overflow-y: auto;
+#depreciation_schedule {
+  height: 100%;
 }
-#depreciation_schedule > tbody div table {
+#depreciation_schedule > tbody > tr > td div {
+  overflow-y: auto;
+  max-height: 645px;
+  height: 100%;
+}
+#depreciation_schedule > tbody > tr > td div table {
   width: 100%;
 }
 #depreciation_schedule .graph-tab .innerContainer {
@@ -265,6 +268,8 @@ label {
   top: 0;
   bottom: 0;
   z-index: -1;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
 }
 #depreciation_schedule .loan-paid-graph {
   right: 0;

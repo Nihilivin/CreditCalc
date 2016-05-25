@@ -5,6 +5,7 @@
         <!--  <script src="eval.js"></script> -->
         <title>Calculateur de crédit</title>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,800' rel='stylesheet' type='text/css'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body data-page="1">
         <div class="page" id="page-1">
@@ -121,13 +122,17 @@
                 &#8963;
             </button>
             <div id="page-2-inner">
-                <div class="toggle" id="toggle-year_month">
-                    <input type="checkbox" name="toggle-year_month-input" id="toggle-year_month-input"/>
-                    <label for="toggle-year_month-input" class="toggle-label-left">Année</label>
-                    <label for="toggle-year_month-input" class="toggle-label-left">Mois</label>
-                </div>
                 <table id="depreciation_schedule">
                     <thead>
+                        <tr>
+                            <td colspan="3">
+                                <div class="toggle" id="toggle-year_month">
+                                    <input type="checkbox" name="toggle-year_month-input" id="toggle-year_month-input"/>
+                                    <label for="toggle-year_month-input" class="toggle-label-left">Année</label>
+                                    <label for="toggle-year_month-input" class="toggle-label-left">Mois</label>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <th colspan="2" class="sep">Montant remboursé</th>
                             <th>Intérêts payés</th>

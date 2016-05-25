@@ -98,7 +98,7 @@ body{
     background: @almostblack;
 
     display: table;
-    
+
     > .table > .table-row > .table-cell{
         padding: 0 5px;
     }
@@ -166,7 +166,7 @@ label{
     /* Smoothing out hover and active states using css3 transitions */
     -webkit-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    
+
     height: 40px;
 
     &:hover {
@@ -176,11 +176,11 @@ label{
     &:disabled {
         background: darken(desaturate(@green, 75%),25%);
     }
-&.midheight{
-    height: 20px;
-    line-height: 20px;
-    overflow: hidden;
-}
+    &.midheight{
+        height: 20px;
+        line-height: 20px;
+        overflow: hidden;
+    }
 }
 
 .cvalue{
@@ -284,11 +284,13 @@ label{
 }
 
 #depreciation_schedule{
-    & > tbody{
+    height: 100%;
+    
+    & > tbody > tr > td{
         div{
-            display: block;
-            max-height: unit(43*15,px);
             overflow-y: auto;
+            max-height: unit(43*15,px);
+            height: 100%;
 
             table{
                 width: 100%;
@@ -307,7 +309,8 @@ label{
         position: absolute;
         top:0;
         bottom: 0;
-        z-index: -1
+        z-index: -1;
+        transition: 0.5s all;
     }
     .loan-paid-graph{
         right: 0;
