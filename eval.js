@@ -590,8 +590,8 @@ calculatorVariables = Object.keys(calculatorVariables);
 
                 // Retrieve prototype
                 var graphTable = gei('depreciation_schedule');
-                var graphTableBody = graphTable.querySelector("tbody");
-                var graphTablePrototype = graphTable.querySelector('.html-prototype');
+                var graphTableBody = graphTable.querySelector('#depreciation_schedule-inner');
+                var graphTablePrototype = graphTableBody.querySelector('.html-prototype');
                 var node = graphTableBody.firstChild;
                 while (node) {
                     var next = node.nextElementSibling;

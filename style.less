@@ -40,6 +40,8 @@ body{
     &#page-2{
         background: @almostblack;
         padding: 56px 10px 0;
+        height: 100%;
+        //box-sizing: border-box;
 
         &,*{
             color:#DDD;
@@ -96,6 +98,10 @@ body{
     background: @almostblack;
 
     display: table;
+    
+    > .table > .table-row > .table-cell{
+        padding: 0 5px;
+    }
 }
 
 /* for each line in the calculator box */
@@ -134,6 +140,7 @@ label{
 
 /* Applying same to the keys */
 .cbutton {
+    box-sizing: border-box;
     overflow: auto;
     float: right;
 
@@ -143,9 +150,10 @@ label{
     height: auto;
 
     background: @green;
+    border: 1px solid lighten(@green, 15%);
     color: #DDD;
 
-    line-height: 40px;
+    line-height: 38px;
     text-align: center;
     transition: all 1s ease;
 
@@ -158,6 +166,8 @@ label{
     /* Smoothing out hover and active states using css3 transitions */
     -webkit-transition: all 0.2s ease;
     transition: all 0.2s ease;
+    
+    height: 40px;
 
     &:hover {
         background: #40bf80;
@@ -166,11 +176,11 @@ label{
     &:disabled {
         background: darken(desaturate(@green, 75%),25%);
     }
-}
-.midheight{
+&.midheight{
     height: 20px;
     line-height: 20px;
     overflow: hidden;
+}
 }
 
 .cvalue{
@@ -274,6 +284,17 @@ label{
 }
 
 #depreciation_schedule{
+    & > tbody{
+        div{
+            display: block;
+            max-height: unit(43*15,px);
+            overflow-y: auto;
+
+            table{
+                width: 100%;
+            }
+        }
+    }
     .graph-tab .innerContainer{
         height: 33px;
         transition: 0.25s all;
@@ -294,7 +315,6 @@ label{
     .interests-paid-graph{
         left: 0;
     }
-
     .graph{
         display: inline-block;
         height: 100%;
@@ -309,6 +329,9 @@ label{
         @graph-margin: 15px;
         @graph-cell-width: 33%;
 
+        span{
+            white-space: nowrap;
+        }
         &:nth-child(2){
             text-align: right;
             width: @graph-cell-width;

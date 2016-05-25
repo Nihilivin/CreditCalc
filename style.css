@@ -35,6 +35,7 @@ body[data-page="2"] {
 .page#page-2 {
   background: #111;
   padding: 56px 10px 0;
+  height: 100%;
 }
 .page#page-2,
 .page#page-2 * {
@@ -87,6 +88,9 @@ body[data-page="2"] {
   background: #111;
   display: table;
 }
+#calculator > .table > .table-row > .table-cell {
+  padding: 0 5px;
+}
 /* for each line in the calculator box */
 .table {
   display: table;
@@ -121,14 +125,16 @@ label {
 }
 /* Applying same to the keys */
 .cbutton {
+  box-sizing: border-box;
   overflow: auto;
   float: right;
   cursor: pointer;
   min-width: 40px;
   height: auto;
   background: #339966;
+  border: 1px solid #53c68c;
   color: #DDD;
-  line-height: 40px;
+  line-height: 38px;
   text-align: center;
   -webkit-transition: all 1s ease;
   transition: all 1s ease;
@@ -140,6 +146,7 @@ label {
   /* Smoothing out hover and active states using css3 transitions */
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
+  height: 40px;
 }
 .cbutton:hover {
   background: #40bf80;
@@ -148,7 +155,7 @@ label {
 .cbutton:disabled {
   background: #262626;
 }
-.midheight {
+.cbutton.midheight {
   height: 20px;
   line-height: 20px;
   overflow: hidden;
@@ -236,6 +243,14 @@ label {
 .html-prototype {
   display: none;
 }
+#depreciation_schedule > tbody div {
+  display: block;
+  max-height: 645px;
+  overflow-y: auto;
+}
+#depreciation_schedule > tbody div table {
+  width: 100%;
+}
 #depreciation_schedule .graph-tab .innerContainer {
   height: 33px;
   -webkit-transition: 0.25s all;
@@ -263,6 +278,9 @@ label {
 }
 #depreciation_schedule td {
   padding: 5px 0;
+}
+#depreciation_schedule td span {
+  white-space: nowrap;
 }
 #depreciation_schedule td:nth-child(2) {
   text-align: right;

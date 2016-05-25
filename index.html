@@ -146,31 +146,37 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="sep" colspan="2">Début Sept 2016</td>
-                            <td></td>
+                            <td colspan="3">Début Sept 2016</td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="graph-tab graph-${ type } html-prototype">
-                            <td>
-                                <p class="innerContainer">${ label }</p>
-                            </td>
-                            <td class="sep">
-                                <div class="innerContainer">
-                                    <span class="loan-paid-value">${ loan_paid }</span><span class="graph loan-paid-graph" style="width:${ loan_width }"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="innerContainer">
-                                    <span class="graph interests-paid-graph" style="width:${ interests_width }"></span><span class="interests-paid-value">${ interests_paid }</span>
+                        <tr>
+                            <td colspan="3">
+                                <div>
+                                    <table id="depreciation_schedule-inner">
+                                        <tr class="graph-tab graph-${ type } html-prototype">
+                                            <td>
+                                                <p class="innerContainer">${ label }</p>
+                                            </td>
+                                            <td class="sep">
+                                                <div class="innerContainer">
+                                                    <span class="loan-paid-value">${ loan_paid }</span><span class="graph loan-paid-graph" style="width:${ loan_width }"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="innerContainer">
+                                                    <span class="graph interests-paid-graph" style="width:${ interests_width }"></span><span class="interests-paid-value">${ interests_paid }</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td class="sep" colspan="2">Fin Sept 2026</td>
-                            <td></td>
+                            <td colspan="2">Fin Sept 2026</td>
                         </tr>
                     </tfoot>
                 </table>
