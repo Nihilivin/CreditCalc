@@ -409,27 +409,47 @@ calculatorVariables = Object.keys(calculatorVariables);
             formElems[j] = {
                 calc: gei(j+"-button"),
                 value: gei(j+"-value"),
+                buttonsContainer: gei(j+"-buttons-plus-minus-container"),
+                padlock: gei(j+"-padlock"),
+                plus: gei(j+"-plus"),
                 minus: gei(j+"-minus"),
-                plus: gei(j+"-plus")
             }
             formElems[j].value.setAttribute("data-placeholder", formElems[j].value.placeholder);
 
             // Bind event listeners
-            attach(formElems[j].calc, "click", (function(){
+            formElems[j].calculate = (function(){
                 var arrNoI = calculatorVariables.filter(function(v){return v!=j});
                 var type = j;
                 return function(){
+                    var c = calculator;
+                    setUrlHash({amount:c.amount,duration:c.duration,rate:c.rate,payment:c.payment});
                     for(var k in arrNoI){
-                        calculator[arrNoI[k]] = getVarValue(arrNoI[k]);
+                        c[arrNoI[k]] = getVarValue(arrNoI[k]);
                     }
-                    console.log(calculator);
                     var result = calculator["calc_"+type]();
                     calculator[type] = result;
                     var valueContainer = formElems[type].value;
-                    console.log(result);
                     valueContainer.value = formatDisplayable(preciseValue(type, result));
                     valueContainer.classList.add("calculated");
                     enableCalcButtons();
+                }
+            })();
+            attach(formElems[j].calc, "click", formElems[j].calculate);
+            attach([formElems[j].padlock],"click",(function(){
+                var target = formElems[j].buttonsContainer;
+                return function(){
+                    target.classList.toggle("locked");
+                    var doIncrement = calculatorVariables.filter(function(value){
+                        return formElems[value].buttonsContainer.classList.contains("locked");
+                    }).length === 2;
+                    calculatorVariables.forEach(function(value){
+                        var bc = formElems[value].buttonsContainer;
+                        if(!bc.classList.contains("locked") && doIncrement === true){
+                            bc.classList.add("increment");
+                        } else {
+                            bc.classList.remove("increment");
+                        }
+                    });
                 }
             })());
             attach([formElems[j].plus,formElems[j].minus],"click",(function(){
@@ -444,10 +464,12 @@ calculatorVariables = Object.keys(calculatorVariables);
                     else
                         factor = 0;
 
-                    var step;
-                    var bounds;
+                    var step, // Incremental/decremental step
+                        bounds, // Defines the min & max values
+                        dec; // Force round value
                     switch(type){
                         case "duration":{
+                            dec = -0.001;
                             step = 1;
                             bounds = [0,+Infinity]
                         } break;
@@ -455,12 +477,13 @@ calculatorVariables = Object.keys(calculatorVariables);
                         case "amount":
                         case "payment":{
                             for(var rev = 1, tempvalue = getNumFieldValue(target.value); tempvalue > 100 - factor; rev *= 10, tempvalue /= 10);
+                            dec = 0.001;
                             step = rev;
                             bounds = [0,+Infinity]
                         } break;
 
                         case "rate":{
-                            console.log(getNumFieldValue(target.value) < 1 - factor*0.0001, getNumFieldValue(target.value));
+                            dec = 0.001;
                             if(getNumFieldValue(target.value) > 10)
                                 step = 1;
                             else if(getNumFieldValue(target.value) < 1 - factor*0.001)
@@ -480,10 +503,14 @@ calculatorVariables = Object.keys(calculatorVariables);
                                     bounds[1],
                                     getNumFieldValue(target.value) + step * factor
                                 )
-                            ).toFixed(2) - 0.001
+                            ).toFixed(2) - dec
                         )
                     );
                     enableCalcButtons();
+                    calculatorVariables.forEach(function(value){
+                        if(value != j && formElems[value].buttonsContainer.classList.contains("increment"))
+                            formElems[value].calculate();
+                    });
                 }
             })());
             /**
@@ -547,6 +574,15 @@ calculatorVariables = Object.keys(calculatorVariables);
             })());
         })();
     }
+    // Try to load hash
+    var hashObj = getUrlHash();
+    if(hashObj != {}){
+        for(var i in calculatorVariables){
+            var j = calculatorVariables[i];
+            calculator[j] = hashObj[j];
+            formElems[j].value.value = formatDisplayable(preciseValue(j, hashObj[j]));
+        }
+    }
     enableCalcButtons();
     attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(function(){
         var body = document.querySelector("body");
@@ -561,7 +597,6 @@ calculatorVariables = Object.keys(calculatorVariables);
 
             if(this.id == "pager-button-1_2"){
                 var c = calculator;
-                setUrlHash({amount:c.amount,duration:c.duration,rate:c.rate,payment:c.payment});
                 var paymentsList = getPayments(c);
                 var dateStart = new Date();
                 var month = dateStart.getMonth();

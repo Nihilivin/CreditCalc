@@ -6,6 +6,7 @@
         <title>Calculateur de crédit</title>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,800' rel='stylesheet' type='text/css'>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     </head>
     <body data-page="1">
         <div class="page" id="page-1">
@@ -29,8 +30,13 @@
                             </div>
                         </div>
                         <div class="table-cell">
-                            <button type="button" class="cbutton midheight" id="amount-plus">+</button>
-                            <button type="button" class="cbutton midheight" id="amount-minus">-</button>
+                            <div class="buttons-plus-minus-container" id="amount-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="amount-plus-minus">
+                                    <button type="button" class="cbutton midheight" id="amount-plus">+</button>
+                                    <button type="button" class="cbutton midheight" id="amount-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="amount-padlock"><i class="fa fa-lock"></i></button>
+                            </div>
                         </div>
                         <div class="table-cell">
                             <button type="button" class="cbutton" id="amount-button">GO</button>
@@ -54,8 +60,13 @@
                             </div>
                         </div>
                         <div class="table-cell">
-                            <button type="button" class="cbutton midheight" id="duration-plus">+</button>
-                            <button type="button" class="cbutton midheight" id="duration-minus">-</button>
+                            <div class="buttons-plus-minus-container" id="duration-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="duration-plus-minus">
+                                    <button type="button" class="cbutton midheight" id="duration-plus">+</button>
+                                    <button type="button" class="cbutton midheight" id="duration-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="duration-padlock"><i class="fa fa-lock"></i></button>                             
+                            </div>
                         </div>
                         <div class="table-cell">
                             <button type="button" class="cbutton" id="duration-button">GO</button>
@@ -79,8 +90,13 @@
                             </div>
                         </div>
                         <div class="table-cell">
-                            <button type="button" class="cbutton midheight" id="rate-plus">+</button>
-                            <button type="button" class="cbutton midheight" id="rate-minus">-</button>
+                            <div class="buttons-plus-minus-container" id="rate-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="rate-plus-minus">
+                                    <button type="button" class="cbutton midheight" id="rate-plus">+</button>
+                                    <button type="button" class="cbutton midheight" id="rate-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="rate-padlock"><i class="fa fa-lock"></i></button>                             
+                            </div>
                         </div>
                         <div class="table-cell">
                             <button type="button" class="cbutton" id="rate-button">GO</button>
@@ -104,8 +120,13 @@
                             </div>
                         </div>
                         <div class="table-cell">
-                            <button type="button" class="cbutton midheight" id="payment-plus">+</button>
-                            <button type="button" class="cbutton midheight" id="payment-minus">-</button>
+                            <div class="buttons-plus-minus-container" id="payment-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="payment-plus-minus">
+                                    <button type="button" class="cbutton midheight" id="payment-plus">+</button>
+                                    <button type="button" class="cbutton midheight" id="payment-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="payment-padlock"><i class="fa fa-lock"></i></button>                             
+                            </div>
                         </div>
                         <div class="table-cell">
                             <button type="button" class="cbutton" id="payment-button">GO</button>
