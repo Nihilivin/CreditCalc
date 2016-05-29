@@ -560,7 +560,9 @@ calculatorVariables = Object.keys(calculatorVariables);
             body.setAttribute("data-page", this.getAttribute("data-page-target"));
 
             if(this.id == "pager-button-1_2"){
-                var paymentsList = getPayments(calculator);
+                var c = calculator;
+                setUrlHash({amount:c.amount,duration:c.duration,rate:c.rate,payment:c.payment});
+                var paymentsList = getPayments(c);
                 var dateStart = new Date();
                 var month = dateStart.getMonth();
                 var year = dateStart.getFullYear();
@@ -592,7 +594,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                 var graphTable = gei('depreciation_schedule');
                 var graphTableBody = graphTable.querySelector('#depreciation_schedule-inner');
                 var graphTablePrototype = graphTableBody.querySelector('.html-prototype');
-                var node = graphTableBody.firstChild;
+                var node = graphTableBody.querySelector("tr");
                 while (node) {
                     var next = node.nextElementSibling;
                     console.log(node, node.classList);
@@ -602,8 +604,8 @@ calculatorVariables = Object.keys(calculatorVariables);
                 }
 
                 (function(){
-                    var total = calculator.payment * (calculator.duration * 12);
-                    var loanPaid = calculator.amount;
+                    var total = c.payment * (c.duration * 12);
+                    var loanPaid = c.amount;
                     var interestsPaid = total - loanPaid;
                     graphTable.querySelector("thead .loan-paid-graph").style.width = ((loanPaid / total) * 100) + "%";
                     graphTable.querySelector("thead .interests-paid-graph").style.width = ((interestsPaid / total) * 100) + "%";
@@ -627,9 +629,9 @@ calculatorVariables = Object.keys(calculatorVariables);
                                     type: "yearly",
                                     label: curYear + "",
                                     loan_paid: formatDisplayable(preciseValue("payment",paymentYear.loan)) + "€",
-                                    loan_width:  ((preciseValue("payment",paymentYear.loan) / (calculator.payment * 12)) * 100) + "%",
+                                    loan_width:  ((preciseValue("payment",paymentYear.loan) / (c.payment * 12)) * 100) + "%",
                                     interests_paid: formatDisplayable(preciseValue("payment",paymentYear.interests)) + "€",
-                                    interests_width: ((preciseValue("payment",paymentYear.interests) / (calculator.payment * 12)) * 100) + "%"
+                                    interests_width: ((preciseValue("payment",paymentYear.interests) / (c.payment * 12)) * 100) + "%"
                                 }
                             )
                         );
@@ -641,11 +643,11 @@ calculatorVariables = Object.keys(calculatorVariables);
                                     graphTablePrototype,
                                     {
                                         type: "monthly",
-                                        label: yearMonths + "/" + curYear,
+                                        label: ("0"+yearMonths).slice(-2) + "/" + curYear,// Leading 0 if not 2 numbers month
                                         loan_paid: formatDisplayable(preciseValue("payment",paymentMonth.loan)) + "€",
-                                        loan_width: ((preciseValue("payment",paymentMonth.loan) / calculator.payment) * 100) + "%",
+                                        loan_width: ((preciseValue("payment",paymentMonth.loan) / c.payment) * 100) + "%",
                                         interests_paid: formatDisplayable(preciseValue("payment",paymentMonth.interests)) + "€",
-                                        interests_width: ((preciseValue("payment",paymentMonth.interests) / calculator.payment) * 100) + "%"
+                                        interests_width: ((preciseValue("payment",paymentMonth.interests) / c.payment) * 100) + "%"
                                     }
                                 )
                             );
@@ -688,3 +690,33 @@ calculatorVariables = Object.keys(calculatorVariables);
         return text;
     }
 })();
+
+/**
+ * @function setUrlHash
+ * @description Takes an object, and put it as url hash in base64
+ * @param {object} obj The object to encode and put in hash
+ * @author Gerkin
+ */
+function setUrlHash(obj){
+    var string = JSON.stringify(obj),
+        hash = btoa(string);
+    if(history.pushState) {
+        history.pushState(null, null, '#'+hash);
+    } else {
+        location.hash = '#'+hash;
+    }
+}
+/**
+ * @function getUrlHash
+ * @description Returns the base64 decoded hash of the url
+ * @returns {object} The decoded object
+ * @author Gerkin
+ */
+function getUrlHash(){
+    var hash = location.hash.replace(/^#/,''),
+        obj = {};
+    try {
+        obj = JSON.parse(atob(hash));
+    } catch(e){}
+    return obj;
+}
