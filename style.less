@@ -48,6 +48,11 @@ body{
         }
     }
 }
+body:not([data-page="2"]) #page-2{
+    .graph{
+        width: 0!important;
+    }
+}
 
 .sep{
     border-right: 1px solid #333;
@@ -140,6 +145,7 @@ label{
 
 /* Applying same to the keys */
 .cbutton {
+    @buttonTextColor: #DDD;
     box-sizing: border-box;
     overflow: auto;
     float: right;
@@ -151,7 +157,7 @@ label{
 
     background: @green;
     border: 1px solid lighten(@green, 15%);
-    color: #DDD;
+    color: @buttonTextColor;
 
     line-height: 38px;
     text-align: center;
@@ -175,6 +181,8 @@ label{
     }
     &:disabled {
         background: darken(desaturate(@green, 75%),25%);
+        color:darken(desaturate(@buttonTextColor, 75%),25%);
+        border-color:darken(desaturate(lighten(@green, 15%), 75%),25%);
     }
     &.midheight{
         height: 20px;
@@ -341,12 +349,16 @@ label{
         position: relative;
         z-index: 1;
     }
+    td:first-child p{
+        display: inline-block;
+        white-space: nowrap;
+    }
     .graph{
         position: absolute;
         top:0;
         bottom: 0;
         z-index: -1;
-        transition: 0.5s all;
+        transition: 0.5s all; 
     }
     .loan-paid-graph{
         right: 0;
@@ -366,14 +378,19 @@ label{
         @amount-color: #3D9CCC;
         @interest-color: #C9492C;
         @graph-margin: 15px;
-        @graph-cell-width: 33%;
+        @graph-cell-width: 50%;
 
         span{
             white-space: nowrap;
         }
+        #depreciation_schedule-inner{
+            &:nth-child(2),
+            &:nth-child(3){
+                width: @graph-cell-width;
+            }
+        }
         &:nth-child(2){
             text-align: right;
-            width: @graph-cell-width;
             span{
                 padding-right: 5px;
             }
@@ -385,7 +402,6 @@ label{
         }
         &:nth-child(3){
             text-align: left;
-            width: @graph-cell-width;
             span{
                 padding-left: 5px;
             }

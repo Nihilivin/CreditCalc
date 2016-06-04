@@ -11,10 +11,6 @@
 
 'use strict';
 
-gei("amount-value").value = 100000;
-gei("duration-value").value = 15;
-gei("rate-value").value = 5;
-
 /**
  * @callback EventFunction
  * @param {object} event Event object emitted
@@ -26,6 +22,56 @@ gei("rate-value").value = 5;
  * @see http://www.w3schools.com/jsref/dom_obj_all.asp
  */
 
+var months = {
+    1:{
+        full: "Janvier",
+        short: "Janv."
+    },
+    2:{
+        full: "Février",
+        short: "Févr."
+    },
+    3:{
+        full: "Mars",
+        short: "Mars"
+    },
+    4:{
+        full: "Avril",
+        short: "Avr."
+    },
+    5:{
+        full: "Mai",
+        short: "Mai"
+    },
+    6:{
+        full: "Juin",
+        short: "Juin"
+    },
+    7:{
+        full: "Juillet",
+        short: "Juil."
+    },
+    8:{
+        full: "Aout",
+        short: "Aout"
+    },
+    9:{
+        full: "Septembre",
+        short: "Sept."
+    },
+    10:{
+        full: "Octobre",
+        short: "Oct."
+    },
+    11:{
+        full: "Novembre",
+        short: "Nov."
+    },
+    12:{
+        full: "Décembre",
+        short: "Déc."
+    },
+}
 /**
  * @class Calculator
  * @description Base class that  handles calculations
@@ -192,8 +238,8 @@ function attach(a,b,c){
     /**
 	 * @function _attach
 	 * @description Single-valued version of {@link ImageZoom.attach attach}. hould not be called directly
-	 * @param {DOMElement}			d DOMElement to bind
-	 * @param {string}			e Event to bind
+	 * @param {DOMElement}			a DOMElement to bind
+	 * @param {string}			b Event to bind
 	 * @param {EventFunction}	c Function to attach
      * @inner
 	 * @since 0.1.0
@@ -220,8 +266,8 @@ function detach(a,b,c){
     /**
 	 * @function _detach
 	 * @description Single-valued version of {@link ImageZoom.detach detach}. hould not be called directly
-	 * @param {DOMElement}			d DOMElement to unbind
-	 * @param {string}			e Event to unbind
+	 * @param {DOMElement}			a DOMElement to unbind
+	 * @param {string}			b Event to unbind
 	 * @param {EventFunction}	c Function to detach
      * @inner
 	 * @since 0.1.0
@@ -236,6 +282,27 @@ function detach(a,b,c){
     }}}
 }
 
+function triggerEvent(a,b,c){
+    /**
+	 * @function _triggerEvent
+	 * @description Single-valued version of {@link ImageZoom.triggerEvent detach}. Should not be called directly
+	 * @param {DOMElement}			a DOMElement to unbind
+	 * @param {string}			b Event name
+	 * @param {object}	c Event object to send (unused)
+     * @inner
+	 * @since 0.1.0
+	 */
+    function _triggerEvent(a,b,c){a&&b&&c&&(d.createEvent?(e=new Event(b))&&a.dispatchEvent(e):(e=d.createEventObject())&&a.fireEvent("on"+b,e));}
+    if(a==null||typeof a=="undefined"||a.constructor.name!="Array")a=[a];
+    if(b==null||typeof b=="undefined"||b.constructor.name!="Array")b=[b];
+    if(c==null||typeof c=="undefined"||c.constructor.name!="Array")c=[c];
+    var i=0,j=0,k=0,I=a.length,J=b.length,d=document,e;
+    for(i=0;i<I;i++){for(j=0;j<J;j++){
+        _triggerEvent(a[i],b[j],c);
+    }}
+
+}
+
 /**
  * @function gei
  * @description Minification shorthand for {@link DOMElement}.getElementById
@@ -244,6 +311,8 @@ function detach(a,b,c){
  * @returns {DOMElement|null} The DOMElement, or null if not found
  */
 function gei(s){return document.getElementById(s)};
+function qs(s){return document.querySelector(s)};
+function qsa(s){return document.querySelectorAll(s)};
 /**
  * @global
  * @name calculator
@@ -305,6 +374,7 @@ calculatorVariables = Object.keys(calculatorVariables);
         value += "";
         var parts = value.match(/^(\d*)(?:[.,](\d*))?$/);
         var regexReplacePost = /(.*\d)(\d{3})/;
+        if(parts === null || parts.length == 0) return "";// If the pattern is invalid, return an empty value
         while(parts[1].match(regexReplacePost)){
             parts[1] = parts[1].replace(regexReplacePost, "$1 $2");
         }
@@ -321,14 +391,15 @@ calculatorVariables = Object.keys(calculatorVariables);
     }
     /**
      * @function enableCalcButtons
-     * @description Check each calculation & pager buttons and set them disabled/enabled depending on missing & provided values.
+     * @description Check each calculation, padlock & pager buttons and set them disabled/enabled depending on missing & provided values.
      * @author Gerkin
      */
     function enableCalcButtons(){
         for(var type in formElems){
+            formElems[type].padlock.disabled = !isParsableNumber(formElems[type].value.value); // Disable padlock button if non valid value
             formElems[type].calc.disabled = Object.keys(formElems).filter(function(value){
                 return value != type && isParsableNumber(formElems[value].value.value)
-            }).length != 3
+            }).length != 3 // Enable Calc button if the 3 other values are filled 
         }
         gei("pager-button-1_2").disabled = Object.keys(formElems).filter(function(value){
             return isParsableNumber(formElems[value].value.value)
@@ -403,6 +474,35 @@ calculatorVariables = Object.keys(calculatorVariables);
     }
 
 
+    var dynamicStylesheet = document.createElement('style');
+    dynamicStylesheet.id = "dynamicStylesheet";
+    qs("head").appendChild(dynamicStylesheet);
+
+    (function(){ // Enable repeatable buttons
+        var repeatableButtons = qsa("button.repeatable");
+        for(var i = 0, j = repeatableButtons.length; i < j; i++){
+            (function(){
+                var button = repeatableButtons[i];
+                var timer,
+                    step,
+                    basestep = button.getAttribute("data-timer-basestep") || 500,
+                    count;
+                attach(button, "mousedown", function(){
+                    count++;
+                    step = basestep / (Math.log(Math.pow(count,2)) + 1);
+                    timer = setTimeout(function(){
+                        triggerEvent(button,"mousedown");
+                    }, step);
+                });
+                attach([button,window],["mouseup","mouseleave","blur"], function(){
+                    clearTimeout(timer);
+                    step = basestep;
+                    count = 0;
+                });
+                triggerEvent(button,"mouseup");
+            })()
+        }
+    }());
     for(var i in calculatorVariables){
         (function(){
             var j = calculatorVariables[i];
@@ -452,7 +552,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                     });
                 }
             })());
-            attach([formElems[j].plus,formElems[j].minus],"click",(function(){
+            attach([formElems[j].plus,formElems[j].minus],"mousedown",(function(){
                 var target = formElems[j].value;
                 var type = j;
                 return function valueIncDec(e){
@@ -584,8 +684,8 @@ calculatorVariables = Object.keys(calculatorVariables);
         }
     }
     enableCalcButtons();
-    attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(function(){
-        var body = document.querySelector("body");
+    attach([].slice.call(qsa(".pager-button")), "click",(function(){
+        var body = qs("body");
         /**
          * @function switchPage
          * @description Switch current page to button target page
@@ -627,9 +727,9 @@ calculatorVariables = Object.keys(calculatorVariables);
 
                 // Retrieve prototype
                 var graphTable = gei('depreciation_schedule');
-                var graphTableBody = graphTable.querySelector('#depreciation_schedule-inner');
+                var graphTableBody = graphTable.querySelector('#depreciation_schedule-inner tbody');
                 var graphTablePrototype = graphTableBody.querySelector('.html-prototype');
-                var node = graphTableBody.querySelector("tr");
+                var node = graphTableBody.firstChild;
                 while (node) {
                     var next = node.nextElementSibling;
                     console.log(node, node.classList);
@@ -678,7 +778,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                                     graphTablePrototype,
                                     {
                                         type: "monthly",
-                                        label: ("0"+yearMonths).slice(-2) + "/" + curYear,// Leading 0 if not 2 numbers month
+                                        label: months[yearMonths].short + " " + curYear,// Leading 0 if not 2 numbers month
                                         loan_paid: formatDisplayable(preciseValue("payment",paymentMonth.loan)) + "€",
                                         loan_width: ((preciseValue("payment",paymentMonth.loan) / c.payment) * 100) + "%",
                                         interests_paid: formatDisplayable(preciseValue("payment",paymentMonth.interests)) + "€",
@@ -689,6 +789,19 @@ calculatorVariables = Object.keys(calculatorVariables);
                         }
                     }
                 }
+
+                // Set the width of headers
+                var firstCells = graphTableBody.querySelectorAll("tbody td:first-child p");
+                var minWidth = Infinity;
+                for(var i = 0, j = firstCells.length; i < j; i++){
+                    var thisWidth = firstCells[i].offsetWidth;
+                    if(thisWidth != 0)
+                        minWidth = Math.min(minWidth, thisWidth);
+                }
+                dynamicStylesheet.innerHTML = "#depreciation_schedule-inner tbody td:first-child{width:"+minWidth+"px}";
+
+                var page2width = qs("#page-2").offsetWidth;
+                qs("#depreciation_schedule tr.graph-tab td.sep").style.width = (((page2width - minWidth) / 2) + minWidth) + "px";
             }
         };
     })());
@@ -733,6 +846,13 @@ calculatorVariables = Object.keys(calculatorVariables);
  * @author Gerkin
  */
 function setUrlHash(obj){
+    if(typeof obj == "undefined" || obj === null || obj === ""){   
+        if(history.pushState) {
+            history.pushState(null, null, "");
+        } else {
+            location.hash = "";
+        }
+    }
     var string = JSON.stringify(obj),
         hash = btoa(string);
     if(history.pushState) {

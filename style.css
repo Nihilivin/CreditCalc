@@ -41,6 +41,9 @@ body[data-page="2"] {
 .page#page-2 * {
   color: #DDD;
 }
+body:not([data-page="2"]) #page-2 .graph {
+  width: 0!important;
+}
 .sep {
   border-right: 1px solid #333;
 }
@@ -154,6 +157,8 @@ label {
 }
 .cbutton:disabled {
   background: #262626;
+  color: #9d9d9d;
+  border-color: #4d4d4d;
 }
 .cbutton.midheight {
   height: 20px;
@@ -296,6 +301,10 @@ label {
   position: relative;
   z-index: 1;
 }
+#depreciation_schedule td:first-child p {
+  display: inline-block;
+  white-space: nowrap;
+}
 #depreciation_schedule .graph {
   position: absolute;
   top: 0;
@@ -320,9 +329,12 @@ label {
 #depreciation_schedule td span {
   white-space: nowrap;
 }
+#depreciation_schedule td #depreciation_schedule-inner:nth-child(2),
+#depreciation_schedule td #depreciation_schedule-inner:nth-child(3) {
+  width: 50%;
+}
 #depreciation_schedule td:nth-child(2) {
   text-align: right;
-  width: 33%;
 }
 #depreciation_schedule td:nth-child(2) span {
   padding-right: 5px;
@@ -334,7 +346,6 @@ label {
 }
 #depreciation_schedule td:nth-child(3) {
   text-align: left;
-  width: 33%;
 }
 #depreciation_schedule td:nth-child(3) span {
   padding-left: 5px;
