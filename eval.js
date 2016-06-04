@@ -855,10 +855,14 @@ function setUrlHash(obj){
     }
     var string = JSON.stringify(obj),
         hash = btoa(string);
-    if(history.pushState) {
-        history.pushState(null, null, '#'+hash);
-    } else {
-        location.hash = '#'+hash;
+    try{
+        if(history.pushState) {
+            history.pushState(null, null, '#'+hash);
+        } else {
+            location.hash = '#'+hash;
+        }
+    } catch(e){
+        console.error("Could not change hash:",e);
     }
 }
 /**
