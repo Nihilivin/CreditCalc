@@ -224,8 +224,10 @@ label {
   box-shadow: 0 0 10px 2px transparent;
   -webkit-transition: 0.5s all;
   transition: 0.5s all;
+  outline: none;
 }
-.cvalue:focus {
+.cvalue:focus,
+.cvalue:focus + div .unit {
   background: #FFF;
 }
 .cvalue:invalid:not(:focus) {
@@ -244,9 +246,12 @@ label {
   height: 40px;
   display: inline-block;
   padding: 0 15px;
-  background: #eeeeee;
+  background: #DDD;
   color: #333;
   margin-right: -1px;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+  margin-left: -1px;
 }
 .toggle {
   position: relative;

@@ -259,9 +259,13 @@ label{
     text-align: right;
     box-shadow:0 0 10px 2px transparent;
     transition: 0.5s all;
+    outline: none;
 
     &:focus{
-        background: #FFF;
+        
+        &,& + div .unit{
+        background: #FFF; 
+        }
     }
     &:invalid:not(:focus){
         box-shadow:0 0 10px 2px #ff3333;
@@ -278,9 +282,11 @@ label{
     height: 40px;
     display: inline-block;
     padding: 0 15px;
-    background: #eeeeee;
+    background: #DDD;
     color:#333;
     margin-right: -1px;// Ensure to cover border gap
+    transition: 0.5s all;
+    margin-left: -1px;
 }
 
 .toggle{
