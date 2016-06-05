@@ -360,8 +360,11 @@ calculatorVariables = Object.keys(calculatorVariables);
         value = getNumFieldValue(value);
         if(["amount","payment","rate"].indexOf(type) != -1) {
             return (parseFloat((Math.ceil(value * 100)).toFixed(0)) / 100).toFixed(2);
-        } else if(type == "duration")
+        } else if(type == "duration"){
             return Math.floor(value).toFixed(0);
+        } else if(type == "roundMoney"){
+            return (parseFloat((Math.round(value * 100)).toFixed(0)) / 100).toFixed(2);
+        }
     }
     /**
      * @function formatDisplayable
@@ -522,14 +525,14 @@ calculatorVariables = Object.keys(calculatorVariables);
                 var type = j;
                 return function(){
                     var c = calculator;
-                    setUrlHash({amount:c.amount,duration:c.duration,rate:c.rate,payment:c.payment});
+                   
                     for(var k in arrNoI){
                         c[arrNoI[k]] = getVarValue(arrNoI[k]);
                     }
                     var result = calculator["calc_"+type]();
                     calculator[type] = result;
                     var valueContainer = formElems[type].value;
-                    valueContainer.value = formatDisplayable(preciseValue(type, result));
+                    valueContainer.value = formatDisplayable(preciseValue(type, result)); setUrlHash({amount:c.amount,duration:c.duration,rate:c.rate,payment:c.payment});
                     valueContainer.classList.add("calculated");
                     enableCalcButtons();
                 }
@@ -732,7 +735,6 @@ calculatorVariables = Object.keys(calculatorVariables);
                 var node = graphTableBody.firstChild;
                 while (node) {
                     var next = node.nextElementSibling;
-                    console.log(node, node.classList);
                     if(!node.classList || !node.classList.contains("html-prototype"))
                         graphTableBody.removeChild(node);
                     node = next;
@@ -744,8 +746,8 @@ calculatorVariables = Object.keys(calculatorVariables);
                     var interestsPaid = total - loanPaid;
                     graphTable.querySelector("thead .loan-paid-graph").style.width = ((loanPaid / total) * 100) + "%";
                     graphTable.querySelector("thead .interests-paid-graph").style.width = ((interestsPaid / total) * 100) + "%";
-                    graphTable.querySelector("thead .loan-paid-value").innerHTML = formatDisplayable(preciseValue("payment", loanPaid)) + "€";
-                    graphTable.querySelector("thead .interests-paid-value").innerHTML = formatDisplayable(preciseValue("payment", interestsPaid)) + "€";
+                    graphTable.querySelector("thead .loan-paid-value").innerHTML = formatDisplayable(preciseValue("roundMoney", loanPaid)) + "€";
+                    graphTable.querySelector("thead .interests-paid-value").innerHTML = formatDisplayable(preciseValue("roundMoney", interestsPaid)) + "€";
                 })();
 
                 // Init table
@@ -763,26 +765,28 @@ calculatorVariables = Object.keys(calculatorVariables);
                                 {
                                     type: "yearly",
                                     label: curYear + "",
-                                    loan_paid: formatDisplayable(preciseValue("payment",paymentYear.loan)) + "€",
-                                    loan_width:  ((preciseValue("payment",paymentYear.loan) / (c.payment * 12)) * 100) + "%",
-                                    interests_paid: formatDisplayable(preciseValue("payment",paymentYear.interests)) + "€",
-                                    interests_width: ((preciseValue("payment",paymentYear.interests) / (c.payment * 12)) * 100) + "%"
+                                    loan_paid: formatDisplayable(preciseValue("roundMoney",paymentYear.loan)) + "€",
+                                    loan_width:  ((preciseValue("roundMoney",paymentYear.loan) / (c.payment * 12)) * 100) + "%",
+                                    interests_paid: formatDisplayable(preciseValue("roundMoney",paymentYear.interests)) + "€",
+                                    interests_width: ((preciseValue("roundMoney",paymentYear.interests) / (c.payment * 12)) * 100) + "%"
                                 }
                             )
                         );
                         for(var yearMonths = (firstYear == curYear ? dateStart.getMonth() + 2 : 1); counterMonth < 15 && yearMonths <= 12; ++counterMonth && ++yearMonths){
                             var paymentMonth = paymentYear[yearMonths];
+                            if(typeof paymentMonth == "undefined")
+                                continue;
 
                             graphTableBody.appendChild(
                                 formatHtmlPrototype(
                                     graphTablePrototype,
                                     {
                                         type: "monthly",
-                                        label: months[yearMonths].short + " " + curYear,// Leading 0 if not 2 numbers month
-                                        loan_paid: formatDisplayable(preciseValue("payment",paymentMonth.loan)) + "€",
-                                        loan_width: ((preciseValue("payment",paymentMonth.loan) / c.payment) * 100) + "%",
-                                        interests_paid: formatDisplayable(preciseValue("payment",paymentMonth.interests)) + "€",
-                                        interests_width: ((preciseValue("payment",paymentMonth.interests) / c.payment) * 100) + "%"
+                                        label: months[yearMonths].short + " " + curYear,
+                                        loan_paid: formatDisplayable(preciseValue("roundMoney",paymentMonth.loan)) + "€",
+                                        loan_width: ((preciseValue("roundMoney",paymentMonth.loan) / c.payment) * 100) + "%",
+                                        interests_paid: formatDisplayable(preciseValue("roundMoney",paymentMonth.interests)) + "€",
+                                        interests_width: ((preciseValue("roundMoney",paymentMonth.interests) / c.payment) * 100) + "%"
                                     }
                                 )
                             );

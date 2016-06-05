@@ -231,15 +231,11 @@ label {
   background: #FFF;
 }
 .cvalue:invalid:not(:focus) {
-  box-shadow: 0 0 10px 2px #ff3333;
-  -webkit-transition: 0.5s all;
-  transition: 0.5s all;
+  color: #ff3333;
 }
 .cvalue.calculated {
   box-shadow: 0 0 10px 2px #339966;
   color: #339966;
-  -webkit-transition: 0.5s all;
-  transition: 0.5s all;
 }
 .unit {
   line-height: 40px;
