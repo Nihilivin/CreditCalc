@@ -1,7 +1,12 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <!---->
         <link rel="stylesheet" type="text/css" href="style.min.css" media="all">
+        <!-->
+        <link rel="stylesheet" type="text/css" href="style.less" media="all">
+        <!---->
+        
         <!--  <script src="eval.js"></script> -->
         <title>Calculateur de crédit</title>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,800' rel='stylesheet' type='text/css'>
@@ -19,6 +24,15 @@
                     </div>
                     <div class="table-row" id="amount">
                         <div class="table-cell">
+                            <div class="buttons-plus-minus-container" id="amount-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="amount-plus-minus">
+                                    <button type="button" class="cbutton midheight repeatable" id="amount-plus">+</button>
+                                    <button type="button" class="cbutton midheight repeatable" id="amount-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="amount-padlock"><i class="fa fa-lock"></i></button>
+                            </div>
+                        </div>
+                        <div class="table-cell">
                             <div class="table-row">
                                 <div class="table-cell">
                                     <input type="text" class="cvalue" id ="amount-value" 
@@ -27,15 +41,6 @@
                                 <div class="table-cell">
                                     <label class="unit" for="amount-value">&#8364;</label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="table-cell">
-                            <div class="buttons-plus-minus-container" id="amount-buttons-plus-minus-container">
-                                <div class="buttons-plus-minus" id="amount-plus-minus">
-                                    <button type="button" class="cbutton midheight repeatable" id="amount-plus">+</button>
-                                    <button type="button" class="cbutton midheight repeatable" id="amount-minus">-</button>
-                                </div>
-                                <button type="button" class="cbutton button-padlock" id="amount-padlock"><i class="fa fa-lock"></i></button>
                             </div>
                         </div>
                         <div class="table-cell">
@@ -49,6 +54,15 @@
                     </div>
                     <div class="table-row" id="duration">
                         <div class="table-cell">
+                            <div class="buttons-plus-minus-container" id="duration-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="duration-plus-minus">
+                                    <button type="button" class="cbutton midheight repeatable" id="duration-plus">+</button>
+                                    <button type="button" class="cbutton midheight repeatable" id="duration-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="duration-padlock"><i class="fa fa-lock"></i></button>                             
+                            </div>
+                        </div>
+                        <div class="table-cell">
                             <div class="table-row">
                                 <div class="table-cell">
                                     <input type="text" class="cvalue" id="duration-value" 
@@ -57,15 +71,6 @@
                                 <div class="table-cell">
                                     <label class="unit" for="duration-value">an(s)</label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="table-cell">
-                            <div class="buttons-plus-minus-container" id="duration-buttons-plus-minus-container">
-                                <div class="buttons-plus-minus" id="duration-plus-minus">
-                                    <button type="button" class="cbutton midheight repeatable" id="duration-plus">+</button>
-                                    <button type="button" class="cbutton midheight repeatable" id="duration-minus">-</button>
-                                </div>
-                                <button type="button" class="cbutton button-padlock" id="duration-padlock"><i class="fa fa-lock"></i></button>                             
                             </div>
                         </div>
                         <div class="table-cell">
@@ -79,6 +84,15 @@
                     </div>
                     <div class="table-row" id="rate">
                         <div class="table-cell">
+                            <div class="buttons-plus-minus-container" id="rate-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="rate-plus-minus">
+                                    <button type="button" class="cbutton midheight repeatable" id="rate-plus">+</button>
+                                    <button type="button" class="cbutton midheight repeatable" id="rate-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="rate-padlock"><i class="fa fa-lock"></i></button>                             
+                            </div>
+                        </div>
+                        <div class="table-cell">
                             <div class="table-row">
                                 <div class="table-cell">
                                     <input type="text" class="cvalue" id="rate-value" 
@@ -87,15 +101,6 @@
                                 <div class="table-cell">
                                     <label class="unit" for="rate-value">%</label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="table-cell">
-                            <div class="buttons-plus-minus-container" id="rate-buttons-plus-minus-container">
-                                <div class="buttons-plus-minus" id="rate-plus-minus">
-                                    <button type="button" class="cbutton midheight repeatable" id="rate-plus">+</button>
-                                    <button type="button" class="cbutton midheight repeatable" id="rate-minus">-</button>
-                                </div>
-                                <button type="button" class="cbutton button-padlock" id="rate-padlock"><i class="fa fa-lock"></i></button>                             
                             </div>
                         </div>
                         <div class="table-cell">
@@ -109,6 +114,15 @@
                     </div>
                     <div class="table-row" id="payment">
                         <div class="table-cell">
+                            <div class="buttons-plus-minus-container" id="payment-buttons-plus-minus-container">
+                                <div class="buttons-plus-minus" id="payment-plus-minus">
+                                    <button type="button" class="cbutton midheight repeatable" id="payment-plus">+</button>
+                                    <button type="button" class="cbutton midheight repeatable" id="payment-minus">-</button>
+                                </div>
+                                <button type="button" class="cbutton button-padlock" id="payment-padlock"><i class="fa fa-lock"></i></button>                             
+                            </div>
+                        </div>
+                        <div class="table-cell">
                             <div class="table-row">
                                 <div class="table-cell">
                                     <input type="text" class="cvalue" id="payment-value" 
@@ -117,15 +131,6 @@
                                 <div class="table-cell">
                                     <label class="unit" for="payment-value">&#8364;</label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="table-cell">
-                            <div class="buttons-plus-minus-container" id="payment-buttons-plus-minus-container">
-                                <div class="buttons-plus-minus" id="payment-plus-minus">
-                                    <button type="button" class="cbutton midheight repeatable" id="payment-plus">+</button>
-                                    <button type="button" class="cbutton midheight repeatable" id="payment-minus">-</button>
-                                </div>
-                                <button type="button" class="cbutton button-padlock" id="payment-padlock"><i class="fa fa-lock"></i></button>                             
                             </div>
                         </div>
                         <div class="table-cell">
