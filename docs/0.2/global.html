@@ -150,7 +150,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line247">line 247</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line316">line 316</a>
     </li></ul></dd>
     
 
@@ -222,7 +222,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line262">line 262</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line331">line 331</a>
     </li></ul></dd>
     
 
@@ -346,7 +346,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line254">line 254</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line323">line 323</a>
     </li></ul></dd>
     
 
@@ -373,7 +373,7 @@
 
     
 
-    <h4 class="name" id="_attach"><span class="type-signature">(inner) </span>_attach<span class="signature">(d, e, c)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_attach"><span class="type-signature">(inner) </span>_attach<span class="signature">(a, b, c)</span><span class="type-signature"></span></h4>
 
     
 
@@ -416,7 +416,7 @@
 
         <tr>
             
-                <td class="name"><code>d</code></td>
+                <td class="name"><code>a</code></td>
             
 
             <td class="type">
@@ -439,7 +439,7 @@
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>b</code></td>
             
 
             <td class="type">
@@ -522,7 +522,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line192">line 192</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line238">line 238</a>
     </li></ul></dd>
     
 
@@ -553,7 +553,7 @@
 
     
 
-    <h4 class="name" id="_detach"><span class="type-signature">(inner) </span>_detach<span class="signature">(d, e, c)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_detach"><span class="type-signature">(inner) </span>_detach<span class="signature">(a, b, c)</span><span class="type-signature"></span></h4>
 
     
 
@@ -596,7 +596,7 @@
 
         <tr>
             
-                <td class="name"><code>d</code></td>
+                <td class="name"><code>a</code></td>
             
 
             <td class="type">
@@ -619,7 +619,7 @@
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>b</code></td>
             
 
             <td class="type">
@@ -702,7 +702,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line220">line 220</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line266">line 266</a>
     </li></ul></dd>
     
 
@@ -791,7 +791,187 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line274">line 274</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line343">line 343</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_triggerEvent"><span class="type-signature">(inner) </span>_triggerEvent<span class="signature">(a, b, c)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Single-valued version of detach. Should not be called directly
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>a</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#DOMElement">DOMElement</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">DOMElement to unbind</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Event name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>c</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Event object to send (unused)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>0.1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line286">line 286</a>
     </li></ul></dd>
     
 
@@ -980,7 +1160,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line183">line 183</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line229">line 229</a>
     </li></ul></dd>
     
 
@@ -1069,7 +1249,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line500">line 500</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line630">line 630</a>
     </li></ul></dd>
     
 
@@ -1158,7 +1338,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line489">line 489</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line619">line 619</a>
     </li></ul></dd>
     
 
@@ -1347,7 +1527,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line211">line 211</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line257">line 257</a>
     </li></ul></dd>
     
 
@@ -1385,7 +1565,7 @@
 
 
 <div class="description">
-    Check each calculation & pager buttons and set them disabled/enabled depending on missing & provided values.
+    Check each calculation, padlock & pager buttons and set them disabled/enabled depending on missing & provided values.
 </div>
 
 
@@ -1436,7 +1616,145 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line322">line 322</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line395">line 395</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="filterChars"><span class="type-signature">(inner) </span>filterChars<span class="signature">(e)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Allow only some chars in input. If the pressed key is not allowed, this function will kill the event and prevent the char from being added
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">KeyboardEvent</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Event emitted by "keypress" event</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Gerkin</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line647">line 647</a>
     </li></ul></dd>
     
 
@@ -1574,7 +1892,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line297">line 297</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line369">line 369</a>
     </li></ul></dd>
     
 
@@ -1685,7 +2003,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line517">line 517</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line658">line 658</a>
     </li></ul></dd>
     
 
@@ -1823,7 +2141,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line239">line 239</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line306">line 306</a>
     </li></ul></dd>
     
 
@@ -1989,7 +2307,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line367">line 367</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line441">line 441</a>
     </li></ul></dd>
     
 
@@ -2028,6 +2346,117 @@
     <dd>
         
 <span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getUrlHash"><span class="type-signature"></span>getUrlHash<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the base64 decoded hash of the url
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Gerkin</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line892">line 892</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The decoded object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
 
 
     </dd>
@@ -2149,7 +2578,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line353">line 353</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line427">line 427</a>
     </li></ul></dd>
     
 
@@ -2312,7 +2741,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line337">line 337</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line411">line 411</a>
     </li></ul></dd>
     
 
@@ -2498,7 +2927,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line281">line 281</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line350">line 350</a>
     </li></ul></dd>
     
 
@@ -2609,7 +3038,145 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line536">line 536</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line677">line 677</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setUrlHash"><span class="type-signature"></span>setUrlHash<span class="signature">(obj)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Takes an object, and put it as url hash in base64
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The object to encode and put in hash</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Gerkin</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line866">line 866</a>
     </li></ul></dd>
     
 
@@ -2698,7 +3265,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line553">line 553</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line703">line 703</a>
     </li></ul></dd>
     
 
@@ -2786,7 +3353,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line22">line 22</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -2910,7 +3477,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line18">line 18</a>
+        <a href="eval.js.html">eval.js</a>, <a href="eval.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -2950,13 +3517,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html">_init</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculator">calculator</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html">checkInput</a></li><li><a href="global.html">clearInputStyles</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#enableCalcButtons">enableCalcButtons</a></li><li><a href="global.html#formatDisplayable">formatDisplayable</a></li><li><a href="global.html">formatInput</a></li><li><a href="global.html#formElems">formElems</a></li><li><a href="global.html#gei">gei</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#getVarValue">getVarValue</a></li><li><a href="global.html#isParsableNumber">isParsableNumber</a></li><li><a href="global.html#preciseValue">preciseValue</a></li><li><a href="global.html">setGraphDisplayMode</a></li><li><a href="global.html">switchPage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html">_init</a></li><li><a href="global.html">_triggerEvent</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculator">calculator</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html">checkInput</a></li><li><a href="global.html">clearInputStyles</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#enableCalcButtons">enableCalcButtons</a></li><li><a href="global.html">filterChars</a></li><li><a href="global.html#formatDisplayable">formatDisplayable</a></li><li><a href="global.html">formatInput</a></li><li><a href="global.html#formElems">formElems</a></li><li><a href="global.html#gei">gei</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#getUrlHash">getUrlHash</a></li><li><a href="global.html#getVarValue">getVarValue</a></li><li><a href="global.html#isParsableNumber">isParsableNumber</a></li><li><a href="global.html#preciseValue">preciseValue</a></li><li><a href="global.html">setGraphDisplayMode</a></li><li><a href="global.html#setUrlHash">setUrlHash</a></li><li><a href="global.html">switchPage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon May 23 2016 17:31:06 GMT-1000 (TAHT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Jun 11 2016 13:48:56 GMT-1000 (TAHT)
 </footer>
 
 <script> prettyPrint(); </script>

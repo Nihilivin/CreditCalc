@@ -34,14 +34,10 @@
  * @license none none
  * @package creditcalc
  *
- * @version 0.1.0
+ * @version 0.2.0
  */
 
 'use strict';
-
-gei("amount-value").value = 100000;
-gei("duration-value").value = 15;
-gei("rate-value").value = 5;
 
 /**
  * @callback EventFunction
@@ -54,6 +50,56 @@ gei("rate-value").value = 5;
  * @see http://www.w3schools.com/jsref/dom_obj_all.asp
  */
 
+var months = {
+    1:{
+        full: "Janvier",
+        short: "Janv."
+    },
+    2:{
+        full: "Février",
+        short: "Févr."
+    },
+    3:{
+        full: "Mars",
+        short: "Mars"
+    },
+    4:{
+        full: "Avril",
+        short: "Avr."
+    },
+    5:{
+        full: "Mai",
+        short: "Mai"
+    },
+    6:{
+        full: "Juin",
+        short: "Juin"
+    },
+    7:{
+        full: "Juillet",
+        short: "Juil."
+    },
+    8:{
+        full: "Aout",
+        short: "Aout"
+    },
+    9:{
+        full: "Septembre",
+        short: "Sept."
+    },
+    10:{
+        full: "Octobre",
+        short: "Oct."
+    },
+    11:{
+        full: "Novembre",
+        short: "Nov."
+    },
+    12:{
+        full: "Décembre",
+        short: "Déc."
+    },
+}
 /**
  * @class Calculator
  * @description Base class that  handles calculations
@@ -220,8 +266,8 @@ function attach(a,b,c){
     /**
 	 * @function _attach
 	 * @description Single-valued version of {@link ImageZoom.attach attach}. hould not be called directly
-	 * @param {DOMElement}			d DOMElement to bind
-	 * @param {string}			e Event to bind
+	 * @param {DOMElement}			a DOMElement to bind
+	 * @param {string}			b Event to bind
 	 * @param {EventFunction}	c Function to attach
      * @inner
 	 * @since 0.1.0
@@ -248,8 +294,8 @@ function detach(a,b,c){
     /**
 	 * @function _detach
 	 * @description Single-valued version of {@link ImageZoom.detach detach}. hould not be called directly
-	 * @param {DOMElement}			d DOMElement to unbind
-	 * @param {string}			e Event to unbind
+	 * @param {DOMElement}			a DOMElement to unbind
+	 * @param {string}			b Event to unbind
 	 * @param {EventFunction}	c Function to detach
      * @inner
 	 * @since 0.1.0
@@ -264,6 +310,27 @@ function detach(a,b,c){
     }}}
 }
 
+function triggerEvent(a,b,c){
+    /**
+	 * @function _triggerEvent
+	 * @description Single-valued version of {@link ImageZoom.triggerEvent detach}. Should not be called directly
+	 * @param {DOMElement}			a DOMElement to unbind
+	 * @param {string}			b Event name
+	 * @param {object}	c Event object to send (unused)
+     * @inner
+	 * @since 0.1.0
+	 */
+    function _triggerEvent(a,b,c){a&amp;&amp;b&amp;&amp;c&amp;&amp;(d.createEvent?(e=new Event(b))&amp;&amp;a.dispatchEvent(e):(e=d.createEventObject())&amp;&amp;a.fireEvent("on"+b,e));}
+    if(a==null||typeof a=="undefined"||a.constructor.name!="Array")a=[a];
+    if(b==null||typeof b=="undefined"||b.constructor.name!="Array")b=[b];
+    if(c==null||typeof c=="undefined"||c.constructor.name!="Array")c=[c];
+    var i=0,j=0,k=0,I=a.length,J=b.length,d=document,e;
+    for(i=0;i&lt;I;i++){for(j=0;j&lt;J;j++){
+        _triggerEvent(a[i],b[j],c);
+    }}
+
+}
+
 /**
  * @function gei
  * @description Minification shorthand for {@link DOMElement}.getElementById
@@ -272,6 +339,8 @@ function detach(a,b,c){
  * @returns {DOMElement|null} The DOMElement, or null if not found
  */
 function gei(s){return document.getElementById(s)};
+function qs(s){return document.querySelector(s)};
+function qsa(s){return document.querySelectorAll(s)};
 /**
  * @global
  * @name calculator
@@ -319,8 +388,11 @@ calculatorVariables = Object.keys(calculatorVariables);
         value = getNumFieldValue(value);
         if(["amount","payment","rate"].indexOf(type) != -1) {
             return (parseFloat((Math.ceil(value * 100)).toFixed(0)) / 100).toFixed(2);
-        } else if(type == "duration")
+        } else if(type == "duration"){
             return Math.floor(value).toFixed(0);
+        } else if(type == "roundMoney"){
+            return (parseFloat((Math.round(value * 100)).toFixed(0)) / 100).toFixed(2);
+        }
     }
     /**
      * @function formatDisplayable
@@ -333,6 +405,7 @@ calculatorVariables = Object.keys(calculatorVariables);
         value += "";
         var parts = value.match(/^(\d*)(?:[.,](\d*))?$/);
         var regexReplacePost = /(.*\d)(\d{3})/;
+        if(parts === null || parts.length == 0) return "";// If the pattern is invalid, return an empty value
         while(parts[1].match(regexReplacePost)){
             parts[1] = parts[1].replace(regexReplacePost, "$1 $2");
         }
@@ -349,14 +422,15 @@ calculatorVariables = Object.keys(calculatorVariables);
     }
     /**
      * @function enableCalcButtons
-     * @description Check each calculation &amp; pager buttons and set them disabled/enabled depending on missing &amp; provided values.
+     * @description Check each calculation, padlock &amp; pager buttons and set them disabled/enabled depending on missing &amp; provided values.
      * @author Gerkin
      */
     function enableCalcButtons(){
         for(var type in formElems){
+            formElems[type].padlock.disabled = !isParsableNumber(formElems[type].value.value); // Disable padlock button if non valid value
             formElems[type].calc.disabled = Object.keys(formElems).filter(function(value){
                 return value != type &amp;&amp; isParsableNumber(formElems[value].value.value)
-            }).length != 3
+            }).length != 3 // Enable Calc button if the 3 other values are filled 
         }
         gei("pager-button-1_2").disabled = Object.keys(formElems).filter(function(value){
             return isParsableNumber(formElems[value].value.value)
@@ -431,36 +505,85 @@ calculatorVariables = Object.keys(calculatorVariables);
     }
 
 
+    var dynamicStylesheet = document.createElement('style');
+    dynamicStylesheet.id = "dynamicStylesheet";
+    qs("head").appendChild(dynamicStylesheet);
+
+    (function(){ // Enable repeatable buttons
+        var repeatableButtons = qsa("button.repeatable");
+        for(var i = 0, j = repeatableButtons.length; i &lt; j; i++){
+            (function(){
+                var button = repeatableButtons[i];
+                var timer,
+                    step,
+                    basestep = button.getAttribute("data-timer-basestep") || 500,
+                    count;
+                attach(button, "mousedown", function(){
+                    count++;
+                    step = basestep / (Math.log(Math.pow(count,2)) + 1);
+                    timer = setTimeout(function(){
+                        triggerEvent(button,"mousedown");
+                    }, step);
+                });
+                attach([button,window],["mouseup","mouseleave","blur"], function(){
+                    clearTimeout(timer);
+                    step = basestep;
+                    count = 0;
+                });
+                triggerEvent(button,"mouseup");
+            })()
+        }
+    }());
     for(var i in calculatorVariables){
         (function(){
             var j = calculatorVariables[i];
             formElems[j] = {
                 calc: gei(j+"-button"),
                 value: gei(j+"-value"),
+                buttonsContainer: gei(j+"-buttons-plus-minus-container"),
+                padlock: gei(j+"-padlock"),
+                plus: gei(j+"-plus"),
                 minus: gei(j+"-minus"),
-                plus: gei(j+"-plus")
             }
             formElems[j].value.setAttribute("data-placeholder", formElems[j].value.placeholder);
 
             // Bind event listeners
-            attach(formElems[j].calc, "click", (function(){
+            formElems[j].calculate = (function(){
                 var arrNoI = calculatorVariables.filter(function(v){return v!=j});
                 var type = j;
                 return function(){
+                    var c = calculator;
+
                     for(var k in arrNoI){
-                        calculator[arrNoI[k]] = getVarValue(arrNoI[k]);
+                        c[arrNoI[k]] = getVarValue(arrNoI[k]);
                     }
-                    console.log(calculator);
                     var result = calculator["calc_"+type]();
                     calculator[type] = result;
                     var valueContainer = formElems[type].value;
-                    console.log(result);
-                    valueContainer.value = formatDisplayable(preciseValue(type, result));
+                    valueContainer.value = formatDisplayable(preciseValue(type, result)); setUrlHash({amount:c.amount,duration:c.duration,rate:c.rate,payment:c.payment});
                     valueContainer.classList.add("calculated");
                     enableCalcButtons();
                 }
+            })();
+            attach(formElems[j].calc, "click", formElems[j].calculate);
+            attach([formElems[j].padlock],"click",(function(){
+                var target = formElems[j].buttonsContainer;
+                return function(){
+                    target.classList.toggle("locked");
+                    var doIncrement = calculatorVariables.filter(function(value){
+                        return formElems[value].buttonsContainer.classList.contains("locked");
+                    }).length === 2;
+                    calculatorVariables.forEach(function(value){
+                        var bc = formElems[value].buttonsContainer;
+                        if(!bc.classList.contains("locked") &amp;&amp; doIncrement === true){
+                            bc.classList.add("increment");
+                        } else {
+                            bc.classList.remove("increment");
+                        }
+                    });
+                }
             })());
-            attach([formElems[j].plus,formElems[j].minus],"click",(function(){
+            attach([formElems[j].plus,formElems[j].minus],"mousedown",(function(){
                 var target = formElems[j].value;
                 var type = j;
                 return function valueIncDec(e){
@@ -472,10 +595,12 @@ calculatorVariables = Object.keys(calculatorVariables);
                     else
                         factor = 0;
 
-                    var step;
-                    var bounds;
+                    var step, // Incremental/decremental step
+                        bounds, // Defines the min &amp; max values
+                        dec; // Force round value
                     switch(type){
                         case "duration":{
+                            dec = -0.001;
                             step = 1;
                             bounds = [0,+Infinity]
                         } break;
@@ -483,12 +608,13 @@ calculatorVariables = Object.keys(calculatorVariables);
                         case "amount":
                         case "payment":{
                             for(var rev = 1, tempvalue = getNumFieldValue(target.value); tempvalue > 100 - factor; rev *= 10, tempvalue /= 10);
+                            dec = 0.001;
                             step = rev;
                             bounds = [0,+Infinity]
                         } break;
 
                         case "rate":{
-                            console.log(getNumFieldValue(target.value) &lt; 1 - factor*0.0001, getNumFieldValue(target.value));
+                            dec = 0.001;
                             if(getNumFieldValue(target.value) > 10)
                                 step = 1;
                             else if(getNumFieldValue(target.value) &lt; 1 - factor*0.001)
@@ -508,10 +634,14 @@ calculatorVariables = Object.keys(calculatorVariables);
                                     bounds[1],
                                     getNumFieldValue(target.value) + step * factor
                                 )
-                            ).toFixed(2) - 0.001
+                            ).toFixed(2) - dec
                         )
                     );
                     enableCalcButtons();
+                    calculatorVariables.forEach(function(value){
+                        if(value != j &amp;&amp; formElems[value].buttonsContainer.classList.contains("increment"))
+                            formElems[value].calculate();
+                    });
                 }
             })());
             /**
@@ -541,6 +671,17 @@ calculatorVariables = Object.keys(calculatorVariables);
                     self.setCustomValidity("");
                 }
                 enableCalcButtons();
+            });
+            /**
+             * @function filterChars
+             * @description Allow only some chars in input. If the pressed key is not allowed, this function will kill the event and prevent the char from being added
+             * @author Gerkin
+             * @param   {KeyboardEvent} e Event emitted by "keypress" event
+             * @inner
+             */
+            attach(formElems[j].value,"keypress", function filterChars(e){
+                if(!String.fromCharCode(e.which || e.keyCode).match(/^[0-9,. ]$/))
+                    e.preventDefault();
             });
             /**
              * @function formatInput
@@ -575,9 +716,18 @@ calculatorVariables = Object.keys(calculatorVariables);
             })());
         })();
     }
+    // Try to load hash
+    var hashObj = getUrlHash();
+    if(hashObj != {}){
+        for(var i in calculatorVariables){
+            var j = calculatorVariables[i];
+            calculator[j] = hashObj[j];
+            formElems[j].value.value = formatDisplayable(preciseValue(j, hashObj[j]));
+        }
+    }
     enableCalcButtons();
-    attach([].slice.call(document.querySelectorAll(".pager-button")), "click",(function(){
-        var body = document.querySelector("body");
+    attach([].slice.call(qsa(".pager-button")), "click",(function(){
+        var body = qs("body");
         /**
          * @function switchPage
          * @description Switch current page to button target page
@@ -588,7 +738,8 @@ calculatorVariables = Object.keys(calculatorVariables);
             body.setAttribute("data-page", this.getAttribute("data-page-target"));
 
             if(this.id == "pager-button-1_2"){
-                var paymentsList = getPayments(calculator);
+                var c = calculator;
+                var paymentsList = getPayments(c);
                 var dateStart = new Date();
                 var month = dateStart.getMonth();
                 var year = dateStart.getFullYear();
@@ -615,65 +766,94 @@ calculatorVariables = Object.keys(calculatorVariables);
                         payments[year] = {};
                     payments[year][month + 1] = paymentsList[i];
                 }
-                console.log(payments);
 
                 // Retrieve prototype
                 var graphTable = gei('depreciation_schedule');
-                var graphTableBody = graphTable.querySelector("tbody");
-                var graphTablePrototype = graphTable.querySelector('.html-prototype');
+                var graphTableBody = graphTable.querySelector('#depreciation_schedule-inner tbody');
+                var graphTablePrototype = graphTableBody.querySelector('.html-prototype');
+                var node = graphTableBody.firstChild;
+                while (node) {
+                    var next = node.nextElementSibling;
+                    if(!node.classList || !node.classList.contains("html-prototype"))
+                        graphTableBody.removeChild(node);
+                    node = next;
+                }
 
                 (function(){
-                    var total = calculator.payment * (calculator.duration * 12);
-                    var loanPaid = calculator.amount;
+                    var total = c.payment * (c.duration * 12);
+                    var loanPaid = c.amount;
                     var interestsPaid = total - loanPaid;
                     graphTable.querySelector("thead .loan-paid-graph").style.width = ((loanPaid / total) * 100) + "%";
                     graphTable.querySelector("thead .interests-paid-graph").style.width = ((interestsPaid / total) * 100) + "%";
-                    graphTable.querySelector("thead .loan-paid-value").innerHTML = formatDisplayable(preciseValue("payment", loanPaid)) + "€";
-                    graphTable.querySelector("thead .interests-paid-value").innerHTML = formatDisplayable(preciseValue("payment", interestsPaid)) + "€";
+                    graphTable.querySelector("thead .loan-paid-value").innerHTML = formatDisplayable(preciseValue("roundMoney", loanPaid)) + "€";
+                    graphTable.querySelector("thead .interests-paid-value").innerHTML = formatDisplayable(preciseValue("roundMoney", interestsPaid)) + "€";
                 })();
 
                 // Init table
                 var firstYear = dateStart.getFullYear();
-                var yearlyOk = false;
                 var counterMonth = 0;
+                var extraneousDates = {};
                 for(var counterYear = 0; counterYear &lt; 15; counterYear++){
                     // Years append
                     var curYear = (firstYear + counterYear);
                     var paymentYear = payments[curYear];
 
+                    function getHtmlRow(type, label, payment){
+                        var timeFactor = type==="yearly"?12:1;
+                        return formatHtmlPrototype(
+                            graphTablePrototype,
+                            {
+                                type: type,
+                                label: label,
+                                loan_paid: formatDisplayable(preciseValue("roundMoney",payment.loan)) + "€",
+                                loan_width:  ((preciseValue("roundMoney",payment.loan) / (c.payment * timeFactor)) * 100) + "%",
+                                interests_paid: formatDisplayable(preciseValue("roundMoney",payment.interests)) + "€",
+                                interests_width: ((preciseValue("roundMoney",payment.interests) / (c.payment * timeFactor)) * 100) + "%"
+                            }
+                        )
+                    }
                     if(typeof paymentYear != "undefined"){
                         graphTableBody.appendChild(
-                            formatHtmlPrototype(
-                                graphTablePrototype,
-                                {
-                                    type: "yearly",
-                                    label: curYear + "",
-                                    loan_paid: formatDisplayable(preciseValue("payment",paymentYear.loan)) + "€",
-                                    loan_width:  ((preciseValue("payment",paymentYear.loan) / (calculator.payment * 12)) * 100) + "%",
-                                    interests_paid: formatDisplayable(preciseValue("payment",paymentYear.interests)) + "€",
-                                    interests_width: ((preciseValue("payment",paymentYear.interests) / (calculator.payment * 12)) * 100) + "%"
-                                }
+                            getHtmlRow(
+                                "yearly",
+                                curYear + "",
+                                paymentYear
                             )
                         );
                         for(var yearMonths = (firstYear == curYear ? dateStart.getMonth() + 2 : 1); counterMonth &lt; 15 &amp;&amp; yearMonths &lt;= 12; ++counterMonth &amp;&amp; ++yearMonths){
                             var paymentMonth = paymentYear[yearMonths];
-
-                            graphTableBody.appendChild(
-                                formatHtmlPrototype(
-                                    graphTablePrototype,
-                                    {
-                                        type: "monthly",
-                                        label: yearMonths + "/" + curYear,
-                                        loan_paid: formatDisplayable(preciseValue("payment",paymentMonth.loan)) + "€",
-                                        loan_width: ((preciseValue("payment",paymentMonth.loan) / calculator.payment) * 100) + "%",
-                                        interests_paid: formatDisplayable(preciseValue("payment",paymentMonth.interests)) + "€",
-                                        interests_width: ((preciseValue("payment",paymentMonth.interests) / calculator.payment) * 100) + "%"
-                                    }
-                                )
-                            );
+                            if(typeof paymentMonth != "undefined"){
+                                var monthLabel = months[yearMonths].short+" "+curYear;
+                                if(counterMonth === 0){
+                                    extraneousDates["start"] = monthLabel
+                                }
+                                extraneousDates["end"] = monthLabel
+                                graphTableBody.appendChild(
+                                    getHtmlRow(
+                                        "monthly",
+                                        monthLabel,
+                                        paymentMonth
+                                    )
+                                );
+                            }
                         }
                     }
                 }
+                (function(st){st&amp;&amp;(st.innerHTML=extraneousDates["start"])})(gei("startdate"));
+                (function(en){en&amp;&amp;(en.innerHTML=extraneousDates["end"])})(gei("enddate"));
+
+                // Set the width of headers
+                var firstCells = graphTableBody.querySelectorAll("tbody td:first-child p");
+                var minWidth = Infinity;
+                for(var i = 0, j = firstCells.length; i &lt; j; i++){
+                    var thisWidth = firstCells[i].offsetWidth;
+                    if(thisWidth != 0)
+                        minWidth = Math.min(minWidth, thisWidth);
+                }
+                dynamicStylesheet.innerHTML = "#depreciation_schedule-inner tbody td:first-child{width:"+minWidth+"px}";
+
+                var page2width = qs("#page-2").offsetWidth;
+                qs("#depreciation_schedule tr.graph-tab td.sep").style.width = (((page2width - minWidth) / 2) + minWidth) + "px";
             }
         };
     })());
@@ -709,7 +889,48 @@ calculatorVariables = Object.keys(calculatorVariables);
         });
         return text;
     }
-})();</code></pre>
+})();
+
+/**
+ * @function setUrlHash
+ * @description Takes an object, and put it as url hash in base64
+ * @param {object} obj The object to encode and put in hash
+ * @author Gerkin
+ */
+function setUrlHash(obj){
+    if(typeof obj == "undefined" || obj === null || obj === ""){   
+        if(history.pushState) {
+            history.pushState(null, null, "");
+        } else {
+            location.hash = "";
+        }
+    }
+    var string = JSON.stringify(obj),
+        hash = btoa(string);
+    try{
+        if(history.pushState) {
+            history.pushState(null, null, '#'+hash);
+        } else {
+            location.hash = '#'+hash;
+        }
+    } catch(e){
+        console.error("Could not change hash:",e);
+    }
+}
+/**
+ * @function getUrlHash
+ * @description Returns the base64 decoded hash of the url
+ * @returns {object} The decoded object
+ * @author Gerkin
+ */
+function getUrlHash(){
+    var hash = location.hash.replace(/^#/,''),
+        obj = {};
+    try {
+        obj = JSON.parse(atob(hash));
+    } catch(e){}
+    return obj;
+}</code></pre>
         </article>
     </section>
 
@@ -719,13 +940,13 @@ calculatorVariables = Object.keys(calculatorVariables);
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html">_init</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculator">calculator</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html">checkInput</a></li><li><a href="global.html">clearInputStyles</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#enableCalcButtons">enableCalcButtons</a></li><li><a href="global.html#formatDisplayable">formatDisplayable</a></li><li><a href="global.html">formatInput</a></li><li><a href="global.html#formElems">formElems</a></li><li><a href="global.html#gei">gei</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#getVarValue">getVarValue</a></li><li><a href="global.html#isParsableNumber">isParsableNumber</a></li><li><a href="global.html#preciseValue">preciseValue</a></li><li><a href="global.html">setGraphDisplayMode</a></li><li><a href="global.html">switchPage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_attach</a></li><li><a href="global.html">_detach</a></li><li><a href="global.html">_init</a></li><li><a href="global.html">_triggerEvent</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculator">calculator</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html">checkInput</a></li><li><a href="global.html">clearInputStyles</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#enableCalcButtons">enableCalcButtons</a></li><li><a href="global.html">filterChars</a></li><li><a href="global.html#formatDisplayable">formatDisplayable</a></li><li><a href="global.html">formatInput</a></li><li><a href="global.html#formElems">formElems</a></li><li><a href="global.html#gei">gei</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#getUrlHash">getUrlHash</a></li><li><a href="global.html#getVarValue">getVarValue</a></li><li><a href="global.html#isParsableNumber">isParsableNumber</a></li><li><a href="global.html#preciseValue">preciseValue</a></li><li><a href="global.html">setGraphDisplayMode</a></li><li><a href="global.html#setUrlHash">setUrlHash</a></li><li><a href="global.html">switchPage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon May 23 2016 17:31:06 GMT-1000 (TAHT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Jun 11 2016 13:48:56 GMT-1000 (TAHT)
 </footer>
 
 <script> prettyPrint(); </script>

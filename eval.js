@@ -6,7 +6,7 @@
  * @license none none
  * @package creditcalc
  *
- * @version 0.1.0
+ * @version 0.2.0
  */
 
 'use strict';
@@ -644,10 +644,15 @@ calculatorVariables = Object.keys(calculatorVariables);
                 }
                 enableCalcButtons();
             });
-
+            /**
+             * @function filterChars
+             * @description Allow only some chars in input. If the pressed key is not allowed, this function will kill the event and prevent the char from being added
+             * @author Gerkin
+             * @param   {KeyboardEvent} e Event emitted by "keypress" event
+             * @inner
+             */
             attach(formElems[j].value,"keypress", function filterChars(e){
-                var k = String.fromCharCode(e.which || e.keyCode);
-                if(!k.match(/^[0-9,. ]$/))
+                if(!String.fromCharCode(e.which || e.keyCode).match(/^[0-9,. ]$/))
                     e.preventDefault();
             });
             /**
