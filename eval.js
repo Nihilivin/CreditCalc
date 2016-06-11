@@ -525,7 +525,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                 var type = j;
                 return function(){
                     var c = calculator;
-                   
+
                     for(var k in arrNoI){
                         c[arrNoI[k]] = getVarValue(arrNoI[k]);
                     }
@@ -644,6 +644,12 @@ calculatorVariables = Object.keys(calculatorVariables);
                 }
                 enableCalcButtons();
             });
+
+            attach(formElems[j].value,"keypress", function filterChars(e){
+                var k = String.fromCharCode(e.which || e.keyCode);
+                if(!k.match(/^[0-9,. ]$/))
+                    e.preventDefault();
+            });
             /**
              * @function formatInput
              * @description Reformat the input value, and re-check value validity
@@ -753,46 +759,55 @@ calculatorVariables = Object.keys(calculatorVariables);
                 // Init table
                 var firstYear = dateStart.getFullYear();
                 var counterMonth = 0;
+                var extraneousDates = {};
                 for(var counterYear = 0; counterYear < 15; counterYear++){
                     // Years append
                     var curYear = (firstYear + counterYear);
                     var paymentYear = payments[curYear];
 
+                    function getHtmlRow(type, label, payment){
+                        var timeFactor = type==="yearly"?12:1;
+                        return formatHtmlPrototype(
+                            graphTablePrototype,
+                            {
+                                type: type,
+                                label: label,
+                                loan_paid: formatDisplayable(preciseValue("roundMoney",payment.loan)) + "€",
+                                loan_width:  ((preciseValue("roundMoney",payment.loan) / (c.payment * timeFactor)) * 100) + "%",
+                                interests_paid: formatDisplayable(preciseValue("roundMoney",payment.interests)) + "€",
+                                interests_width: ((preciseValue("roundMoney",payment.interests) / (c.payment * timeFactor)) * 100) + "%"
+                            }
+                        )
+                    }
                     if(typeof paymentYear != "undefined"){
                         graphTableBody.appendChild(
-                            formatHtmlPrototype(
-                                graphTablePrototype,
-                                {
-                                    type: "yearly",
-                                    label: curYear + "",
-                                    loan_paid: formatDisplayable(preciseValue("roundMoney",paymentYear.loan)) + "€",
-                                    loan_width:  ((preciseValue("roundMoney",paymentYear.loan) / (c.payment * 12)) * 100) + "%",
-                                    interests_paid: formatDisplayable(preciseValue("roundMoney",paymentYear.interests)) + "€",
-                                    interests_width: ((preciseValue("roundMoney",paymentYear.interests) / (c.payment * 12)) * 100) + "%"
-                                }
+                            getHtmlRow(
+                                "yearly",
+                                curYear + "",
+                                paymentYear
                             )
                         );
                         for(var yearMonths = (firstYear == curYear ? dateStart.getMonth() + 2 : 1); counterMonth < 15 && yearMonths <= 12; ++counterMonth && ++yearMonths){
                             var paymentMonth = paymentYear[yearMonths];
-                            if(typeof paymentMonth == "undefined")
-                                continue;
-
-                            graphTableBody.appendChild(
-                                formatHtmlPrototype(
-                                    graphTablePrototype,
-                                    {
-                                        type: "monthly",
-                                        label: months[yearMonths].short + " " + curYear,
-                                        loan_paid: formatDisplayable(preciseValue("roundMoney",paymentMonth.loan)) + "€",
-                                        loan_width: ((preciseValue("roundMoney",paymentMonth.loan) / c.payment) * 100) + "%",
-                                        interests_paid: formatDisplayable(preciseValue("roundMoney",paymentMonth.interests)) + "€",
-                                        interests_width: ((preciseValue("roundMoney",paymentMonth.interests) / c.payment) * 100) + "%"
-                                    }
-                                )
-                            );
+                            if(typeof paymentMonth != "undefined"){
+                                var monthLabel = months[yearMonths].short+" "+curYear;
+                                if(counterMonth === 0){
+                                    extraneousDates["start"] = monthLabel
+                                }
+                                extraneousDates["end"] = monthLabel
+                                graphTableBody.appendChild(
+                                    getHtmlRow(
+                                        "monthly",
+                                        monthLabel,
+                                        paymentMonth
+                                    )
+                                );
+                            }
                         }
                     }
                 }
+                (function(st){st&&(st.innerHTML=extraneousDates["start"])})(gei("startdate"));
+                (function(en){en&&(en.innerHTML=extraneousDates["end"])})(gei("enddate"));
 
                 // Set the width of headers
                 var firstCells = graphTableBody.querySelectorAll("tbody td:first-child p");
