@@ -361,7 +361,7 @@ calculatorVariables = Object.keys(calculatorVariables);
         if(["amount","payment","rate"].indexOf(type) != -1) {
             return (parseFloat((Math.ceil(value * 100)).toFixed(0)) / 100).toFixed(2);
         } else if(type == "duration"){
-            return Math.floor(value).toFixed(0);
+            return Math.ceil(value).toFixed(0);
         } else if(type == "roundMoney"){
             return (parseFloat((Math.round(value * 100)).toFixed(0)) / 100).toFixed(2);
         }
@@ -404,9 +404,6 @@ calculatorVariables = Object.keys(calculatorVariables);
                 return value != type && isParsableNumber(formElems[value].value.value)
             }).length != 3 // Enable Calc button if the 3 other values are filled 
         }
-        gei("pager-button-1_2").disabled = Object.keys(formElems).filter(function(value){
-            return isParsableNumber(formElems[value].value.value)
-        }).length != 4
     }
     /**
      * @function isParsableNumber
@@ -681,7 +678,7 @@ calculatorVariables = Object.keys(calculatorVariables);
                  * @inner
                  */
                 function setGraphDisplayMode(){
-                    graphTable.setAttribute("data-display-mode", input.checked ? "monthly" : "yearly");
+                    //graphTable.setAttribute("data-display-mode", input.checked ? "monthly" : "yearly");
                 }
                 setGraphDisplayMode();
                 return setGraphDisplayMode;

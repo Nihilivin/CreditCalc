@@ -4,8 +4,7 @@
   padding: 0;
   border: 0;
   box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 20px;
+  font-size: inherit;
 }
 html {
   height: 100%;
@@ -13,103 +12,76 @@ html {
 }
 body {
   height: 100%;
-  position: absolute;
   width: 100%;
-  -webkit-transition: all 1s ease;
-  transition: all 1s ease;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
-body,
-body[data-page="1"] {
-  bottom: 0;
+body > section {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
 }
-body[data-page="2"] {
-  bottom: 100%;
+header {
+  background-color: #000;
+  color: #ffffff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  height: 45px;
+  padding: 0 15px;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
-.page {
-  height: 100%;
-  position: relative;
+header #menu {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  text-align: right;
 }
-.page#page-1 {
-  background: #222;
+header #menu a {
+  padding: 10px;
+  color: inherit;
+  text-decoration: none;
 }
-.page#page-2 {
-  background: #111;
-  padding: 56px 10px 0;
-  height: 100%;
+/*body:not([data-page="2"]) #page-2{
+.graph{
+width: 0!important;
 }
-.page#page-2,
-.page#page-2 * {
-  color: #DDD;
-}
-body:not([data-page="2"]) #page-2 .graph {
-  width: 0!important;
-}
+}*/
 .sep {
   border-right: 1px solid #333;
 }
-.pager-button {
-  position: absolute;
-  border: 1px solid #111;
-  text-align: center;
-  background: #2b2b2b;
-  padding: 0;
-  font-size: 40px;
-  color: #111 !important;
-  -webkit-transition: 0.5s all;
-  transition: 0.5s all;
+.logo {
+  font: 800 30px/32px "Dosis";
 }
-.pager-button:disabled {
-  opacity: 0;
+.logo *:first-child {
+  color: #ffc000;
 }
-.pager-button.pager-button-bottom {
-  bottom: 0;
-  height: auto;
-}
-.pager-button.pager-button-top {
-  top: 0;
-  height: auto;
-}
-.pager-button.pager-button-bottom,
-.pager-button.pager-button-top {
-  width: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
-}
-/* main box, universal width */
-#calculator {
-  overflow: auto;
-  width: 350px;
-  /*all elements are positionned relative to this value*/
-  height: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  padding: 20px;
-  background: #111;
-  display: table;
-}
-#calculator > .table > .table-row > .table-cell {
-  position: relative;
-  padding: 0 5px;
-}
-#calculator > .table > .table-row > .table-cell:nth-child(1) {
-  padding: 0;
-}
-#calculator > .table > .table-row > .table-cell:nth-child(2) {
-  padding-left: 0;
-  width: 100%;
-}
-#calculator > .table > .table-row > .table-cell:only-of-type {
-  padding-top: 35px;
-}
-#calculator > .table > .table-row > .table-cell:only-of-type label {
-  position: absolute;
-  bottom: 0;
-  min-width: 100%;
-  white-space: nowrap;
+.logo *:last-child {
+  color: #ffffff;
 }
 /* for each line in the calculator box */
 .table {
@@ -147,8 +119,8 @@ label {
   float: right;
   cursor: pointer;
   min-width: 40px;
-  background: #339966;
-  border: 1px solid #53c68c;
+  background: #00b050;
+  border: 1px solid #00fd73;
   color: #DDD;
   line-height: 38px;
   text-align: center;
@@ -169,7 +141,7 @@ label {
   color: white;
 }
 .cbutton:disabled {
-  background: #262626;
+  background: #121e18;
   color: #9d9d9d;
   border-color: #9d9d9d;
 }
@@ -198,12 +170,12 @@ label {
 }
 .buttons-plus-minus-container .button-padlock {
   left: 0;
-  background: #666666;
+  background: #2c8454;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 .buttons-plus-minus-container.locked .button-padlock {
-  background: #339966;
+  background: #00b050;
 }
 .buttons-plus-minus-container.increment .buttons-plus-minus {
   left: 0;
@@ -234,8 +206,8 @@ label {
   color: #ff3333;
 }
 .cvalue.calculated {
-  box-shadow: 0 0 10px 2px #339966;
-  color: #339966;
+  box-shadow: 0 0 10px 2px #00b050;
+  color: #00b050;
 }
 .unit {
   line-height: 40px;
@@ -254,6 +226,7 @@ label {
   display: table;
   width: 100%;
   overflow: hidden;
+  background: #333;
 }
 .toggle input {
   display: none;
@@ -287,99 +260,92 @@ label {
   width: 100%;
   height: 100%;
   top: 0;
-  background: #333;
+  background: #00b050;
   -webkit-transition: 0.5s all;
   transition: 0.5s all;
   z-index: -1;
+}
+.green-emphasis {
+  color: #00b050;
+}
+#basic_data {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  background-color: #262626;
+  height: 100%;
+}
+/* main box, universal width */
+#calculator-padder {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 390px;
+      -ms-flex: 0 0 390px;
+          flex: 0 0 390px;
+  display: block;
+}
+.calculator-data {
+  background: #000000;
+  color: #fff;
+  margin: 20px;
+  padding: 20px;
+  text-align: center;
+}
+#calculator {
+  text-align: left;
+  overflow: auto;
+  display: table;
+}
+#calculator > .table > .table-row > .table-cell {
+  position: relative;
+  padding: 0 5px;
+}
+#calculator > .table > .table-row > .table-cell:nth-child(1) {
+  padding: 0;
+}
+#calculator > .table > .table-row > .table-cell:nth-child(2) {
+  padding-left: 0;
+  width: 100%;
+}
+#calculator > .table > .table-row > .table-cell:only-of-type {
+  padding-top: 35px;
+}
+#calculator > .table > .table-row > .table-cell:only-of-type label {
+  position: absolute;
+  bottom: 0;
+  min-width: 100%;
+  white-space: nowrap;
+}
+#graph_1-padder {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  color: #bfbfbf;
+}
+#graph_1 {
+  margin: 20px;
+  padding: 20px;
+  background-color: #000000;
+}
+#graph_1_head .left {
+  float: left;
+}
+#graph_1_head .right {
+  float: right;
+}
+#refund {
+  font-size: 24px;
+  text-align: center;
+}
+.selected-text {
+  color: #fff;
 }
 .html-prototype {
   display: none;
-}
-#depreciation_schedule {
-  height: 100%;
-}
-#depreciation_schedule > tbody > tr > td div {
-  overflow-y: auto;
-  max-height: 645px;
-  height: 100%;
-}
-#depreciation_schedule > tbody > tr > td div table {
-  width: 100%;
-}
-#depreciation_schedule .graph-tab .innerContainer {
-  height: 33px;
-  -webkit-transition: 0.25s all;
-  transition: 0.25s all;
-  overflow: hidden;
-  padding: 5px 0;
-  position: relative;
-  z-index: 1;
-}
-#depreciation_schedule td:first-child p {
-  display: inline-block;
-  white-space: nowrap;
-}
-#depreciation_schedule .graph {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: -1;
-  -webkit-transition: 0.5s all;
-  transition: 0.5s all;
-}
-#depreciation_schedule .loan-paid-graph {
-  right: 0;
-}
-#depreciation_schedule .interests-paid-graph {
-  left: 0;
-}
-#depreciation_schedule .graph {
-  display: inline-block;
-  height: 100%;
-}
-#depreciation_schedule td {
-  padding: 5px 0;
-}
-#depreciation_schedule td span {
-  white-space: nowrap;
-}
-#depreciation_schedule td #depreciation_schedule-inner:nth-child(2),
-#depreciation_schedule td #depreciation_schedule-inner:nth-child(3) {
-  width: 50%;
-}
-#depreciation_schedule td:nth-child(2) {
-  text-align: right;
-}
-#depreciation_schedule td:nth-child(2) span {
-  padding-right: 5px;
-}
-#depreciation_schedule td:nth-child(2) .graph {
-  margin-left: 15px;
-  box-shadow: 0 0 0 0 #3D9CCC;
-  background: #3D9CCC;
-}
-#depreciation_schedule td:nth-child(3) {
-  text-align: left;
-}
-#depreciation_schedule td:nth-child(3) span {
-  padding-left: 5px;
-}
-#depreciation_schedule td:nth-child(3) .graph {
-  margin-right: 15px;
-  box-shadow: 0 0 0 0 #C9492C;
-  background: #C9492C;
-}
-#depreciation_schedule[data-display-mode="yearly"] .graph-monthly td {
-  padding: 0;
-}
-#depreciation_schedule[data-display-mode="yearly"] .graph-monthly .innerContainer {
-  height: 0;
-  padding: 0;
-}
-#depreciation_schedule[data-display-mode="monthly"] .graph-yearly td {
-  padding: 0;
-}
-#depreciation_schedule[data-display-mode="monthly"] .graph-yearly .innerContainer {
-  height: 0;
-  padding: 0;
 }
