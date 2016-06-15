@@ -33,9 +33,10 @@ body{
     font-family: 'Open Sans', sans-serif;
     display: flex;
     flex-direction: column;
-    
+
     & > section{
         flex: 1 1 auto;
+        overflow: auto;
     }
 }
 header{
@@ -241,10 +242,13 @@ label{
 .toggle{
     position: relative;
     display: table;
-    width: 100%;
     overflow: hidden;
-            background: #333;
-
+    background: #333;
+    cursor:pointer;
+    
+    *{
+        cursor: inherit;
+    }
     input{
         display: none;
 
@@ -274,7 +278,6 @@ label{
         }
     }
     label{
-        transition: 0.25s all;
         position: relative;
         display: table-cell;
         text-align: center;
@@ -290,7 +293,7 @@ label{
             height: 100%;
             top:0;
             background: @green;
-            transition: 0.5s all;
+        transition: 0.25s all
             z-index: -1;
         }
     }
@@ -308,7 +311,7 @@ label{
     display: flex;
     flex-direction: row;
     background-color: @darkgrey;
-    height: 100%;
+    min-height: 100%;
 }
 /* main box, universal width */
 #calculator-padder{
@@ -360,15 +363,58 @@ label{
     margin: 20px;
     padding: 20px;
     background-color: #000000;
-}
-#graph_1_head{
-    .left{
-        float: left;
+
+    .top-lined{
+        border-top: 1px solid @text_unselected;
     }
-    .right{
-        float:right;
+    .line{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        .left {
+            text-align: left;
+            flex: 1 1 0;
+        }
+        .right {
+            text-align: right;
+            flex: 1 1 0;
+        }
     }
 }
+#graph_1-scroll_area{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+#graph_1-scroll_bar{
+    flex: 0 0 40px;
+    position: relative;
+}
+#graph_1-scroll_cursor{
+    min-height: 35px;
+    width: 20px;
+    margin: 5px auto;
+    background-color: @green;
+    border: 1px solid @text_unselected;
+    position: relative;
+    z-index: 10;
+}
+#graph_1-scroll_line{
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top:2px;
+    bottom: 2px;
+    margin-left: -1px;
+    border: 1px solid @text_unselected;
+}
+#graph_1-body_scroll{
+    flex: 1 1 auto;
+}
+#toggle-year_month{
+    display: inline-block;
+}
+
 #refund{
     font-size: 24px;
     text-align: center;
