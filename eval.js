@@ -210,7 +210,7 @@
 	 * @since 0.1.0
 	 */
         function _attach(a, b, c) {
-            var i = a && b && c && (a.addEventListener || a.attachEvent)(b, c);
+            var i = a && b && c && (a.addEventListener || a.attachEvent).call(a, b, c);
         }
         if (isNA(a) || a.constructor.name !== "Array") {a = [a]; }
         if (isNA(b) || b.constructor.name !== "Array") {b = [b]; }
@@ -240,7 +240,7 @@
 	 * @since 0.1.0
 	 */
         function _detach(a, b, c) {
-            var i = a && b && c && (a.removeEventListener || a.detachEvent)(b, c);
+            var i = a && b && c && (a.removeEventListener || a.detachEvent).call(a, b, c);
         }
         if (isNA(a) || a.constructor.name !== "Array") {a = [a]; }
         if (isNA(b) || b.constructor.name !== "Array") {b = [b]; }
