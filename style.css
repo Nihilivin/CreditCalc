@@ -335,8 +335,18 @@ label {
   padding: 20px;
   background-color: #000000;
 }
+#graph_1 .refund .graph-elem {
+  background-color: #29769d;
+}
+#graph_1 .interests .graph-elem {
+  background-color: #c9492c;
+}
 #graph_1 .top-lined {
   border-top: 1px solid #bfbfbf;
+}
+#graph_1 .left,
+#graph_1 .refund {
+  border-right: 1px solid #fff;
 }
 #graph_1 .line {
   display: -webkit-box;
@@ -350,19 +360,101 @@ label {
           flex-direction: row;
   width: 100%;
 }
+#graph_1 .line .left,
+#graph_1 .line .right {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 auto;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
+}
+#graph_1 .line .left .graph-elem,
+#graph_1 .line .right .graph-elem {
+  position: absolute;
+  bottom: 0;
+}
 #graph_1 .line .left {
   text-align: left;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 0;
-      -ms-flex: 1 1 0;
-          flex: 1 1 0;
 }
 #graph_1 .line .right {
   text-align: right;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 0;
-      -ms-flex: 1 1 0;
-          flex: 1 1 0;
+}
+#graph_1 .graph-elem {
+  height: 30px;
+}
+#graph_1 .graph_1-line {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  line-height: 30px;
+}
+#graph_1 .graph_1-line > * {
+  -webkit-transition: 0.25s all;
+  transition: 0.25s all;
+}
+#graph_1 .graph_1-line > *,
+#graph_1 .graph_1-line p {
+  padding-top: 10px;
+}
+#graph_1 .graph_1-line:last-child > *,
+#graph_1 .graph_1-line:last-child p {
+  padding-bottom: 10px;
+}
+#graph_1 .graph_1-line .date,
+#graph_1 .graph_1-line .payment {
+  text-align: right;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+#graph_1 .graph_1-line .date {
+  padding: 0 10px 0 0;
+}
+#graph_1 .graph_1-line .payment {
+  padding: 0 10px;
+}
+#graph_1 .graph_1-line .refund,
+#graph_1 .graph_1-line .interests {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 1 100%;
+      -ms-flex: 0 1 100%;
+          flex: 0 1 100%;
+  position: relative;
+}
+#graph_1 .graph_1-line .refund p,
+#graph_1 .graph_1-line .interests p {
+  position: absolute;
+  top: 0;
+}
+#graph_1 .graph_1-line .refund p {
+  text-align: right;
+  right: 5px;
+}
+#graph_1 .graph_1-line .interests p {
+  text-align: left;
+  left: 5px;
+}
+#graph_1_head .graph-elem {
+  padding: 15px 0;
+}
+#graph_1_head .left,
+#graph_1_head .right {
+  position: relative;
+  padding-bottom: 30px;
+}
+#graph_1_head .left .graph-elem {
+  right: 0;
+  width: 50%;
+}
+#graph_1_head .right .graph-elem {
+  left: 0;
+  width: 50%;
 }
 #graph_1-scroll_area {
   display: -webkit-box;
@@ -407,6 +499,9 @@ label {
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
 }
+#toggle-year_month {
+  display: inline-block;
+}
 #refund {
   font-size: 24px;
   text-align: center;
@@ -416,4 +511,7 @@ label {
 }
 .html-prototype {
   display: none;
+}
+.hello{
+    display: none;
 }

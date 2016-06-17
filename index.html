@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="table-cell">
                                     <div class="table-row">
-                                        <input type="text" class="cvalue table-cell" id ="amount-value" 
+                                        <input type="text" class="cvalue table-cell" id ="amount-value"
                                                placeholder="200 000" tabindex="1">
                                         <div class="table-cell">
                                             <label class="unit" for="amount-value">&#8364;</label>
@@ -61,12 +61,12 @@
                                             <button type="button" class="cbutton midheight repeatable" id="duration-plus">+</button>
                                             <button type="button" class="cbutton midheight repeatable" id="duration-minus">-</button>
                                         </div>
-                                        <button type="button" class="cbutton button-padlock" id="duration-padlock"><i class="fa fa-lock"></i></button>                             
+                                        <button type="button" class="cbutton button-padlock" id="duration-padlock"><i class="fa fa-lock"></i></button>
                                     </div>
                                 </div>
                                 <div class="table-cell">
                                     <div class="table-row">
-                                        <input type="text" class="cvalue table-cell" id="duration-value" 
+                                        <input type="text" class="cvalue table-cell" id="duration-value"
                                                placeholder="20" tabindex="2">
                                         <div class="table-cell">
                                             <label class="unit" for="duration-value">an(s)</label>
@@ -89,12 +89,12 @@
                                             <button type="button" class="cbutton midheight repeatable" id="rate-plus">+</button>
                                             <button type="button" class="cbutton midheight repeatable" id="rate-minus">-</button>
                                         </div>
-                                        <button type="button" class="cbutton button-padlock" id="rate-padlock"><i class="fa fa-lock"></i></button>                             
+                                        <button type="button" class="cbutton button-padlock" id="rate-padlock"><i class="fa fa-lock"></i></button>
                                     </div>
                                 </div>
                                 <div class="table-cell">
                                     <div class="table-row">
-                                        <input type="text" class="cvalue table-cell" id="rate-value" 
+                                        <input type="text" class="cvalue table-cell" id="rate-value"
                                                placeholder="2,5" tabindex="3">
                                         <div class="table-cell">
                                             <label class="unit" for="rate-value">%</label>
@@ -117,12 +117,12 @@
                                             <button type="button" class="cbutton midheight repeatable" id="payment-plus">+</button>
                                             <button type="button" class="cbutton midheight repeatable" id="payment-minus">-</button>
                                         </div>
-                                        <button type="button" class="cbutton button-padlock" id="payment-padlock"><i class="fa fa-lock"></i></button>                             
+                                        <button type="button" class="cbutton button-padlock" id="payment-padlock"><i class="fa fa-lock"></i></button>
                                     </div>
                                 </div>
                                 <div class="table-cell">
                                     <div class="table-row">
-                                        <input type="text" class="cvalue table-cell" id="payment-value" 
+                                        <input type="text" class="cvalue table-cell" id="payment-value"
                                                placeholder="1 500" tabindex="4">
                                         <div class="table-cell">
                                             <label class="unit" for="payment-value">&#8364;</label>
@@ -143,8 +143,18 @@
                         <p id="refund">Remboursement total: <span class="switch-text selected-text" id="refund_amount">0 &euro;</span></p>
 
                         <div id="graph_1_head" class="top-lined line">
-                            <div class="left"><p>dont capital remboursé: <span class="switch-text selected-text" id="payback_amount">0 &euro;</span></p></div>
-                            <div class="right"><p>dont intérêts: <span class="switch-text selected-text" id="interests_amount">0 &euro;</span></p></div>
+                            <div class="left">
+                                <p>dont capital remboursé: <span class="switch-text selected-text" id="payback_amount">0 &euro;</span></p>
+                                <div class="refund">
+                                    <div class="graph-elem"></div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <p>dont intérêts: <span class="switch-text selected-text" id="interests_amount">0 &euro;</span></p>
+                                <div class="interests">
+                                    <div class="graph-elem"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="line">
                             <div class="left"><p id="datestart">Juin 2016</p></div>
@@ -154,7 +164,20 @@
                                 <div id="graph_1-scroll_line"></div>
                                 <div id="graph_1-scroll_cursor"></div>
                             </div>
-                            <div id="graph_1-body_scroll"></div>
+                            <div id="graph_1-body_scroll">
+                                <div class="html-prototype graph_1-line line-{ type }" id="graph_1-{ id }">
+                                    <div class="date"><p>{ label }</p></div>
+                                    <div class="payment"><p>{ payment }</p></div>
+                                    <div class="refund">
+                                        <div class="graph-elem"></div>
+                                        <p>{ loan_paid }</p>
+                                    </div>
+                                    <div class="interests">
+                                        <div class="graph-elem"></div>
+                                        <p>{ interests_paid }</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="top-lined line" id="graph_1-foot">
                             <div class="left"><p id="dateend">Septembre 2020</p></div>
@@ -171,6 +194,7 @@
                 </div>
             </div>
         </section>
-        <script src="eval.js"></script>
+        <script src="base_converter.js" async></script>
+        <script src="eval.js" async></script>
     </body>
 </html>

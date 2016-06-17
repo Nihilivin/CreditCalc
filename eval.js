@@ -1,8 +1,3 @@
-/*jslint plusplus: true */
-/*jshint strict: true */
-/*jslint nomen: true*/
-/*jslint browser: true, devel: true, regexp: true, white:true */
-/*global d, Event, atob, btoa */
 /**
  * @file Main calculator client-side script
  *
@@ -13,6 +8,12 @@
  *
  * @version 0.2.0
  */
+
+/*jslint plusplus: true */
+/*jshint strict: true */
+/*jslint nomen: true*/
+/*jslint browser: true, devel: true, regexp: true, white:true */
+/*global d, Event, atob, btoa */
 
 /**
  * @callback EventFunction
@@ -28,24 +29,25 @@
 (function () {
     'use strict';
     /**
- * @class Calculator
- * @description Base class that  handles calculations
- * @author Gerkin
- */
+     * @class Calculator
+     * @description Base class that  handles calculations
+     * @author Gerkin
+     */
     function Calculator() {
         var amount,
             duration,
             rate,
-            payment;
+            payment,
+            paymentYear = null;
 
         Object.defineProperties(this, {
             /**
-         * @member {Integer} amount
-         * @description Amount of money borrowed
-         * @memberof Calculator
-         * @public
-         * @instance
-         */
+             * @member {Integer} amount
+             * @description Amount of money borrowed
+             * @memberof Calculator
+             * @public
+             * @instance
+             */
             amount: {
                 get: function () {
                     return amount;
@@ -58,12 +60,12 @@
                 }
             },
             /**
-         * @member {Integer} rate
-         * @description Annual rate of the loan
-         * @memberof Calculator
-         * @public
-         * @instance
-         */
+             * @member {Integer} rate
+             * @description Annual rate of the loan
+             * @memberof Calculator
+             * @public
+             * @instance
+             */
             rate: {
                 get: function () {
                     return rate;
@@ -76,12 +78,12 @@
                 }
             },
             /**
-         * @member {Integer} duration
-         * @description Total duration of the loan, in years
-         * @memberof Calculator
-         * @public
-         * @instance
-         */
+             * @member {Integer} duration
+             * @description Total duration of the loan, in years
+             * @memberof Calculator
+             * @public
+             * @instance
+             */
             duration: {
                 get: function () {
                     return duration;
@@ -94,12 +96,12 @@
                 }
             },
             /**
-         * @member {Integer} payment
-         * @description Payment of a mensuality
-         * @memberof Calculator
-         * @public
-         * @instance
-         */
+             * @member {Integer} payment
+             * @description Payment of a mensuality
+             * @memberof Calculator
+             * @public
+             * @instance
+             */
             payment: {
                 get: function () {
                     return payment;
@@ -110,41 +112,61 @@
                         payment = newPayment;
                     }
                 }
+            },
+            /**
+             * @member {Integer} paymentYear
+             * @description Payment of a year of mensualities
+             * @memberof Calculator
+             * @public
+             * @instance
+             * @readonly
+             */
+            paymentYear: {
+                get: function (){
+                    return paymentYear;
+                },
+                set: function (newPaymentYear) {
+                    newPaymentYear = parseFloat(newPaymentYear);
+                    console.log(newPaymentYear);
+                    if (isFinite(newPaymentYear) && newPaymentYear > 0) {
+                        paymentYear = newPaymentYear;
+                    }
+                }
             }
         });
     }
     Calculator.prototype = {
         /**
-     * @function calc_amount
-     * @memberof Calculator
-     * @description Calculates the {@link Calculator#amount amount borrowed}, according to given {@link Calculator#duration duration}, {@link Calculator#rate rate} and {@link Calculator#payment monthly payment}
-     * @author Gerkin
-     * @returns {float} The amount of the loan
-     */
+         * @function calc_amount
+         * @memberof Calculator
+         * @description Calculates the {@link Calculator#amount amount borrowed}, according to given {@link Calculator#duration duration}, {@link Calculator#rate rate} and {@link Calculator#payment monthly payment}
+         * @author Gerkin
+         * @returns {float} The amount of the loan
+         */
         calc_amount: function () {
             var self = this,
                 mensualRate = self.rate / 1200;
             return self.payment * ((1 - (1 / Math.pow(1 + mensualRate, 12 * self.duration))) / mensualRate);
         },
         /**
-     * @function calc_duration
-     * @memberof Calculator
-     * @description Calculates the {@link Calculator#duration duration} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#rate rate} and {@link Calculator#payment monthly payment}
-     * @author Gerkin
-     * @returns {float} The duration of the loan
-     */
+         * @function calc_duration
+         * @memberof Calculator
+         * @description Calculates the {@link Calculator#duration duration} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#rate rate} and {@link Calculator#payment monthly payment}
+         * @author Gerkin
+         * @returns {float} The duration of the loan
+         */
         calc_duration: function () {
             var self = this,
                 r = self.rate / 1200;
             return Math.log(-self.payment / ((r * self.amount) - self.payment)) / (12 * Math.log(r + 1));
         },
         /**
-     * @function calc_rate
-     * @memberof Calculator
-     * @description Calculates the {@link Calculator#rate annual rate} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#duration duration} and {@link Calculator#payment monthly payment}. Notice: this function is iterative, and may return non-exact values
-     * @author Gerkin
-     * @returns {float} The annual rate of the loan
-     */
+         * @function calc_rate
+         * @memberof Calculator
+         * @description Calculates the {@link Calculator#rate annual rate} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#duration duration} and {@link Calculator#payment monthly payment}. Notice: this function is iterative, and may return non-exact values
+         * @author Gerkin
+         * @returns {float} The annual rate of the loan
+         */
         calc_rate: function () {
             var self = this,
                 tempCalc = new Calculator(),
@@ -174,12 +196,12 @@
             return rate;
         },
         /**
-     * @function calc_payment
-     * @memberof Calculator
-     * @description Calculates the {@link Calculator#payment monthly payment} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#rate rate} and {@link Calculator#duration duration}
-     * @author Gerkin
-     * @returns {float} The monthly payment of the loan
-     */
+         * @function calc_payment
+         * @memberof Calculator
+         * @description Calculates the {@link Calculator#payment monthly payment} of the loan, according to given {@link Calculator#amount amount borrowed}, {@link Calculator#rate rate} and {@link Calculator#duration duration}
+         * @author Gerkin
+         * @returns {float} The monthly payment of the loan
+         */
         calc_payment: function () {
             var self = this,
                 mensualRate = self.rate / 1200;
@@ -281,6 +303,22 @@
         } }
     }
 
+
+    var hashTable = {
+        amount: 1,
+        duration: 2,
+        rate: 3,
+        payment: 4,
+        paymentYear: 5,
+        wasCalc: 9
+    },
+        hashTableK = Object.keys(hashTable);
+
+
+    var hashBase = new Base(
+        "!$&'()*+,;=-._~:@/?ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz0123456789");// Sort by inference
+    var dataBase = new Base(
+        ":1234567890,.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");// Sort by inference
     /**
      * @function setUrlHash
      * @description Takes an object, and put it as url hash in base64
@@ -295,8 +333,14 @@
                 location.hash = "";
             }
         }
-        var string = JSON.stringify(obj),
-            hash = btoa(string);
+        var tabledObj = {}
+        for(var i in obj){
+            var val = i === "wasCalc" ? hashTable[obj[i]] : obj[i];
+            tabledObj[hashTable[i] || i] = val;
+        }
+        var json = JSON.stringify(tabledObj),
+            string = json.slice(1).slice(0, -1).replace(/"/g, ""),
+            hash = dataBase.convert(hashBase, string);
         try {
             if (history.pushState) {
                 history.pushState(null, null, '#' + hash);
@@ -314,12 +358,25 @@
      * @author Gerkin
      */
     function getUrlHash() {
-        var hash = location.hash.replace(/^#/, ''),
-            obj = {};
+        var hash = location.hash.slice(1),
+            obj = {},
+            decoded;
         try {
-            obj = JSON.parse(atob(hash));
-        } catch (e) {}
-        return obj;
+            decoded = hashBase.convert(dataBase, hash);
+            obj = JSON.parse(("{" + decoded + "}").replace(/(\{|,)([^:]+)|([a-zA-Z]+)/g,'$1"$2$3"'));
+        } catch (e) {console.error(e, e.stack)}
+        var tabledObj = {};
+        for(var i in obj){
+            var val = hashTableK.filter(function(k){
+                return hashTable[k] == i;
+            })[0] === "wasCalc" ? hashTableK.filter(function(k){
+                return hashTable[k] == obj[i];
+            })[0] : obj[i];
+            tabledObj[hashTableK.filter(function(k){
+                return hashTable[k] == i;
+            })[0] || i] = val;
+        }
+        return tabledObj;
     }
 
     /**
@@ -331,8 +388,9 @@
      */
     function gei(s) {return d.getElementById(s); }
     function geiN(s) {return gei(s) || {};}
-    function qs(s) {return d.querySelector(s); }
-    function qsa(s) {return d.querySelectorAll(s); }
+    function qs(s,e) {return (e||d).querySelector(s); }
+    function qsa(s,e) {return (e||d).querySelectorAll(s); }
+    function hop(a,v) {return a.hasOwnProperty(v); }
 
 
     var months = {
@@ -387,29 +445,31 @@
     },
         d = document,
         /**
- * @global
- * @name calculator
- * @type {Calculator}
- * @description The main {@link Calculator} instance
- */
+     * @global
+     * @name calculator
+     * @type {Calculator}
+     * @description The main {@link Calculator} instance
+     */
         calculator = new Calculator(),
         /**
- * @global
- * @name formElems
- * @type {object}
- * @property {DOMElement}  calculatorVariables.calc The calcul trigger button
- * @description {@link DOMElement DOMElements} stored in memory to avoid most of the DOM queries
- */
+     * @global
+     * @name formElems
+     * @type {object}
+     * @property {DOMElement}  calculatorVariables.calc The calcul trigger button
+     * @description {@link DOMElement DOMElements} stored in memory to avoid most of the DOM queries
+     */
         formElems = {},
         /**
- * @global
- * @name calculatorVariables
- * @description The list of handled form sets
- * @type {string[]}
- * @readonly
- * @enum {string}
- */
-        calculatorVariables = {"amount": 0, "duration": 1, "rate": 2, "payment": 3};
+     * @global
+     * @name calculatorVariables
+     * @description The list of handled form sets
+     * @type {string[]}
+     * @readonly
+     * @enum {string}
+     */
+        calculatorVariables = {"amount": 0, "duration": 1, "rate": 2, "payment": 3},
+
+        graphElems = {y:[],m:[]};
     calculatorVariables = Object.keys(calculatorVariables);
 
 
@@ -450,12 +510,12 @@
             }
         }
         /**
-     * @function formatDisplayable
-     * @description Takes a float and format it with spaces and comma as separator
-     * @author Gerkin
-     * @param   {float} value  The numeric value to format
-     * @returns {string} Displayable string
-     */
+         * @function formatDisplayable
+         * @description Takes a float and format it with spaces and comma as separator
+         * @author Gerkin
+         * @param   {float} value  The numeric value to format
+         * @returns {string} Displayable string
+         */
         function formatDisplayable(value) {
             value += "";
             var parts = value.match(/^(\d*)(?:[.,](\d*))?$/),
@@ -505,9 +565,9 @@
                     return value !== type && isParsableNumber(formElems[value].value.value);
                 };
             for (type in formElems) {
-                if (formElems.hasOwnProperty(type)) {
+                if (hop(formElems,type)) {
                     formElems[type].padlock.disabled = !isParsableNumber(formElems[type].value.value); // Disable padlock button if non valid value
-                    formElems[type].calc.disabled = Object.keys(formElems).filter(checkValidValue).length !== 3; // Enable Calc button if the 3 other values are filled 
+                    formElems[type].calc.disabled = Object.keys(formElems).filter(checkValidValue).length !== 3; // Enable Calc button if the 3 other values are filled
                 }
             }
         }
@@ -524,28 +584,6 @@
                 return getNumFieldValue(formElems[type].value.value);
             }
             return 0;
-        }
-
-        function replacePlaceholders(text, replacements){
-            text = text.replace(/\$\{\s*([\w\.]+)\s*\}/g, function(matched, identifier){
-                var identifiers = identifier.split("."),
-                    swapReplacements = replacements,
-                    i = 0,
-                    j = identifiers.length;
-                for(i; i < j; i++){
-                    // Search in both ancestor & current obj
-                    if(typeof replacements === "object"){
-                        swapReplacements = swapReplacements[identifiers[i]];
-                    } else {
-                        swapReplacements = "";
-                    }
-                    if(swapReplacements === ""){
-                        break;
-                    }
-                }
-                return swapReplacements || "";
-            });
-            return text;
         }
 
         function formatHtmlPrototype(DOMElement, replacements){
@@ -634,24 +672,33 @@
                     return function () {
                         var c = calculator,
                             k,
-                            result = c["calc_" + type](),
+                            result,
                             valueContainer = formElems[type].value;
 
                         for (k in arrNoI) {
-                            if (arrNoI.hasOwnProperty(k)) {
+                            if (hop(arrNoI,k)) {
                                 c[arrNoI[k]] = getVarValue(arrNoI[k]);
                             }
+                        }
+                        result = c["calc_" + type]();
+                        if(type === "payment"){
+                            calculator["paymentYear"] = result * 12;
+                        } else {
+                            calculator["paymentYear"] = calculator["payment"];
                         }
                         calculator[type] = result;
                         valueContainer.value = formatDisplayable(preciseValue(type, result));
                         setUrlHash({
-                            amount: c.amount,
-                            duration: c.duration,
-                            rate: c.rate,
-                            payment: c.payment
+                            amount: parseFloat(preciseValue("amount", c.amount)),
+                            duration: parseFloat(preciseValue("duration", c.duration)),
+                            rate: parseFloat(preciseValue("rate", c.rate)),
+                            payment: parseFloat(preciseValue("payment", c.payment)),
+                            paymentYear: parseFloat(preciseValue("payment", c.paymentYear)),
+                            wasCalc: type
                         });
                         valueContainer.classList.add("calculated");
                         enableCalcButtons();
+                        generateGraph();
                     };
                 }());
                 attach(formElems[j].calc, "click", formElems[j].calculate);
@@ -813,7 +860,9 @@
                     return setGraphDisplayMode;
                 }()));
             },
-            hashObj = getUrlHash();
+            hashObj = getUrlHash(),
+            wasCalculated;
+
         dynamicStylesheet.id = "dynamicStylesheet";
         qs("head").appendChild(dynamicStylesheet);
 
@@ -822,29 +871,237 @@
             initRepeatableButton(i);
         }
         for (i in calculatorVariables) {
-            if (calculatorVariables.hasOwnProperty(i)) {
+            if (hop(calculatorVariables,i)) {
                 initCalculatorInput(i);
             }
         }
         // Try to load hash
-        if(Object.keys(hashObj).length === 0 && hashObj.constructor === Object) {
-            for(i in calculatorVariables) {
-                if (calculatorVariables.hasOwnProperty(i)) {
-                    j = calculatorVariables[i];
-                    calculator[j] = hashObj[j];
-                    formElems[j].value.value = formatDisplayable(preciseValue(j, hashObj[j]));
+        if(Object.keys(hashObj).length !== 0 && hashObj.constructor === Object) {
+            for(i in hashObj) {
+                console.log(i, calculatorVariables);
+                if (hop(hashObj,i)) {
+                    calculator[i] = hashObj[i];
+                    formElems[i] && (formElems[i].value.value = formatDisplayable(preciseValue(i != "paymentYear" ? i : "payment", hashObj[i])));
                 }
+            }
+            wasCalculated = formElems[hashObj.wasCalc];
+            if(Object.keys(formElems).filter(function(v){
+                return isParsableNumber(formElems[v].value.value)
+            }).length === 4){
+                if (wasCalculated) {
+                    wasCalculated.value && wasCalculated.value.classList.add("calculated");
+                }
+                generateGraph();
             }
         }
         enableCalcButtons();
+
+
+
+
+
+        function replacePlaceholders(text, replacements){
+            text = text.replace(/\{\s*([\w\.]+)\s*\}/g, function(matched, identifier){
+                var identifiers = identifier.split("."),
+                    swapReplacements = replacements,
+                    i = 0,
+                    j = identifiers.length;
+                for(i; i < j; i++){
+                    // Search in both ancestor & current obj
+                    if(typeof replacements === "object"){
+                        swapReplacements = swapReplacements[identifiers[i]];
+                    } else {
+                        swapReplacements = "";
+                    }
+                    if(swapReplacements === ""){
+                        break;
+                    }
+                }
+                return swapReplacements || "";
+            });
+            return text;
+        }
+
+        function parseHtml(str){ // /!\ Single node only
+            if(document.createRange){
+                var range = document.createRange(),
+                    fragment;
+                range.selectNode(document.body); // required in Safari
+                fragment = range.createContextualFragment(str);
+                return fragment.firstChild;
+            } else {
+                var elem = document.createElement("div");
+                elem.innerHTML = str;
+                return elem.firstChild;
+            }
+        }
+
+        function generateGraph(){
+            function getOrderedPayments(calc, dateStart){
+                var paymentsList = getPayments(calc),
+                    i = 0,
+                    j = paymentsList.length,
+                    month = dateStart.getMonth(),
+                    yearStart = dateStart.getFullYear(),
+                    year = yearStart,
+                    payments = {};
+
+                for(; i < j && year < yearStart + 16; i++){
+                    month++;
+                    if(month > 11 || i === j - 1){
+                        for(var k in payments[year]){
+                            if(payments[year].hasOwnProperty(k)) {
+                                if(isNA(payments[year].loan)) {
+                                    payments[year].loan = 0;
+                                }
+                                payments[year].loan += payments[year][k].loan;
+                                if(isNA(payments[year].interests)) {
+                                    payments[year].interests = 0;
+                                }
+                                payments[year].interests += payments[year][k].interests;
+                            }
+                        }
+                        payments[year].loanLeft = paymentsList[i === j - 1 ? i : i - 1].loanLeft;
+                    }
+                    if(month > 11){
+                        month = 0;
+                        year++;
+                    }
+                    if(isNA(payments[year])){
+                        payments[year] = {};
+                    }
+                    payments[year][month + 1] = paymentsList[i];
+                }
+                return payments;
+            }
+
+            var c = calculator,
+                dateStart = new Date(), // Change for modulate start of payment. Defaults to "Now"
+                dateStart = new Date(dateStart.getFullYear(), dateStart.getMonth() + 1),
+                dateEnd = new Date(dateStart.getFullYear() + Math.floor(c.duration), dateStart.getMonth() + Math.round((c.duration % 1) * 12)),
+                payments = getOrderedPayments(c,dateStart),
+                linesMaxCount = 15,// Change to display more rows
+                firstYear = dateStart.getFullYear(),
+                extraneousDates = {},
+                inRange = {y:{},m:{}};
+
+
+            // Init years list
+            for(var i = 0, year; i < linesMaxCount && !isNA(year = payments[firstYear + i]); i++){
+                inRange.y[String(firstYear + i)] = {
+                    loanLeft: year.loanLeft,
+                    loan: year.loan,
+                    interests: year.interests
+                };
+            }
+
+            // Init months list
+            var i = -1,
+                month = dateStart.getMonth(),
+                yearInc = 0,
+                yearO,
+                monthO;
+            while(++i < linesMaxCount && !isNA(yearO = payments[firstYear + yearInc]) && !isNA(monthO = yearO[month+1])){
+                console.log(month, i, monthO);
+                inRange.m[i + "_" + months[month + 1].short + " " + (firstYear + yearInc)] = {
+                    loanLeft: monthO.loanLeft,
+                    loan: monthO.loan,
+                    interests: monthO.interests
+                };
+                month++;
+                if(month == 12){
+                    yearInc++;
+                    month = 0;
+                }
+            }
+            console.log(inRange);
+
+            var head = gei("datestart"),
+                foot = gei("dateend");
+            head && (head.innerHTML = months[dateStart.getMonth() + 1].full + " " + dateStart.getFullYear());
+            foot && (foot.innerHTML = months[dateEnd.getMonth() + 1].full + " " + dateEnd.getFullYear());
+
+            var bodyGraph = gei("graph_1-body_scroll"),
+                prototype = qs(".html-prototype", bodyGraph),
+                pseudoContainer = d.createElement("div"),
+                prototypeStr;
+            prototype.classList.remove("html-prototype")
+            pseudoContainer.appendChild(prototype);
+            prototypeStr = pseudoContainer.innerHTML;
+
+            // Init year lines
+            for(var i in inRange.y){
+                var yearInfos = inRange.y[i],
+                    paymentYearFactor = (function(){
+                        if(i == dateStart.getFullYear() && i == dateEnd.getFullYear()){
+                            return dateEnd.getMonth() - dateStart.getMonth();
+                        } else if(i == dateStart.getFullYear()){
+                            return 12 - dateStart.getMonth();
+                        } else if(i == dateEnd.getFullYear()){
+                            return dateEnd.getMonth() + 1
+                        } else {
+                            return 12
+                        }
+                    }()) / 12,
+                    formatted = replacePlaceholders(
+                        prototypeStr,
+                        {
+                            type: "year",
+                            label: i,
+                            payment: formatDisplayable(preciseValue("roundMoney",c.paymentYear * paymentYearFactor)) + " €",
+                            loan_paid: formatDisplayable(preciseValue("roundMoney",yearInfos.loan)) + "€",
+                            loan_width:  ((preciseValue("roundMoney",yearInfos.loan) / (c.payment * 12)) * 100) + "%",
+                            interests_paid: formatDisplayable(preciseValue("roundMoney",yearInfos.interests)) + "€",
+                            interests_width: ((preciseValue("roundMoney",yearInfos.interests) / (c.payment * 12)) * 100) + "%"
+                        }
+                    ),
+                    newElem = parseHtml(formatted);
+                console.log(paymentYearFactor);
+                graphElems.y.push(newElem);
+                bodyGraph.appendChild(newElem);
+            }
+
+
+            function equalizeWidths(selector, parents){
+                parents = [].slice.call(parents);
+                var val = 0,
+                    parentsCount = parents.length,
+                    i = 0;
+                for(; i < parentsCount; i++){
+                    var child = qs(selector, parents[i]);
+                    if(child){
+                        val = Math.max(child.offsetWidth, val);
+                    }
+                }
+                return val;
+            }
+            var yearLines = qsa(".line-year", bodyGraph);
+            setTimeout(function(){
+                var datesYearWidth = equalizeWidths(".date",yearLines),
+                    paymentsYearWidth = equalizeWidths(".payment",yearLines),
+                    labelsRefundYearWidth = equalizeWidths(".refund p",yearLines),
+                    labelsInterestsYearWidth = equalizeWidths(".interests p",yearLines);
+
+                console.log(labelsRefundYearWidth, labelsInterestsYearWidth);
+
+
+                dynamicStylesheet.innerHTML =
+                    ".graph_1-line.line-year .date{width:"+datesYearWidth+"px}"+
+                    ".graph_1-line.line-year .payment{width:"+paymentsYearWidth+"px}"
+            },1000);
+        }
+
+
+
+
         attach([].slice.call(qsa(".pager-button")), "click",(function(){
             var body = qs("body");
             /**
-         * @function switchPage
-         * @description Switch current page to button target page
-         * @author Gerkin
-         * @inner
-         */
+             * @function switchPage
+             * @description Switch current page to button target page
+             * @author Gerkin
+             * @inner
+             */
             return function switchPage(){
                 body.setAttribute("data-page", this.getAttribute("data-page-target"));
 
@@ -921,8 +1178,8 @@
 
                     // Retrieve prototype
                     graphTable = gei('depreciation_schedule');
-                    graphTableBody = graphTable.querySelector('#depreciation_schedule-inner tbody');
-                    graphTablePrototype = graphTableBody.querySelector('.html-prototype');
+                    graphTableBody = qs('#depreciation_schedule-inner tbody',graphTable);
+                    graphTablePrototype = qs('.html-prototype',graphTableBody);
                     node = graphTableBody.firstChild;
                     while (node) {
                         next = node.nextElementSibling;
@@ -936,10 +1193,10 @@
                         var total = c.payment * (c.duration * 12),
                             loanPaid = c.amount,
                             interestsPaid = total - loanPaid;
-                        graphTable.querySelector("thead .loan-paid-graph").style.width = ((loanPaid / total) * 100) + "%";
-                        graphTable.querySelector("thead .interests-paid-graph").style.width = ((interestsPaid / total) * 100) + "%";
-                        graphTable.querySelector("thead .loan-paid-value").innerHTML = formatDisplayable(preciseValue("roundMoney", loanPaid)) + "€";
-                        graphTable.querySelector("thead .interests-paid-value").innerHTML = formatDisplayable(preciseValue("roundMoney", interestsPaid)) + "€";
+                        qs("thead .loan-paid-graph",graphTable).style.width = ((loanPaid / total) * 100) + "%";
+                        qs("thead .interests-paid-graph",graphTable).style.width = ((interestsPaid / total) * 100) + "%";
+                        qs("thead .loan-paid-value",graphTable).innerHTML = formatDisplayable(preciseValue("roundMoney", loanPaid)) + "€";
+                        qs("thead .interests-paid-value",graphTable).innerHTML = formatDisplayable(preciseValue("roundMoney", interestsPaid)) + "€";
                     }());
 
                     // Init table
@@ -978,7 +1235,7 @@
                     geiN("enddate").innerHTML=extraneousDates.end;
 
                     // Set the width of headers
-                    firstCells = graphTableBody.querySelectorAll("tbody td:first-child p");
+                    firstCells = qsa("tbody td:first-child p",graphTableBody);
                     minWidth = Infinity;
                     for(i = 0, j = firstCells.length; i < j; i++){
                         thisWidth = firstCells[i].offsetWidth;

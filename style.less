@@ -215,10 +215,10 @@ label{
     &:focus{
 
         &,& + div .unit{
-            background: #FFF; 
+            background: #FFF;
         }
     }
-    &:invalid:not(:focus){ 
+    &:invalid:not(:focus){
         color:#ff3333;
         //        box-shadow:0 0 10px 2px #ff3333;
     }
@@ -245,7 +245,7 @@ label{
     overflow: hidden;
     background: #333;
     cursor:pointer;
-    
+
     *{
         cursor: inherit;
     }
@@ -293,7 +293,7 @@ label{
             height: 100%;
             top:0;
             background: @green;
-        transition: 0.25s all
+            transition: 0.25s all;
             z-index: -1;
         }
     }
@@ -364,20 +364,106 @@ label{
     padding: 20px;
     background-color: #000000;
 
+    .refund .graph-elem{
+        background-color: rgb(41,118,157);
+    }
+    .interests .graph-elem{
+        background-color: rgb(201,73,44);
+    }
     .top-lined{
         border-top: 1px solid @text_unselected;
+    }
+    .left, .refund{
+        border-right: 1px solid #fff;
     }
     .line{
         display: flex;
         flex-direction: row;
         width: 100%;
+
+        .left, .right{
+            flex: 1 0 auto;
+
+            .graph-elem{
+                position: absolute;
+                bottom: 0;
+            }
+        }
         .left {
             text-align: left;
-            flex: 1 1 0;
         }
         .right {
             text-align: right;
-            flex: 1 1 0;
+        }
+    }
+    .graph-elem{
+        height: 30px;
+    }
+
+    .graph_1-line{
+        display: flex;
+        flex-direction: row;
+        line-height: 30px;
+
+        > *{
+            transition: 0.25s all;
+        }
+        > *, p{
+            padding-top: 10px;
+        }
+        &:last-child{
+            > *, p{
+                padding-bottom: 10px;
+            }
+        }
+        .date, .payment{
+            text-align: right;
+            flex: 0 0 auto;
+        }
+        @padding: 10px;
+        .date{
+            padding: 0 @padding 0 0;
+        }
+        .payment{
+            padding: 0 @padding;
+        }
+        .refund, .interests{
+            flex: 0 1 100%;
+            position: relative;
+
+            p{
+                position: absolute;
+                top:0;
+            }
+        }
+        .refund p{
+            text-align: right;
+            right: @padding / 2;
+        }
+        .interests p{
+            text-align: left;
+            left: @padding / 2;
+        }
+    }
+}
+#graph_1_head{
+    .graph-elem{
+        padding: 15px 0;
+    }
+    .left, .right{
+        position: relative;
+        padding-bottom: 30px;
+    }
+    .left {
+        .graph-elem{
+            right: 0;
+            width: 50%;
+        }
+    }
+    .right {
+        .graph-elem{
+            left: 0;
+            width: 50%;
         }
     }
 }
@@ -425,3 +511,8 @@ label{
 .html-prototype{
     display: none;
 }
+
+
+
+
+@import (inline, optional) "style_css.css";
