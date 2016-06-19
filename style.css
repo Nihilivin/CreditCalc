@@ -24,6 +24,7 @@ body {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+  overflow: hidden;
 }
 body > section {
   -webkit-box-flex: 1;
@@ -267,8 +268,44 @@ label {
   transition: 0.25s all;
   z-index: -1;
 }
+.switch-text {
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+}
+.switch-text,
+.switch-text > span {
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+}
+.switch-text.animating span,
+.switch-text.not-animated span {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+.switch-text.animating > span:first-child {
+  opacity: 1;
+  left: 0;
+}
+.switch-text.animating > span:last-child {
+  opacity: 0;
+  left: 100%;
+}
+.switch-text.not-animated > span:first-child {
+  opacity: 0;
+  left: -100%;
+}
+.switch-text.not-animated > span:last-child {
+  opacity: 1;
+  left: 0;
+}
 .green-emphasis {
   color: #00b050;
+}
+.nobreak {
+  white-space: nowrap;
+  display: inline-block;
 }
 #basic_data {
   display: -webkit-box;
@@ -282,6 +319,16 @@ label {
           flex-direction: row;
   background-color: #262626;
   min-height: 100%;
+  overflow-x: hidden;
+}
+@media (max-width: 890px) {
+  #basic_data {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
 }
 /* main box, universal width */
 #calculator-padder {
@@ -329,6 +376,7 @@ label {
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   color: #bfbfbf;
+  overflow: hidden;
 }
 #graph_1 {
   margin: 20px;
@@ -337,9 +385,11 @@ label {
 }
 #graph_1 .refund .graph-elem {
   background-color: #29769d;
+  right: 0;
 }
 #graph_1 .interests .graph-elem {
   background-color: #c9492c;
+  left: 0;
 }
 #graph_1 .top-lined {
   border-top: 1px solid #bfbfbf;
@@ -359,13 +409,23 @@ label {
       -ms-flex-direction: row;
           flex-direction: row;
   width: 100%;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
-#graph_1 .line .left,
+#graph_1 .line .left {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 100%;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+}
 #graph_1 .line .right {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 0 auto;
-      -ms-flex: 1 0 auto;
-          flex: 1 0 auto;
+  -webkit-flex: 1 1 0;
+      -ms-flex: 1 1 0;
+          flex: 1 1 0;
+  overflow: visible;
 }
 #graph_1 .line .left .graph-elem,
 #graph_1 .line .right .graph-elem {
@@ -380,6 +440,8 @@ label {
 }
 #graph_1 .graph-elem {
   height: 30px;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
 }
 #graph_1 .graph_1-line {
   display: -webkit-box;
@@ -392,18 +454,31 @@ label {
       -ms-flex-direction: row;
           flex-direction: row;
   line-height: 30px;
+  height: 40px;
+  width: 100%;
+  -webkit-transition: 1s all;
+  transition: 1s all;
+  position: relative;
+  left: 0;
 }
 #graph_1 .graph_1-line > * {
   -webkit-transition: 0.25s all;
   transition: 0.25s all;
+  padding-top: 10px!important;
 }
-#graph_1 .graph_1-line > *,
-#graph_1 .graph_1-line p {
-  padding-top: 10px;
+#graph_1 .graph_1-line.inside.last {
+  height: 50px;
 }
-#graph_1 .graph_1-line:last-child > *,
-#graph_1 .graph_1-line:last-child p {
+#graph_1 .graph_1-line.inside.last > * {
   padding-bottom: 10px;
+}
+#graph_1 .graph_1-line:not(.inside) {
+  height: 0;
+  left: 100%;
+}
+#graph_1 .graph_1-line:not(.inside),
+#graph_1 .graph_1-line:not(.inside) * {
+  overflow: visible;
 }
 #graph_1 .graph_1-line .date,
 #graph_1 .graph_1-line .payment {
@@ -429,16 +504,27 @@ label {
 }
 #graph_1 .graph_1-line .refund p,
 #graph_1 .graph_1-line .interests p {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+#graph_1 .graph_1-line .refund .graph-elem,
+#graph_1 .graph_1-line .interests .graph-elem {
   position: absolute;
-  top: 0;
+  top: 10px;
+  width: 100%;
+}
+#graph_1 .graph_1-line .refund {
+  text-align: right;
 }
 #graph_1 .graph_1-line .refund p {
-  text-align: right;
-  right: 5px;
+  padding-right: 5px;
+}
+#graph_1 .graph_1-line .interests {
+  text-align: left;
 }
 #graph_1 .graph_1-line .interests p {
-  text-align: left;
-  left: 5px;
+  padding-left: 5px;
 }
 #graph_1_head .graph-elem {
   padding: 15px 0;
@@ -498,6 +584,7 @@ label {
   -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
+  position: relative;
 }
 #toggle-year_month {
   display: inline-block;
@@ -512,6 +599,4 @@ label {
 .html-prototype {
   display: none;
 }
-.hello{
-    display: none;
-}
+

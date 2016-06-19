@@ -38,7 +38,8 @@
             duration,
             rate,
             payment,
-            paymentYear = null;
+            paymentYear = null,
+            paymentTotal = null;
 
         Object.defineProperties(this, {
             /**
@@ -130,7 +131,13 @@
                     console.log(newPaymentYear);
                     if (isFinite(newPaymentYear) && newPaymentYear > 0) {
                         paymentYear = newPaymentYear;
+                        paymentTotal = newPaymentYear * duration;
                     }
+                }
+            },
+            paymentTotal: {
+                get: function(){
+                    return paymentTotal;
                 }
             }
         });
@@ -387,9 +394,11 @@
      * @returns {DOMElement|null} The DOMElement, or null if not found
      */
     function gei(s) {return d.getElementById(s); }
-    function geiN(s) {return gei(s) || {};}
     function qs(s,e) {return (e||d).querySelector(s); }
     function qsa(s,e) {return (e||d).querySelectorAll(s); }
+    function geiN(s) {return gei(s) || {};}
+    function qsN(s,e) {return qs(s,e) || {}; }
+    function qsaN(s,e) {return qsa(s) || {}; }
     function hop(a,v) {return a.hasOwnProperty(v); }
 
 
@@ -469,8 +478,20 @@
      */
         calculatorVariables = {"amount": 0, "duration": 1, "rate": 2, "payment": 3},
 
-        graphElems = {y:[],m:[]};
+        graphElems = {y:[],m:[]},
+        bodyGraph = gei("graph_1-body_scroll"),
+        prototype = qs(".html-prototype", bodyGraph),
+        pseudoContainer = d.createElement("div"),
+        prototypeStr;
+
+
+
+
     calculatorVariables = Object.keys(calculatorVariables);
+    window.calculator = calculator;
+    prototype.classList.remove("html-prototype")
+    pseudoContainer.appendChild(prototype);
+    prototypeStr = pseudoContainer.innerHTML;
 
 
     /**
@@ -826,6 +847,9 @@
                     if(!String.fromCharCode(e.which || e.keyCode).match(/^[0-9,. ]$/)) {
                         e.preventDefault();
                     }
+                    if((e.which || e.keyCode) == 13){ // On "enter"
+                        formElems[j].calculate();
+                    }
                 });
                 /**
              * @function formatInput
@@ -891,7 +915,7 @@
                 if (wasCalculated) {
                     wasCalculated.value && wasCalculated.value.classList.add("calculated");
                 }
-                generateGraph();
+                generateGraph(true);
             }
         }
         enableCalcButtons();
@@ -936,7 +960,8 @@
             }
         }
 
-        function generateGraph(){
+        var resizeListenerInited = false;
+        function generateGraph(onInit){
             function getOrderedPayments(calc, dateStart){
                 var paymentsList = getPayments(calc),
                     i = 0,
@@ -1016,38 +1041,40 @@
             }
             console.log(inRange);
 
-            var head = gei("datestart"),
-                foot = gei("dateend");
-            head && (head.innerHTML = months[dateStart.getMonth() + 1].full + " " + dateStart.getFullYear());
-            foot && (foot.innerHTML = months[dateEnd.getMonth() + 1].full + " " + dateEnd.getFullYear());
 
-            var bodyGraph = gei("graph_1-body_scroll"),
-                prototype = qs(".html-prototype", bodyGraph),
-                pseudoContainer = d.createElement("div"),
-                prototypeStr;
-            prototype.classList.remove("html-prototype")
-            pseudoContainer.appendChild(prototype);
-            prototypeStr = pseudoContainer.innerHTML;
+            switchText(gei("datestart"),months[dateStart.getMonth() + 1].full + " " + dateStart.getFullYear(),onInit);
+            switchText(gei("dateend"),months[dateEnd.getMonth() + 1].full + " " + dateEnd.getFullYear(),onInit);
+            switchText(gei("refund_amount"), formatDisplayable(preciseValue("roundMoney",c.paymentTotal)),onInit);
+            switchText(gei("payback_amount"), formatDisplayable(preciseValue("roundMoney",c.amount)),onInit);
+            switchText(gei("interests_amount"), formatDisplayable(preciseValue("roundMoney",c.paymentTotal - c.amount)),onInit);
 
             // Init year lines
-            for(var i in inRange.y){
-                var yearInfos = inRange.y[i],
+            var counter = 0,
+                keys = Object.keys(inRange.y),
+                keysCount = keys.length;
+
+            for(; counter < keysCount; counter++){
+                var key = keys[counter],
+                    yearInfos = inRange.y[key],
                     paymentYearFactor = (function(){
-                        if(i == dateStart.getFullYear() && i == dateEnd.getFullYear()){
+                        if(key == dateStart.getFullYear() && key == dateEnd.getFullYear()){
                             return dateEnd.getMonth() - dateStart.getMonth();
-                        } else if(i == dateStart.getFullYear()){
+                        } else if(key == dateStart.getFullYear()){
                             return 12 - dateStart.getMonth();
-                        } else if(i == dateEnd.getFullYear()){
+                        } else if(key == dateEnd.getFullYear()){
                             return dateEnd.getMonth() + 1
                         } else {
                             return 12
                         }
-                    }()) / 12,
-                    formatted = replacePlaceholders(
+                    }()) / 12;
+
+                if(isNA(graphElems.y[counter])){
+                    // Create the rown
+                    var formatted = replacePlaceholders(
                         prototypeStr,
                         {
                             type: "year",
-                            label: i,
+                            label: key,
                             payment: formatDisplayable(preciseValue("roundMoney",c.paymentYear * paymentYearFactor)) + " €",
                             loan_paid: formatDisplayable(preciseValue("roundMoney",yearInfos.loan)) + "€",
                             loan_width:  ((preciseValue("roundMoney",yearInfos.loan) / (c.payment * 12)) * 100) + "%",
@@ -1055,10 +1082,33 @@
                             interests_width: ((preciseValue("roundMoney",yearInfos.interests) / (c.payment * 12)) * 100) + "%"
                         }
                     ),
-                    newElem = parseHtml(formatted);
-                console.log(paymentYearFactor);
-                graphElems.y.push(newElem);
-                bodyGraph.appendChild(newElem);
+                        newElem = parseHtml(formatted);
+                    graphElems.y.push(newElem);
+                    bodyGraph.appendChild(newElem);
+                    newElem.classList.add("inside");
+                    if(counter === keysCount - 1){
+                        newElem.classList.add("last");
+                    }
+                } else {
+                    // Edit the row
+                    graphElems.y[counter].classList.add("inside");
+                    if(counter === keysCount - 1){
+                        graphElems.y[counter].classList.add("last");
+                    } else {
+                        graphElems.y[counter].classList.remove("last");
+                    }
+                    qsN(".date p", graphElems.y[counter]).innerHTML = key;
+                    qsN(".payment p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",c.paymentYear * paymentYearFactor)) + " €";
+                    qsN(".refund p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.loan)) + "€";
+                    qsN(".interests p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.interests)) + "€";
+                }
+            }
+            for(; counter < linesMaxCount; counter++){
+                var row = graphElems.y[counter];
+                if(!isNA(row)){
+                    row.classList.remove("inside");
+                    row.classList.remove("last");
+                }
             }
 
 
@@ -1080,16 +1130,99 @@
                 var datesYearWidth = equalizeWidths(".date",yearLines),
                     paymentsYearWidth = equalizeWidths(".payment",yearLines),
                     labelsRefundYearWidth = equalizeWidths(".refund p",yearLines),
-                    labelsInterestsYearWidth = equalizeWidths(".interests p",yearLines);
+                    labelsInterestsYearWidth = equalizeWidths(".interests p",yearLines),
+                    lineInfoWidth = datesYearWidth + paymentsYearWidth,
+                    maxLoan = Math.max.apply(null,Object.keys(inRange.y).map(function(v){
+                        return inRange.y[v].loan;
+                    })),
+                    maxInterests = Math.max.apply(null,Object.keys(inRange.y).map(function(v){
+                        return inRange.y[v].interests;
+                    })),
+                    maxRatio = maxLoan / maxInterests,
+                    maxRatioTotals = c.amount / (c.paymentTotal - c.amount);// Ration between column "refund" && "interests"
 
-                console.log(labelsRefundYearWidth, labelsInterestsYearWidth);
 
+                /*qs("thead .loan-paid-graph",graphTable).style.width = ((loanPaid / total) * 100) + "%";
+                qs("thead .interests-paid-graph",graphTable).style.width = ((interestsPaid / total) * 100) + "%";*/
+                var prefix = "#graph_1 .graph_1-line.line-year ";
+                var bodyStylesheet = prefix + ".date{width:"+datesYearWidth+"px}\n"+
+                    prefix + ".payment{width:"+paymentsYearWidth+"px}\n"+
+                    prefix + ".refund{min-width:"+labelsRefundYearWidth+"px;flex:"+maxRatio+" 0 0}\n"+
+                    prefix + ".interests{min-width:"+labelsInterestsYearWidth+"px;flex:"+"1"+" 0 0}\n";
+                dynamicStylesheet.innerHTML = bodyStylesheet;
 
-                dynamicStylesheet.innerHTML =
-                    ".graph_1-line.line-year .date{width:"+datesYearWidth+"px}"+
-                    ".graph_1-line.line-year .payment{width:"+paymentsYearWidth+"px}"
+                if(!resizeListenerInited){
+                    resizeListenerInited = true;
+                    attach(window, "resize", function(e){
+                        console.log(e);
+                        for(var i = 0; i < keysCount; i++){
+                            var data = inRange.y[keys[i]],
+                                firstLoanContainer = qs(".refund", yearLines[0]),
+                                firstInterestsContainer = qs(".interests", yearLines[0]),
+                                reallyUsefullSpace = firstLoanContainer.offsetWidth / firstLoanContainer.offsetWidth;// All lines have the same containers widths
+                            if(!isNA(data)){
+                                var line = yearLines[i],
+                                    loanGraph = qs(".refund .graph-elem", line),
+                                    interestsGraph = qs(".interests .graph-elem", line);
+
+                                // Scale graph subelems
+                                loanGraph.style.width = (reallyUsefullSpace * firstLoanContainer.offsetWidth * (data.loan / maxLoan)) + "px";
+                                interestsGraph.style.width = ((firstLoanContainer.offsetWidth * reallyUsefullSpace) * (data.interests / maxLoan)) + "px";
+
+                            }
+                        }
+                        // Scale out-of-table components
+                        var head = gei("graph_1_head"),
+                            headWidth = head.offsetWidth,
+                            flexRightWidth = Math.max(
+                                labelsInterestsYearWidth,
+                                (headWidth - (lineInfoWidth + 40)) / (maxRatio + 1)
+                            ),
+                            flexLeftWidth = headWidth - flexRightWidth;
+                        console.log(lineInfoWidth, (headWidth - (lineInfoWidth + 40)) / (maxRatio + 1));
+                        dynamicStylesheet.innerHTML = bodyStylesheet +
+                            "#graph_1 .left{min-width:" + flexLeftWidth + "px;max-width:" + flexLeftWidth + "px;width:" + flexLeftWidth + "px;}\n" +
+                            "#graph_1 .right{min-width:" + flexRightWidth + "px;max-width:" + flexRightWidth + "px;width:" + flexRightWidth + "px;}\n";
+                    });
+                }
+                triggerEvent(window, "resize");
             },1000);
         }
+
+        function switchText(elem, newText, noAnim){
+            noAnim = noAnim === true;
+            function switchTextWidthOk(){
+                var newWidth = newDom.offsetWidth;
+                if(newWidth === 0 && newText.length != 0){
+                    return setTimeout(switchTextWidthOk, 10);
+                }
+                elem.classList.remove("not-animated");
+                elem.classList.add("animating");
+                elem.style.width = newWidth + "px";
+                elem.style.height = newDom.offsetHeight + "px";
+                setTimeout(function(){
+                    elem.removeChild(elem.lastChild);
+                    elem.classList.remove("animating");
+                    elem.style.width = "";
+                }, 500);
+            }
+
+            if(isNA(elem)) {
+                return;
+            }
+            if(noAnim){
+                elem.innerHTML = "<span>" + newText + "</span>";
+                return;
+            }
+            var newDom = parseHtml("<span>" + newText + "</span>");
+            elem.style.height = elem.firstChild.offsetHeight + "px";
+            elem.style.width = elem.firstChild.offsetWidth + "px";
+
+            elem.classList.add("not-animated");
+            elem.insertBefore(newDom, elem.firstChild);
+            setTimeout(switchTextWidthOk, 10);
+        }
+        window.switchText = switchText;
 
 
 

@@ -33,6 +33,7 @@ body{
     font-family: 'Open Sans', sans-serif;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     & > section{
         flex: 1 1 auto;
@@ -239,6 +240,11 @@ label{
     margin-left: -1px;
 }
 
+
+
+
+
+
 .toggle{
     position: relative;
     display: table;
@@ -298,8 +304,53 @@ label{
         }
     }
 }
+.switch-text{
+    position: relative;
+    display: inline-block;
+    vertical-align: bottom;
+
+
+    &, > span{
+        transition: 0.5s all;
+    }
+    &.animating,&.not-animated{
+        span{
+            width: 100%;
+            position: absolute;
+            bottom:0;
+        }
+    }
+    &.animating{
+        > span{
+            &:first-child{
+                opacity: 1;
+                left: 0;
+            }
+            &:last-child{
+                opacity: 0;
+                left: 100%;
+            }
+        }
+    }
+    &.not-animated{
+        > span{
+            &:first-child{
+                opacity: 0;
+                left: -100%;
+            }
+            &:last-child{
+                opacity: 1;
+                left: 0;
+            }
+        }
+    }
+}
 .green-emphasis{
     color:@green;
+}
+.nobreak{
+    white-space: nowrap;
+    display: inline-block;
 }
 
 
@@ -312,6 +363,11 @@ label{
     flex-direction: row;
     background-color: @darkgrey;
     min-height: 100%;
+    overflow-x: hidden;
+
+    @media(max-width: 890px){
+        flex-direction: column;
+    }
 }
 /* main box, universal width */
 #calculator-padder{
@@ -358,6 +414,7 @@ label{
 #graph_1-padder{
     flex: 1 1 auto;
     color:@text_unselected;
+    overflow: hidden;
 }
 #graph_1{
     margin: 20px;
@@ -366,9 +423,11 @@ label{
 
     .refund .graph-elem{
         background-color: rgb(41,118,157);
+        right: 0;
     }
     .interests .graph-elem{
         background-color: rgb(201,73,44);
+        left:0;
     }
     .top-lined{
         border-top: 1px solid @text_unselected;
@@ -380,10 +439,16 @@ label{
         display: flex;
         flex-direction: row;
         width: 100%;
+        justify-content: space-between;
 
+        .left{
+            flex: 1 1 100%;
+        }
+        .right{
+            flex: 1 1 0;
+            overflow: visible;
+        }
         .left, .right{
-            flex: 1 0 auto;
-
             .graph-elem{
                 position: absolute;
                 bottom: 0;
@@ -398,29 +463,43 @@ label{
     }
     .graph-elem{
         height: 30px;
+        transition: 0.5s all;
     }
 
     .graph_1-line{
+        @padding: 10px;
         display: flex;
         flex-direction: row;
         line-height: 30px;
+        height: 30px + @padding;
+        width: 100%;
+        transition: 1s all;
+        position: relative;
+        left: 0;
 
         > *{
             transition: 0.25s all;
+            padding-top: 10px!important;
         }
-        > *, p{
-            padding-top: 10px;
-        }
-        &:last-child{
-            > *, p{
+        &.inside.last{
+            height: 30px + (2 * @padding);
+            > *{
                 padding-bottom: 10px;
+            }
+        }
+        &:not(.inside){
+            height: 0;
+            left: 100%;
+
+            &, *{
+                overflow: visible;
+                //overflow-y: visible;
             }
         }
         .date, .payment{
             text-align: right;
             flex: 0 0 auto;
         }
-        @padding: 10px;
         .date{
             padding: 0 @padding 0 0;
         }
@@ -432,17 +511,29 @@ label{
             position: relative;
 
             p{
+                position: relative;
+                display: inline-block;
+                white-space: nowrap;
+            }
+            .graph-elem{
                 position: absolute;
-                top:0;
+                top: 10px;
+                width: 100%;
             }
         }
-        .refund p{
+        .refund{
             text-align: right;
-            right: @padding / 2;
+
+            p{
+                padding-right: @padding / 2;
+            }
         }
-        .interests p{
+        .interests{
             text-align: left;
-            left: @padding / 2;
+
+            p{
+                padding-left: @padding / 2;
+            }
         }
     }
 }
@@ -496,6 +587,7 @@ label{
 }
 #graph_1-body_scroll{
     flex: 1 1 auto;
+    position: relative;
 }
 #toggle-year_month{
     display: inline-block;
