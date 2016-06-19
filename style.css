@@ -32,6 +32,10 @@ body > section {
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
   overflow: auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 header {
   background-color: #000;
@@ -268,38 +272,6 @@ label {
   transition: 0.25s all;
   z-index: -1;
 }
-.switch-text {
-  position: relative;
-  display: inline-block;
-  vertical-align: bottom;
-}
-.switch-text,
-.switch-text > span {
-  -webkit-transition: 0.5s all;
-  transition: 0.5s all;
-}
-.switch-text.animating span,
-.switch-text.not-animated span {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-}
-.switch-text.animating > span:first-child {
-  opacity: 1;
-  left: 0;
-}
-.switch-text.animating > span:last-child {
-  opacity: 0;
-  left: 100%;
-}
-.switch-text.not-animated > span:first-child {
-  opacity: 0;
-  left: -100%;
-}
-.switch-text.not-animated > span:last-child {
-  opacity: 1;
-  left: 0;
-}
 .green-emphasis {
   color: #00b050;
 }
@@ -318,8 +290,15 @@ label {
       -ms-flex-direction: row;
           flex-direction: row;
   background-color: #262626;
-  min-height: 100%;
   overflow-x: hidden;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 100%;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
 }
 @media (max-width: 890px) {
   #basic_data {
@@ -337,6 +316,13 @@ label {
       -ms-flex: 0 0 390px;
           flex: 0 0 390px;
   display: block;
+}
+@media (max-width: 890px) {
+  #calculator-padder {
+    -webkit-align-self: center;
+        -ms-flex-item-align: center;
+            align-self: center;
+  }
 }
 .calculator-data {
   background: #000000;
@@ -377,6 +363,13 @@ label {
           flex: 1 1 auto;
   color: #bfbfbf;
   overflow: hidden;
+}
+@media (max-width: 890px) {
+  #graph_1-padder {
+    -webkit-align-self: stretch;
+        -ms-flex-item-align: stretch;
+            align-self: stretch;
+  }
 }
 #graph_1 {
   margin: 20px;
@@ -440,6 +433,7 @@ label {
 }
 #graph_1 .graph-elem {
   height: 30px;
+  width: 0px;
   -webkit-transition: 0.5s all;
   transition: 0.5s all;
 }
@@ -487,6 +481,9 @@ label {
   -webkit-flex: 0 0 auto;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
+  /*p{
+                display: inline-block;
+            }*/
 }
 #graph_1 .graph_1-line .date {
   padding: 0 10px 0 0;
@@ -512,7 +509,6 @@ label {
 #graph_1 .graph_1-line .interests .graph-elem {
   position: absolute;
   top: 10px;
-  width: 100%;
 }
 #graph_1 .graph_1-line .refund {
   text-align: right;
@@ -536,11 +532,9 @@ label {
 }
 #graph_1_head .left .graph-elem {
   right: 0;
-  width: 50%;
 }
 #graph_1_head .right .graph-elem {
   left: 0;
-  width: 50%;
 }
 #graph_1-scroll_area {
   display: -webkit-box;
@@ -598,5 +592,106 @@ label {
 }
 .html-prototype {
   display: none;
+}
+.switch-text {
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+}
+.switch-text,
+.switch-text > span {
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+}
+.switch-text.doing span,
+.switch-text.prepare span {
+  width: 100%;
+  position: absolute;
+}
+.switch-text.doing > span:first-child {
+  opacity: 1;
+}
+.switch-text.doing > span:last-child {
+  opacity: 0;
+}
+.switch-text.prepare > span:first-child {
+  opacity: 0;
+}
+.switch-text.prepare > span:last-child {
+  opacity: 1;
+}
+.switch-text.doing span,
+.switch-text.l_r.doing span,
+.switch-text.r_l.doing span,
+.switch-text.l_l.doing span,
+.switch-text.r_r.doing span,
+.switch-text.prepare span,
+.switch-text.l_r.prepare span,
+.switch-text.r_l.prepare span,
+.switch-text.l_l.prepare span,
+.switch-text.r_r.prepare span {
+  top: 0;
+}
+.switch-text.doing > span:first-child,
+.switch-text.l_r.doing > span:first-child,
+.switch-text.r_l.doing > span:first-child,
+.switch-text.l_l.doing > span:first-child,
+.switch-text.r_r.doing > span:first-child {
+  left: 0;
+}
+.switch-text.prepare > span:last-child,
+.switch-text.l_r.prepare > span:last-child,
+.switch-text.r_l.prepare > span:last-child,
+.switch-text.l_l.prepare > span:last-child,
+.switch-text.r_r.prepare > span:last-child {
+  left: 0;
+}
+.switch-text.prepare > span:first-child,
+.switch-text.l_r.prepare > span:first-child,
+.switch-text.l_l.prepare > span:first-child {
+  left: -100%;
+}
+.switch-text.r_l.prepare > span:first-child,
+.switch-text.r_r.prepare > span:first-child {
+  left: 100%;
+}
+.switch-text.doing > span:last-child,
+.switch-text.l_r.doing > span:last-child,
+.switch-text.r_r.doing > span:last-child {
+  left: 100%;
+}
+.switch-text.r_l.doing > span:last-child,
+.switch-text.l_l.doing > span:last-child {
+  left: -100%;
+}
+.switch-text.t_b.doing span,
+.switch-text.b_t.doing span,
+.switch-text.t_b.prepare span,
+.switch-text.b_t.prepare span {
+  left: 0;
+}
+.switch-text.t_b.doing > span:first-child {
+  top: 0;
+}
+.switch-text.t_b.doing > span:last-child {
+  top: 100%;
+}
+.switch-text.t_b.prepare > span:first-child {
+  top: -100%;
+}
+.switch-text.t_b.prepare > span:last-child {
+  top: 0;
+}
+.switch-text.b_t.doing > span:first-child {
+  top: 0;
+}
+.switch-text.b_t.doing > span:last-child {
+  top: -100%;
+}
+.switch-text.b_t.prepare > span:first-child {
+  top: 100%;
+}
+.switch-text.b_t.prepare > span:last-child {
+  top: 0;
 }
 

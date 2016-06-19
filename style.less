@@ -38,6 +38,7 @@ body{
     & > section{
         flex: 1 1 auto;
         overflow: auto;
+        display: flex;
     }
 }
 header{
@@ -304,47 +305,6 @@ label{
         }
     }
 }
-.switch-text{
-    position: relative;
-    display: inline-block;
-    vertical-align: bottom;
-
-
-    &, > span{
-        transition: 0.5s all;
-    }
-    &.animating,&.not-animated{
-        span{
-            width: 100%;
-            position: absolute;
-            bottom:0;
-        }
-    }
-    &.animating{
-        > span{
-            &:first-child{
-                opacity: 1;
-                left: 0;
-            }
-            &:last-child{
-                opacity: 0;
-                left: 100%;
-            }
-        }
-    }
-    &.not-animated{
-        > span{
-            &:first-child{
-                opacity: 0;
-                left: -100%;
-            }
-            &:last-child{
-                opacity: 1;
-                left: 0;
-            }
-        }
-    }
-}
 .green-emphasis{
     color:@green;
 }
@@ -362,8 +322,9 @@ label{
     display: flex;
     flex-direction: row;
     background-color: @darkgrey;
-    min-height: 100%;
     overflow-x: hidden;
+    align-items: flex-start;
+    flex: 1 1 100%;
 
     @media(max-width: 890px){
         flex-direction: column;
@@ -373,6 +334,10 @@ label{
 #calculator-padder{
     flex: 0 0 390px;
     display: block;
+
+    @media(max-width: 890px){
+        align-self: center;
+    }
 }
 .calculator-data{
     background: #000000;
@@ -415,6 +380,10 @@ label{
     flex: 1 1 auto;
     color:@text_unselected;
     overflow: hidden;
+
+    @media(max-width: 890px){
+        align-self: stretch;
+    }
 }
 #graph_1{
     margin: 20px;
@@ -463,6 +432,7 @@ label{
     }
     .graph-elem{
         height: 30px;
+        width: 0px;
         transition: 0.5s all;
     }
 
@@ -499,6 +469,10 @@ label{
         .date, .payment{
             text-align: right;
             flex: 0 0 auto;
+
+            /*p{
+                display: inline-block;
+            }*/
         }
         .date{
             padding: 0 @padding 0 0;
@@ -518,7 +492,6 @@ label{
             .graph-elem{
                 position: absolute;
                 top: 10px;
-                width: 100%;
             }
         }
         .refund{
@@ -548,13 +521,11 @@ label{
     .left {
         .graph-elem{
             right: 0;
-            width: 50%;
         }
     }
     .right {
         .graph-elem{
             left: 0;
-            width: 50%;
         }
     }
 }
@@ -607,4 +578,5 @@ label{
 
 
 
+@import "switchtext.less";
 @import (inline, optional) "style_css.css";
