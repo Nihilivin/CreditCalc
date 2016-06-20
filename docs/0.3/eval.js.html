@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: eval.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: eval.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file Main calculator client-side script
  *
  * @author Alexandre Germain
@@ -58,7 +86,7 @@
                 },
                 set: function (newAmount) {
                     newAmount = parseFloat(newAmount);
-                    if (isFinite(newAmount) && newAmount > 0) {
+                    if (isFinite(newAmount) &amp;&amp; newAmount > 0) {
                         amount = newAmount;
                     }
                 }
@@ -76,7 +104,7 @@
                 },
                 set: function (newRate) {
                     newRate = parseFloat(newRate);
-                    if (isFinite(newRate) && newRate > 0) {
+                    if (isFinite(newRate) &amp;&amp; newRate > 0) {
                         rate = newRate;
                     }
                 }
@@ -94,7 +122,7 @@
                 },
                 set: function (newDuration) {
                     newDuration = parseFloat(newDuration);
-                    if (isFinite(newDuration) && newDuration > 0) {
+                    if (isFinite(newDuration) &amp;&amp; newDuration > 0) {
                         duration = newDuration;
                     }
                 }
@@ -112,7 +140,7 @@
                 },
                 set: function (newPayment) {
                     newPayment = parseFloat(newPayment);
-                    if (isFinite(newPayment) && newPayment > 0) {
+                    if (isFinite(newPayment) &amp;&amp; newPayment > 0) {
                         payment = newPayment;
                     }
                 }
@@ -131,7 +159,7 @@
                 },
                 set: function (newPaymentYear) {
                     newPaymentYear = parseFloat(newPaymentYear);
-                    if (isFinite(newPaymentYear) && newPaymentYear > 0) {
+                    if (isFinite(newPaymentYear) &amp;&amp; newPaymentYear > 0) {
                         paymentYear = newPaymentYear;
                         paymentTotal = newPaymentYear * duration;
                     }
@@ -184,18 +212,18 @@
                 step = 1,
                 exitCount = 0,
                 amount;
-            if (self.payment * (self.duration * 12) < self.amount) {
+            if (self.payment * (self.duration * 12) &lt; self.amount) {
                 return 0;
             }
             tempCalc.duration = self.duration;
             tempCalc.payment = self.payment;
-            while (step > 0.0001 && exitCount <= 999) {
+            while (step > 0.0001 &amp;&amp; exitCount &lt;= 999) {
                 exitCount++;
                 lastRate = rate;
                 rate += step;
                 tempCalc.rate = rate;
                 amount = tempCalc.calc_amount();
-                if (amount < self.amount) {
+                if (amount &lt; self.amount) {
                     step /= 10;
                     rate = lastRate;
                 } else if (amount === self.amout) {
@@ -231,7 +259,7 @@
 
 
     var hashBase = new Base(
-        "!$&'()*+,;=-._~:@/?ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz0123456789");// Sort by inference
+        "!$&amp;'()*+,;=-._~:@/?ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz0123456789");// Sort by inference
     var dataBase = new Base(
         ":1234567890,.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");// Sort by inference
     /**
@@ -373,10 +401,9 @@
         graphElems = {y:[],m:[]},
         bodyGraph = gei("graph_1-body_scroll"),
         bodyGraphYear = gei("graph_1-body_scroll-container-years"),
-        prototype = bodyGraph.qs(".html-prototype"),
+        prototype = qs(".html-prototype", bodyGraph),
         pseudoContainer = d.createElement("div"),
         prototypeStr;
-    w.formElems = formElems;
 
 
 
@@ -455,7 +482,7 @@
         }
         /**
          * @function isParsableNumber
-         * @description Check if the input string contains only understandable chars & with the right format
+         * @description Check if the input string contains only understandable chars &amp; with the right format
          * @author Gerkin
          * @param   {string} value  The string to check
          * @returns {boolean} True if parsable, false otherwise. Note: a string with a length of 0 is not parsable
@@ -471,16 +498,16 @@
         }
         /**
          * @function enableCalcButtons
-         * @description Check each calculation, padlock & pager buttons and set them disabled/enabled depending on missing & provided values.
+         * @description Check each calculation, padlock &amp; pager buttons and set them disabled/enabled depending on missing &amp; provided values.
          * @author Gerkin
          */
         function enableCalcButtons() {
             var type,
                 checkValidValue = function (value) {
-                    return value !== type && isParsableNumber(formElems[value].value.value);
+                    return value !== type &amp;&amp; isParsableNumber(formElems[value].value.value);
                 };
             for (type in formElems) {
-                if (formElems.hop(type)) {
+                if (hop(formElems,type)) {
                     formElems[type].padlock.disabled = !isParsableNumber(formElems[type].value.value); // Disable padlock button if non valid value
                     formElems[type].calc.disabled = Object.keys(formElems).filter(checkValidValue).length !== 3; // Enable Calc button if the 3 other values are filled
                 }
@@ -494,7 +521,7 @@
          * @returns {float|0} The numeric value of the input. 0 if invalid
          */
         function getVarValue(type) {
-            if (formElems[type] && formElems[type].value) {
+            if (formElems[type] &amp;&amp; formElems[type].value) {
                 formElems[type].value.classList.remove("calculated");
                 return getNumFieldValue(formElems[type].value.value);
             }
@@ -589,7 +616,7 @@
                             valueContainer = formElems[type].value;
 
                         for (k in arrNoI) {
-                            if (arrNoI.hop(k)) {
+                            if (hop(arrNoI,k)) {
                                 c[arrNoI[k]] = getVarValue(arrNoI[k]);
                             }
                         }
@@ -624,7 +651,7 @@
                         }).length === 2;
                         calculatorVariables.forEach(function (value) {
                             var bc = formElems[value].buttonsContainer;
-                            if (!bc.classList.contains("locked") && doIncrement === true) {
+                            if (!bc.classList.contains("locked") &amp;&amp; doIncrement === true) {
                                 bc.classList.add("increment");
                             } else {
                                 bc.classList.remove("increment");
@@ -638,7 +665,7 @@
                     return function valueIncDec(e) {
                         var factor,
                             step, // Incremental/decremental step
-                            bounds, // Defines the min & max values
+                            bounds, // Defines the min &amp; max values
                             dec,
                             rev,
                             tempvalue; // Force round value
@@ -671,7 +698,7 @@
                                 dec = 0.001;
                                 if(getNumFieldValue(target.value) > 10) {
                                     step = 1;
-                                } else if (getNumFieldValue(target.value) < 1 - factor*0.001) {
+                                } else if (getNumFieldValue(target.value) &lt; 1 - factor*0.001) {
                                     step = 0.01;
                                 } else {
                                     step = 0.1;
@@ -694,7 +721,7 @@
                         );
                         enableCalcButtons();
                         calculatorVariables.forEach(function(value){
-                            if(value !== j && formElems[value].buttonsContainer.classList.contains("increment")) {
+                            if(value !== j &amp;&amp; formElems[value].buttonsContainer.classList.contains("increment")) {
                                 formElems[value].calculate();
                             }
                         });
@@ -702,7 +729,7 @@
                 }()));
                 /**
                  * @function clearInputStyles
-                 * @description Clear class, custom validity & placeholder from input
+                 * @description Clear class, custom validity &amp; placeholder from input
                  * @author Gerkin
                  * @inner
                  */
@@ -721,7 +748,7 @@
                     var self = this,
                         value = self.value.trim();
 
-                    if(!isParsableNumber(value) && value.length > 0){
+                    if(!isParsableNumber(value) &amp;&amp; value.length > 0){
                         self.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
                     } else {
                         self.setCustomValidity("");
@@ -783,21 +810,20 @@
         qs("head").appendChild(dynamicStylesheet);
 
         // Enable repeatable buttons
-        for (i = 0, j = repeatableButtons.length; i < j; i++) {
+        for (i = 0, j = repeatableButtons.length; i &lt; j; i++) {
             initRepeatableButton(i);
         }
         for (i in calculatorVariables) {
-            if (calculatorVariables.hop(i)) {
+            if (hop(calculatorVariables,i)) {
                 initCalculatorInput(i);
             }
         }
         // Try to load hash
-        if(Object.keys(hashObj).length !== 0 && hashObj.constructor === Object) {
+        if(Object.keys(hashObj).length !== 0 &amp;&amp; hashObj.constructor === Object) {
             for(i in hashObj) {
-                if (hashObj.hop(i)) {
-                    console.log(i);
+                if (hop(hashObj,i)) {
                     calculator[i] = hashObj[i];
-                    formElems[i] && (formElems[i].value.value = formatDisplayable(preciseValue(i != "paymentYear" ? i : "payment", hashObj[i])));
+                    formElems[i] &amp;&amp; (formElems[i].value.value = formatDisplayable(preciseValue(i != "paymentYear" ? i : "payment", hashObj[i])));
                 }
             }
             wasCalculated = formElems[hashObj.wasCalc];
@@ -805,7 +831,7 @@
                 return isParsableNumber(formElems[v].value.value)
             }).length === 4){
                 if (wasCalculated) {
-                    wasCalculated.value && wasCalculated.value.classList.add("calculated");
+                    wasCalculated.value &amp;&amp; wasCalculated.value.classList.add("calculated");
                 }
                 generateGraph(true);
             }
@@ -822,8 +848,8 @@
                     swapReplacements = replacements,
                     i = 0,
                     j = identifiers.length;
-                for(i; i < j; i++){
-                    // Search in both ancestor & current obj
+                for(i; i &lt; j; i++){
+                    // Search in both ancestor &amp; current obj
                     if(typeof replacements === "object"){
                         swapReplacements = swapReplacements[identifiers[i]];
                     } else {
@@ -867,11 +893,11 @@
                     year = yearStart,
                     payments = {};
 
-                for(; i < j && year < yearStart + linesMaxCount + 1; i++){
+                for(; i &lt; j &amp;&amp; year &lt; yearStart + linesMaxCount + 1; i++){
                     month++;
                     if(month > 11 || i === j - 1){
                         for(var k in payments[year]){
-                            if(payments[year].hop(k)) {
+                            if(payments[year].hasOwnProperty(k)) {
                                 if(isNA(payments[year].loan)) {
                                     payments[year].loan = 0;
                                 }
@@ -908,7 +934,7 @@
 
 
             // Init years list
-            for(var i = 0, year; i < linesMaxCount && !isNA(year = payments[firstYear + i]); i++){
+            for(var i = 0, year; i &lt; linesMaxCount &amp;&amp; !isNA(year = payments[firstYear + i]); i++){
                 inRange.y[String(firstYear + i)] = {
                     loanLeft: year.loanLeft,
                     loan: year.loan,
@@ -922,7 +948,7 @@
                 yearInc = 0,
                 yearO,
                 monthO;
-            while(++i < linesMaxCount && !isNA(yearO = payments[firstYear + yearInc]) && !isNA(monthO = yearO[month+1])){
+            while(++i &lt; linesMaxCount &amp;&amp; !isNA(yearO = payments[firstYear + yearInc]) &amp;&amp; !isNA(monthO = yearO[month+1])){
                 console.log(month, i, monthO);
                 inRange.m[i + "_" + months[month + 1].short + " " + (firstYear + yearInc)] = {
                     loanLeft: monthO.loanLeft,
@@ -948,11 +974,11 @@
                 inRangeKeys = Object.keys(inRange.y),
                 inRangeKeysCount = inRangeKeys.length;
 
-            for(; counter < inRangeKeysCount; counter++){
+            for(; counter &lt; inRangeKeysCount; counter++){
                 var key = inRangeKeys[counter],
                     yearInfos = inRange.y[key],
                     paymentYearFactor = (function(){
-                        if(key == dateStart.getFullYear() && key == dateEnd.getFullYear()){
+                        if(key == dateStart.getFullYear() &amp;&amp; key == dateEnd.getFullYear()){
                             return dateEnd.getMonth() - dateStart.getMonth();
                         } else if(key == dateStart.getFullYear()){
                             return 12 - dateStart.getMonth();
@@ -992,13 +1018,13 @@
                     } else {
                         graphElems.y[counter].classList.remove("last");
                     }
-                    graphElems.y[counter].qsN(".date p").innerHTML = key;
-                    graphElems.y[counter].qsN(".payment p").innerHTML = formatDisplayable(preciseValue("roundMoney",c.paymentYear * paymentYearFactor)) + " €";
-                    graphElems.y[counter].qsN(".refund p").innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.loan)) + "€";
-                    graphElems.y[counter].qsN(".interests p").innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.interests)) + "€";
+                    qsN(".date p", graphElems.y[counter]).innerHTML = key;
+                    qsN(".payment p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",c.paymentYear * paymentYearFactor)) + " €";
+                    qsN(".refund p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.loan)) + "€";
+                    qsN(".interests p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.interests)) + "€";
                 }
             }
-            for(; counter < linesMaxCount; counter++){
+            for(; counter &lt; linesMaxCount; counter++){
                 var row = graphElems.y[counter];
                 if(!isNA(row)){
                     row.classList.remove("inside");
@@ -1012,7 +1038,7 @@
                 var val = 0,
                     parentsCount = parents.length,
                     i = 0;
-                for(; i < parentsCount; i++){
+                for(; i &lt; parentsCount; i++){
                     var child = qs(selector, parents[i]);
                     if(child){
                         val = Math.max(child.offsetWidth, val);
@@ -1040,7 +1066,7 @@
                         return inRange.y[v].interests;
                     })),
                     maxRatio = maxLoan / maxInterests,
-                    maxRatioTotals = c.amount / (c.paymentTotal - c.amount);// Ration between column "refund" && "interests"
+                    maxRatioTotals = c.amount / (c.paymentTotal - c.amount);// Ration between column "refund" &amp;&amp; "interests"
 
 
                 /*qs("thead .loan-paid-graph",graphTable).style.width = ((loanPaid / total) * 100) + "%";
@@ -1075,7 +1101,7 @@
                         headLoanGraph = qs(".refund .graph-elem", head),
                         headInterestsGraph = qs(".interests .graph-elem", head),
                         headEurPerPx = Math.max(c.amount / graphLeft, (c.paymentTotal - c.amount) / graphRight);
-                    for(var i = 0; i < inRangeKeysCount; i++){
+                    for(var i = 0; i &lt; inRangeKeysCount; i++){
                         var data = inRange.y[inRangeKeys[i]];
                         if(!isNA(data)){
                             var line = yearLines[i],
@@ -1126,7 +1152,7 @@
 
 
             },10, function(){
-                return sampleFCalcIn.offsetWidth == sampleFCalcOut.offsetWidth + 10 || (onceFlexboxInited && ++loopsTestRedim > maxLoopsTestRedim);
+                return sampleFCalcIn.offsetWidth == sampleFCalcOut.offsetWidth + 10 || (onceFlexboxInited &amp;&amp; ++loopsTestRedim > maxLoopsTestRedim);
             });
         }
 
@@ -1149,10 +1175,10 @@
                 return;
             }
             if(noAnim){
-                elem.innerHTML = "<span>" + newText + "</span>";
+                elem.innerHTML = "&lt;span>" + newText + "&lt;/span>";
                 return;
             }
-            var newDom = parseHtml("<span>" + newText + "</span>");
+            var newDom = parseHtml("&lt;span>" + newText + "&lt;/span>");
             elem.style.height = elem.firstChild.offsetHeight + "px";
             elem.style.width = elem.firstChild.offsetWidth + "px";
 
@@ -1164,4 +1190,26 @@
         }
         window.switchText = switchText;
     });
-}());
+}());</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Calculator.html">Calculator</a></li><li><a href="Document.html">Document</a></li><li><a href="Element.html">Element</a></li><li><a href="EventTarget.html">EventTarget</a></li><li><a href="Object.html">Object</a></li></ul><h3>Global</h3><ul><li><a href="global.html">_init</a></li><li><a href="global.html#attach">attach</a></li><li><a href="global.html#calculator">calculator</a></li><li><a href="global.html#calculatorVariables">calculatorVariables</a></li><li><a href="global.html">checkInput</a></li><li><a href="global.html">clearInputStyles</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#enableCalcButtons">enableCalcButtons</a></li><li><a href="global.html">filterChars</a></li><li><a href="global.html#formatDisplayable">formatDisplayable</a></li><li><a href="global.html">formatInput</a></li><li><a href="global.html#formElems">formElems</a></li><li><a href="global.html#gei">gei</a></li><li><a href="global.html#getNumFieldValue">getNumFieldValue</a></li><li><a href="global.html#getUrlHash">getUrlHash</a></li><li><a href="global.html#getVarValue">getVarValue</a></li><li><a href="global.html#isNA">isNA</a></li><li><a href="global.html#isParsableNumber">isParsableNumber</a></li><li><a href="global.html#preciseValue">preciseValue</a></li><li><a href="global.html">setGraphDisplayMode</a></li><li><a href="global.html#setUrlHash">setUrlHash</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jun 19 2016 20:18:22 GMT-1000 (TAHT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

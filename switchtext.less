@@ -1,0 +1,153 @@
+.switch-text{
+    position: relative;
+    display: inline-block;
+    vertical-align: bottom;
+
+
+    &, > span{
+        transition: 0.5s all;
+    }
+    &.doing,&.prepare{
+        span{
+            width: 100%;
+            position: absolute;
+        }
+    }
+    &.doing{
+        > span{
+            &:first-child{
+                opacity: 1;
+            }
+            &:last-child{
+                opacity: 0;
+            }
+        }
+    }
+    &.prepare{
+        > span{
+            &:first-child{
+                opacity: 0;
+            }
+            &:last-child{
+                opacity: 1;
+            }
+        }
+    }
+
+
+
+    &,&.l_r, &.r_l,&.l_l,&.r_r{
+        &.doing,&.prepare{
+            span{
+                top:0;
+            }
+        }
+        &.doing{
+            > span{
+                &:first-child{
+                    left: 0;
+                }
+            }
+        }
+        &.prepare{
+            > span{
+                &:last-child{
+                    left: 0;
+                }
+            }
+        }
+    }
+    &,&.l_r,&.l_l{
+        &.prepare{
+            > span{
+                &:first-child{
+                    left: -100%;
+                }
+            }
+        }
+    }
+    &.r_l,&.r_r{
+        &.prepare{
+            > span{
+                &:first-child{
+                    left: 100%;
+                }
+            }
+        }
+    }
+    &,&.l_r,&.r_r{
+        &.doing{
+            > span{
+                &:last-child{
+                    left: 100%;
+                }
+            }
+        }
+    }
+    &.r_l,&.l_l{
+        &.doing{
+            > span{
+                &:last-child{
+                    left: -100%;
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+    &.t_b, &.b_t{
+        &.doing,&.prepare{
+            span{
+                left:0;
+            }
+        }
+    }
+    &.t_b{
+        &.doing{
+            > span{
+                &:first-child{
+                    top: 0;
+                }
+                &:last-child{
+                    top: 100%;
+                }
+            }
+        }
+        &.prepare{
+            > span{
+                &:first-child{
+                    top: -100%;
+                }
+                &:last-child{
+                    top: 0;
+                }
+            }
+        }
+    }
+    &.b_t{
+        &.doing{
+            > span{
+                &:first-child{
+                    top: 0;
+                }
+                &:last-child{
+                    top: -100%;
+                }
+            }
+        }
+        &.prepare{
+            > span{
+                &:first-child{
+                    top: 100%;
+                }
+                &:last-child{
+                    top: 0;
+                }
+            }
+        }
+    }
+}
