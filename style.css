@@ -372,6 +372,8 @@ label {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
   /*height: 100%;*/
 }
 @media (max-width: 890px) {
@@ -428,6 +430,8 @@ label {
           flex: 0 0 auto;
 }
 #graph_1 > #graph_1-scroll_area {
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
   -webkit-box-flex: 0;
   -webkit-flex: 0 1 auto;
       -ms-flex: 0 1 auto;
@@ -444,9 +448,9 @@ label {
 #graph_1 .top-lined {
   border-top: 1px solid #bfbfbf;
 }
-#graph_1 .left,
-#graph_1 .refund {
-  border-right: 1px solid #fff;
+#graph_1 .right,
+#graph_1 .interests {
+  border-left: 1px solid #fff;
 }
 #graph_1 .line {
   display: -webkit-box;
@@ -524,7 +528,6 @@ label {
   padding-bottom: 10px;
 }
 #graph_1 .graph_1-line:not(.inside) {
-  height: 0;
   left: 100%;
 }
 #graph_1 .graph_1-line:not(.inside),
@@ -604,6 +607,7 @@ label {
       -ms-flex-direction: row;
           flex-direction: row;
   width: 100%;
+  max-height: 0;
 }
 #graph_1-scroll_bar {
   -webkit-box-flex: 0;
@@ -614,12 +618,17 @@ label {
 }
 #graph_1-scroll_cursor {
   min-height: 35px;
+  height: 35px;
   width: 20px;
   margin: 5px auto;
   background-color: #00b050;
   border: 1px solid #bfbfbf;
-  position: relative;
+  position: absolute;
   z-index: 10;
+  left: 10px;
+  -webkit-transition: 0.1s height;
+  transition: 0.1s height;
+  cursor: pointer;
 }
 #graph_1-scroll_line {
   position: absolute;
@@ -637,6 +646,9 @@ label {
           flex: 1 1 auto;
   position: relative;
   overflow: hidden;
+}
+#graph_1-body_scroll-container {
+  position: relative;
 }
 #toggle-year_month {
   display: inline-block;

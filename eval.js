@@ -373,7 +373,7 @@
         graphElems = {y:[],m:[]},
         bodyGraph = gei("graph_1-body_scroll"),
         bodyGraphYear = gei("graph_1-body_scroll-container-years"),
-        prototype = bodyGraph.qs(".html-prototype"),
+        prototype = qs(".html-prototype",bodyGraph),
         pseudoContainer = d.createElement("div"),
         prototypeStr;
     w.formElems = formElems;
@@ -394,7 +394,7 @@
  * @author Gerkin
  * @inner
  */
-    attach(window, "load", function _init() {
+    on(window, "load", function _init() {
         /**
          * @function getNumFieldValue
          * @description convert a {@link isParsableNumber parsable string} into a float.
@@ -480,7 +480,7 @@
                     return value !== type && isParsableNumber(formElems[value].value.value);
                 };
             for (type in formElems) {
-                if (formElems.hop(type)) {
+                if (hop(formElems,type)) {
                     formElems[type].padlock.disabled = !isParsableNumber(formElems[type].value.value); // Disable padlock button if non valid value
                     formElems[type].calc.disabled = Object.keys(formElems).filter(checkValidValue).length !== 3; // Enable Calc button if the 3 other values are filled
                 }
@@ -552,19 +552,19 @@
                     step,
                     basestep = button.getAttribute("data-timer-basestep") || 500,
                     count;
-                attach(button, "mousedown", function () {
+                on(button, "mousedown", function () {
                     count++;
                     step = basestep / (Math.log(Math.pow(count, 2)) + 1);
                     timer = setTimeout(function () {
-                        triggerEvent(button, "mousedown");
+                        go(button, "mousedown");
                     }, step);
                 });
-                attach([button, window], ["mouseup", "mouseleave", "blur"], function () {
+                on([button, window], ["mouseup", "mouseleave", "blur"], function () {
                     clearTimeout(timer);
                     step = basestep;
                     count = 0;
                 });
-                triggerEvent(button, "mouseup");
+                go(button, "mouseup");
             },
             initCalculatorInput = function (i) {
                 var j = calculatorVariables[i];
@@ -589,7 +589,7 @@
                             valueContainer = formElems[type].value;
 
                         for (k in arrNoI) {
-                            if (arrNoI.hop(k)) {
+                            if (hop(arrNoI,k)) {
                                 c[arrNoI[k]] = getVarValue(arrNoI[k]);
                             }
                         }
@@ -614,8 +614,8 @@
                         generateGraph();
                     };
                 }());
-                attach(formElems[j].calc, "click", formElems[j].calculate);
-                attach([formElems[j].padlock], "click", (function () {
+                on(formElems[j].calc, "click", formElems[j].calculate);
+                on([formElems[j].padlock], "click", (function () {
                     var target = formElems[j].buttonsContainer;
                     return function () {
                         target.classList.toggle("locked");
@@ -632,7 +632,7 @@
                         });
                     };
                 }()));
-                attach([formElems[j].plus, formElems[j].minus], "mousedown", (function () {
+                on([formElems[j].plus, formElems[j].minus], "mousedown", (function () {
                     var target = formElems[j].value,
                         type = j;
                     return function valueIncDec(e) {
@@ -706,7 +706,7 @@
                  * @author Gerkin
                  * @inner
                  */
-                attach(formElems[j].value,"focus", function clearInputStyles(){
+                on(formElems[j].value,"focus", function clearInputStyles(){
                     this.setCustomValidity("");
                     this.placeholder = '';
                     this.classList.remove("calculated");
@@ -717,7 +717,7 @@
              * @author Gerkin
              * @inner
              */
-                attach(formElems[j].value,["blur","keyup","change","input"], function checkInput(){
+                on(formElems[j].value,["blur","keyup","change","input"], function checkInput(){
                     var self = this,
                         value = self.value.trim();
 
@@ -735,7 +735,7 @@
              * @param   {KeyboardEvent} e Event emitted by "keypress" event
              * @inner
              */
-                attach(formElems[j].value,"keypress", function filterChars(e){
+                on(formElems[j].value,"keypress", function filterChars(e){
                     if(!String.fromCharCode(e.which || e.keyCode).match(/^[0-9,. ]$/)) {
                         e.preventDefault();
                     }
@@ -749,7 +749,7 @@
              * @author Gerkin
              * @inner
              */
-                attach(formElems[j].value,"blur", function formatInput(){
+                on(formElems[j].value,"blur", function formatInput(){
                     var self = this;
                     self.placeholder = self.getAttribute("data-placeholder");
                     if(isParsableNumber(self.value)){
@@ -760,7 +760,7 @@
                         self.setCustomValidity("Cette valeur n'est pas une valeur numérique acceptable");
                     }
                 });
-                attach(gei('toggle-year_month-input'), "change", (function(){
+                on(gei('toggle-year_month-input'), "change", (function(){
                     var graphTable = gei('depreciation_schedule'),
                         input = gei('toggle-year_month-input');
                     /**
@@ -780,21 +780,21 @@
             wasCalculated;
 
         dynamicStylesheet.id = "dynamicStylesheet";
-        qs("head").appendChild(dynamicStylesheet);
+        document.head.appendChild(dynamicStylesheet);
 
         // Enable repeatable buttons
         for (i = 0, j = repeatableButtons.length; i < j; i++) {
             initRepeatableButton(i);
         }
         for (i in calculatorVariables) {
-            if (calculatorVariables.hop(i)) {
+            if (hop(calculatorVariables,i)) {
                 initCalculatorInput(i);
             }
         }
         // Try to load hash
         if(Object.keys(hashObj).length !== 0 && hashObj.constructor === Object) {
             for(i in hashObj) {
-                if (hashObj.hop(i)) {
+                if (hop(hashObj,i)) {
                     console.log(i);
                     calculator[i] = hashObj[i];
                     formElems[i] && (formElems[i].value.value = formatDisplayable(preciseValue(i != "paymentYear" ? i : "payment", hashObj[i])));
@@ -856,8 +856,11 @@
             onceFlexboxInited = false,
             resizeGraphElemsPtr = null,
             scrollCursor = gei("graph_1-scroll_cursor"),
-            scrollLine = gei("graph_1-scroll_bar");
+            scrollLine = gei("graph_1-scroll_bar"),
+            intervalResizeScrollBar,
+            timeoutResizeGraphWaitEnd;
         function generateGraph(onInit){
+            clearInterval(intervalResizeScrollBar);
             function getOrderedPayments(calc, dateStart){
                 var paymentsList = getPayments(calc),
                     i = 0,
@@ -871,7 +874,7 @@
                     month++;
                     if(month > 11 || i === j - 1){
                         for(var k in payments[year]){
-                            if(payments[year].hop(k)) {
+                            if(hop(payments[year],k)) {
                                 if(isNA(payments[year].loan)) {
                                     payments[year].loan = 0;
                                 }
@@ -992,10 +995,10 @@
                     } else {
                         graphElems.y[counter].classList.remove("last");
                     }
-                    graphElems.y[counter].qsN(".date p").innerHTML = key;
-                    graphElems.y[counter].qsN(".payment p").innerHTML = formatDisplayable(preciseValue("roundMoney",c.paymentYear * paymentYearFactor)) + " €";
-                    graphElems.y[counter].qsN(".refund p").innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.loan)) + "€";
-                    graphElems.y[counter].qsN(".interests p").innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.interests)) + "€";
+                    qsN(".date p", graphElems.y[counter]).innerHTML = key;
+                    qsN(".payment p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",c.paymentYear * paymentYearFactor)) + " €";
+                    qsN(".refund p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.loan)) + "€";
+                    qsN(".interests p", graphElems.y[counter]).innerHTML = formatDisplayable(preciseValue("roundMoney",yearInfos.interests)) + "€";
                 }
             }
             for(; counter < linesMaxCount; counter++){
@@ -1026,108 +1029,130 @@
                 maxLoopsTestRedim = 25,
                 sampleFCalcIn = qs(".line-year .date", bodyGraphYear),
                 sampleFCalcOut = qs("p", sampleFCalcIn);
-            timeoutUntil(function(){
-                var yearLines = qsa(".line-year", bodyGraphYear),
-                    datesYearWidth = equalizeWidths(".date",yearLines),
-                    paymentsYearWidth = equalizeWidths(".payment",yearLines),
-                    labelsRefundYearWidth = equalizeWidths(".refund p",yearLines),
-                    labelsInterestsYearWidth = equalizeWidths(".interests p",yearLines),
-                    lineInfoWidth = datesYearWidth + paymentsYearWidth,
-                    maxLoan = Math.max.apply(null,Object.keys(inRange.y).map(function(v){
-                        return inRange.y[v].loan;
-                    })),
-                    maxInterests = Math.max.apply(null,Object.keys(inRange.y).map(function(v){
-                        return inRange.y[v].interests;
-                    })),
-                    maxRatio = maxLoan / maxInterests,
-                    maxRatioTotals = c.amount / (c.paymentTotal - c.amount);// Ration between column "refund" && "interests"
+            waitUntil(
+                function(){
+                    var yearLines = qsa(".line-year", bodyGraphYear),
+                        datesYearWidth = equalizeWidths(".date",yearLines),
+                        paymentsYearWidth = equalizeWidths(".payment",yearLines),
+                        labelsRefundYearWidth = equalizeWidths(".refund p",yearLines),
+                        labelsInterestsYearWidth = equalizeWidths(".interests p",yearLines),
+                        lineInfoWidth = datesYearWidth + paymentsYearWidth,
+                        maxLoan = Math.max.apply(null,Object.keys(inRange.y).map(function(v){
+                            return inRange.y[v].loan;
+                        })),
+                        maxInterests = Math.max.apply(null,Object.keys(inRange.y).map(function(v){
+                            return inRange.y[v].interests;
+                        })),
+                        maxRatio = maxLoan / maxInterests,
+                        maxRatioTotals = c.amount / (c.paymentTotal - c.amount);// Ration between column "refund" && "interests"
 
 
-                /*qs("thead .loan-paid-graph",graphTable).style.width = ((loanPaid / total) * 100) + "%";
+                    /*qs("thead .loan-paid-graph",graphTable).style.width = ((loanPaid / total) * 100) + "%";
                 qs("thead .interests-paid-graph",graphTable).style.width = ((interestsPaid / total) * 100) + "%";*/
-                var prefix = "#graph_1 .graph_1-line.line-year ";
-                var bodyStylesheet = prefix + ".date{width:"+datesYearWidth+"px}\n"+
-                    prefix + ".payment{width:"+paymentsYearWidth+"px}\n"+
-                    prefix + ".refund{min-width:"+labelsRefundYearWidth+"px;flex:"+maxRatio+" 0 0}\n"+
-                    prefix + ".interests{min-width:"+labelsInterestsYearWidth+"px;flex:"+"1"+" 0 0}\n";
-                dynamicStylesheet.innerHTML = bodyStylesheet;
+                    var prefix = "#graph_1 .graph_1-line.line-year ";
+                    var bodyStylesheet = prefix + ".date{width:"+datesYearWidth+"px}\n"+
+                        prefix + ".payment{width:"+paymentsYearWidth+"px}\n"+
+                        prefix + ".refund{min-width:"+labelsRefundYearWidth+"px;flex:"+maxRatio+" 0 0}\n"+
+                        prefix + ".interests{min-width:"+labelsInterestsYearWidth+"px;flex:"+"1"+" 0 0}\n";
+                    dynamicStylesheet.innerHTML = bodyStylesheet;
 
-                function resizeGraphElems(e){
-                    onceFlexboxInited = true;
-                    headWidth = head.offsetWidth;
-                    loopsTestRedim = 0;
-                    var graphsWidth = headWidth - (lineInfoWidth + 40),
-                        graphRight = Math.max(
-                            labelsInterestsYearWidth,
-                            graphsWidth / (maxRatio + 1)
-                        ),
-                        graphLeft = Math.max(
-                            labelsRefundYearWidth,
-                            Math.min(
-                                graphsWidth - graphRight,
-                                (graphsWidth / (maxRatio + 1)) * maxRatio
-                            )
-                        ),
-                        flexRightWidth = graphRight,
-                        flexLeftWidth = headWidth - flexRightWidth,
-                        containersFactor = graphLeft / graphRight,
-                        eurPerPx = Math.max(maxLoan / graphLeft, maxInterests / graphRight),// Unit: €/px
-                        headLoanGraph = qs(".refund .graph-elem", head),
-                        headInterestsGraph = qs(".interests .graph-elem", head),
-                        headEurPerPx = Math.max(c.amount / graphLeft, (c.paymentTotal - c.amount) / graphRight);
-                    for(var i = 0; i < inRangeKeysCount; i++){
-                        var data = inRange.y[inRangeKeys[i]];
-                        if(!isNA(data)){
-                            var line = yearLines[i],
-                                loanGraph = qs(".refund .graph-elem", line),
-                                interestsGraph = qs(".interests .graph-elem", line);
-
-                            // Scale graph subelems
-                            loanGraph.style.width = (data.loan / eurPerPx) + "px";
-                            //console.log((graphLeft * (data.loan / maxLoan)), loanGraph);
-                            interestsGraph.style.width = (data.interests / eurPerPx) + "px";
-
-                        }
+                    function resizeGraphWaitEnd(e){
+                        clearTimeout(timeoutResizeGraphWaitEnd);
+                        timeoutResizeGraphWaitEnd = setTimeout(function(){
+                            resizeGraphElems(e);
+                        },100);
                     }
-                    // Scale out-of-table components
-                    dynamicStylesheet.innerHTML = bodyStylesheet +
-                        "#graph_1 .left{min-width:" + flexLeftWidth + "px;max-width:" + flexLeftWidth + "px;width:" + flexLeftWidth + "px;}\n" +
-                        "#graph_1 .right{min-width:" + flexRightWidth + "px;max-width:" + flexRightWidth + "px;width:" + flexRightWidth + "px;}\n" +
-                        "#graph_1-padder{min-height:" + geiN("calculator-padder").offsetHeight + "px;max-height:" + geiN("basic_data").offsetHeight + "px;}";
 
-                    // Resize head graph elems
-                    headLoanGraph.style.width = (c.amount / headEurPerPx) + "px";
-                    headInterestsGraph.style.width = ((c.paymentTotal - c.amount) / headEurPerPx) + "px";
+                    function resizeGraphElems(e){
+                        onceFlexboxInited = true;
+                        headWidth = head.offsetWidth;
+                        loopsTestRedim = 0;
+                        var graphsWidth = headWidth - (lineInfoWidth + 40),
+                            graphRight = Math.max(
+                                labelsInterestsYearWidth,
+                                graphsWidth / (maxRatio + 1)
+                            ),
+                            graphLeft = Math.max(
+                                labelsRefundYearWidth,
+                                Math.min(
+                                    graphsWidth - graphRight,
+                                    (graphsWidth / (maxRatio + 1)) * maxRatio
+                                )
+                            ),
+                            flexRightWidth = graphRight,
+                            flexLeftWidth = headWidth - flexRightWidth,
+                            containersFactor = graphLeft / graphRight,
+                            eurPerPx = Math.max(maxLoan / graphLeft, maxInterests / graphRight),// Unit: €/px
+                            headLoanGraph = qs(".refund .graph-elem", head),
+                            headInterestsGraph = qs(".interests .graph-elem", head),
+                            headEurPerPx = Math.max(c.amount / graphLeft, (c.paymentTotal - c.amount) / graphRight);
+                        for(var i = 0; i < inRangeKeysCount; i++){
+                            var data = inRange.y[inRangeKeys[i]];
+                            if(!isNA(data)){
+                                var line = yearLines[i],
+                                    loanGraph = qs(".refund .graph-elem", line),
+                                    interestsGraph = qs(".interests .graph-elem", line);
 
-                    // Resize graph-1 padder
-                    var scrollInMaxHeight = geiN("graph_1-body_scroll-container").offsetHeight;
-                    (geiN("graph_1-scroll_area").style||{}).maxHeight = scrollInMaxHeight + "px";
-                    //geiN("graph_1").style.maxHeight = (geiN("refund").offsetHeight + head.offsetHeight + geiN("datestart").offsetHeight + geiN("dateend").offsetHeight + scrollInMaxHeight + 40 + 3) + "px"
+                                // Scale graph subelems
+                                loanGraph.style.width = (data.loan / eurPerPx) + "px";
+                                //console.log((graphLeft * (data.loan / maxLoan)), loanGraph);
+                                interestsGraph.style.width = (data.interests / eurPerPx) + "px";
+
+                            }
+                        }
+                        // Scale out-of-table components
+                        dynamicStylesheet.innerHTML = bodyStylesheet +
+                            //"#graph_1 .left{min-width:" + flexLeftWidth + "px;max-width:" + flexLeftWidth + "px;width:" + flexLeftWidth + "px;}\n" +
+                            "#graph_1 .right{min-width:" + flexRightWidth + "px;max-width:" + flexRightWidth + "px;width:" + flexRightWidth + "px;}\n" +
+                            "#graph_1-padder{min-height:" + geiN("calculator-padder").offsetHeight + "px;max-height:" + geiN("basic_data").offsetHeight + "px;height:"+docHeight()+"px;}";
+
+                        // Resize head graph elems
+                        headLoanGraph.style.width = (c.amount / headEurPerPx) + "px";
+                        headInterestsGraph.style.width = ((c.paymentTotal - c.amount) / headEurPerPx) + "px";
+
+                        // Resize graph-1 padder
+                        var firstRow = qsN("#graph_1-body_scroll-container-years .graph_1-line.inside"),
+                            lastRow = qsN("#graph_1-body_scroll-container-years .graph_1-line.inside.last"),
+                            scrollInMaxHeight = (lastRow.offsetTop + /*lastRow.offsetHeight*/50) - firstRow.offsetTop,
+                            scrollArea = geiN("graph_1-scroll_area");
+                        (scrollArea.style||{}).maxHeight = scrollInMaxHeight + "px";
+                        //geiN("graph_1").style.maxHeight = (geiN("refund").offsetHeight + head.offsetHeight + geiN("datestart").offsetHeight + geiN("dateend").offsetHeight + scrollInMaxHeight + 40 + 3) + "px"
 
 
-                    // Resize scroll cursor
-                    scrollCursor.style.height = (bodyGraph.offsetHeight / bodyGraphYear.offsetHeight) * (scrollLine.offsetHeight - 10);
-                    // Reposition scroll cursor
-                }
+                        // Resize scroll cursor
+                        setTimeout(function(){
+                            clearInterval(intervalResizeScrollBar);
+                        },500);
+                            clearInterval(intervalResizeScrollBar);
+                        intervalResizeScrollBar = setInterval(function(){
+                            var newHeight = ((scrollArea.offsetHeight - 10) / (scrollInMaxHeight)) * (scrollLine.offsetHeight);
+                            scrollCursor.style.height = newHeight + "px";
+                            scrollCursor.style.top = Math.min((scrollLine.offsetHeight - 10) - newHeight, scrollCursor.offsetTop);
+                        },100);
+                        // Reposition scroll cursor
+                    }
 
 
 
 
-                if(!resizeListenerInited){
-                    resizeListenerInited = true;
-                    resizeGraphElemsPtr = resizeGraphElems;
-                    attach(window, "resize", resizeGraphElemsPtr);
-                } else {
-                    detach(window, "resize", resizeGraphElemsPtr);
-                    resizeGraphElemsPtr = resizeGraphElems;
-                    attach(window, "resize", resizeGraphElemsPtr);
-                }
-                triggerEvent(window, "resize");
+                    if(!resizeListenerInited){
+                        resizeListenerInited = true;
+                    } else {
+                        off(window, "resize", resizeGraphElemsPtr);
+                    }
+                    clearInterval(intervalResizeScrollBar);
+                    resizeGraphElemsPtr = resizeGraphWaitEnd;
+                    on(window, "resize", resizeGraphElemsPtr);
+                    go(window, "resize");
 
 
-            },10, function(){
-                return sampleFCalcIn.offsetWidth == sampleFCalcOut.offsetWidth + 10 || (onceFlexboxInited && ++loopsTestRedim > maxLoopsTestRedim);
-            });
+                },
+                function(){
+                    return sampleFCalcIn.offsetWidth == sampleFCalcOut.offsetWidth + 10
+                },
+                100,
+                onceFlexboxInited ? 250 : false
+            );
         }
 
         function switchText(elem, newText, noAnim){
@@ -1158,10 +1183,59 @@
 
             elem.classList.add("prepare");
             elem.insertBefore(newDom, elem.firstChild);
-            timeoutUntil(switchTextWidthOk, 10, function(){
-                return newDom.offsetWidth !== 0 || newText.length != 0
-            });
+            waitUntil(
+                switchTextWidthOk,
+                function(){
+                    return newDom.offsetWidth !== 0 || newText.length != 0
+                },
+                10
+            );
         }
         window.switchText = switchText;
+
+        var scrollCursorClickOffsetY = false,
+            scrollContainer = gei("graph_1-body_scroll-container");
+        function doScroll(e){
+            killEvent(e);
+            if(scrollCursorClickOffsetY !== false){
+                if(e.buttons & 1){
+                    var maxTopOffset = (scrollLine.offsetHeight - scrollCursor.offsetHeight) - 10,
+                        topOffset = Math.min(
+                        maxTopOffset,
+                        Math.max(
+                            0,
+                            (e.pageY - scrollLine.offsetTop) - scrollCursorClickOffsetY
+                        )
+                    );
+                    scrollCursor.style.top = topOffset + "px";
+                    scrollContainer.style.top = "-" + ((scrollContainer.offsetHeight - bodyGraph.offsetHeight) * (topOffset / maxTopOffset)) + "px"
+                }
+            }
+        }
+        on(scrollCursor, "mousedown", function(e){
+            killEvent(e);
+            if(e.buttons & 1){
+                on(d, "mousemove", doScroll);
+                scrollCursorClickOffsetY = e.offsetY;
+            }
+        });
+        on(document, "mouseup", function(e){
+            if(scrollCursorClickOffsetY !== false){
+                killEvent(e);
+                if(!(e.buttons & 1)){
+                    off(d, "mousemove", doScroll);
+                    scrollCursorClickOffsetY = false;
+                }
+            }
+        });
+        on(scrollCursor, "contextmenu", function(e){
+            killEvent(e);
+            return false;
+        });
+
+        function killEvent(e){
+            e.stopPropagation();
+            e.preventDefault();
+        }
     });
 }());
