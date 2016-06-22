@@ -2,8 +2,10 @@
     <head>
         <meta charset="UTF-8">
         <!---->
-        <link rel="stylesheet" type="text/css" href="style.css" media="all">
-        <link rel="stylesheet" type="text/css" href="style_css.css" media="all">
+        <script>console.log("Original global vars:",
+Object.keys( window ));</script>
+        <link rel="stylesheet" type="text/css" href="resources/css/src/style.css" media="all">
+        <link rel="stylesheet" type="text/css" href="resources/css/src/style_css.css" media="all">
         <!--
 <link rel="stylesheet" type="text/css" href="style.less" media="all">
 <!---->
@@ -17,9 +19,10 @@
 
 
 
-        <script src="ithoughts-toolbox.js" defer></script>
-        <script src="base_converter.js" defer></script>
-        <script src="eval.js" defer></script>
+        <script src="resources/js/src/ithoughts-toolbox.js" defer></script>
+        <script src="resources/js/src/base_converter.js" defer></script>
+        <script src="resources/js/src/calculator.js" defer></script>
+        <script src="resources/js/src/eval.js" defer></script>
     </head>
     <body>
         <header><h1 class="logo"><span>Calcula</span><span>Pr&ecirc;t</span></h1><div id="menu" aria-role="nav"><a href="/a-propos">&Agrave; propos</a><a href="/mon-compte">Mon compte</a></div></header>
@@ -203,14 +206,17 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="line" id="graph_1-space_eater">
+                            <div class="left"></div>
+                            <div class="right"></div>
+                        </div>
                     </div>
                     <div class="action-buttons">
                         <div class="action-button">
-                            <img src="download.svg" alt="Télécharger" title="Télécharger"/>
+                            <img src="resources/img/download.svg" alt="Télécharger" title="Télécharger"/>
                         </div>
                         <div class="action-button">
-                            <img src="share.svg" alt="Partager" title="Partager"/>
+                            <img src="resources/img/share.svg" alt="Partager" title="Partager"/>
                         </div>
                     </div>
                 </div>

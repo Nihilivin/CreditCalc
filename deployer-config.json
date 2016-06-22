@@ -36,8 +36,8 @@
                                 "IE 8",
                                 "last 2 versions"
                             ],
-                            "from": "^(.*)\\.less$",
-                            "to": "$1.css"
+                            "from": "^(.*)/([^\\/]+)\\.less$",
+                            "to": "$1/../css/src/$2.css"
                         },
                         "events": {
                             "onchange": {
@@ -50,16 +50,16 @@
                         "next": {
                             "action": "minify",
                             "data": {
-                                "from": "^(.*)(\\.(?:cs|j)s)$",
-                                "to": "$1.min$2"
+                                "from": "^(.*)/([^\\/]+)(\\.(?:cs|j)s)$",
+                                "to": "$1/../min/$2.min$3"
                             }
                         }
                     },
                     {
                         "action": "minify",
                         "data": {
-                            "from": "^(.*)(\\.(?:cs|j)s)$",
-                            "to": "$1.min$2"
+                            "from": "^(.*)/([^\\/]+)(\\.(?:cs|j)s)$",
+                            "to": "$1/../min/$2.min$3"
                         },
                         "events": {
                             "onchange": {
