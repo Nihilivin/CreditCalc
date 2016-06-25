@@ -1,16 +1,11 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <!---->
         <script>console.log("Original global vars:",
                             Object.keys( window ));</script>
         <link rel="stylesheet" type="text/css" href="resources/css/src/style.css" media="all">
         <link rel="stylesheet" type="text/css" href="resources/css/src/style_css.css" media="all">
-        <!--
-<link rel="stylesheet" type="text/css" href="style.less" media="all">
-<!---->
-
-        <!--  <script src="eval.js"></script> -->
         <title>Calculateur de crédit</title>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,800' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Dosis:800' rel='stylesheet' type='text/css'>
@@ -28,7 +23,7 @@
     <body>
         <header>
             <h1 class="logo"><span>Calcula</span><span>Pr&ecirc;t</span></h1>
-            <div id="menu" aria-role="nav"><a href="/a-propos">&Agrave; propos</a><a href="/mon-compte">Mon compte</a></div>
+            <nav id="menu"><a href="/a-propos">&Agrave; propos</a><a href="/mon-compte">Mon compte</a></nav>
         </header>
         <section>
             <noscript id="noscript" class="center-flex">
@@ -203,7 +198,7 @@
                                 <div id="graph_1-scroll_cursor"></div>
                             </div>
                             <div id="graph_1-body_scroll">
-                                <div class="html-prototype graph_1-line line-{ type }" id="graph_1-{ id }">
+                                <div class="html-prototype graph_1-line line-{ type }" id="graph_1-{id}">
                                     <div class="date"><p>{ label }</p></div>
                                     <div class="payment"><p>{ payment }</p></div>
                                     <div class="refund">

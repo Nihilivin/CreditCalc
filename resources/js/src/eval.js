@@ -374,13 +374,14 @@ var crossPageData = {};
                             }
                         }
                         result = c["calc_" + type]();
+                        console.log(result);
                         if(type === "payment"){
                             c["paymentYear"] = result * 12;
                         } else {
                             c["paymentYear"] = c["payment"] * 12;
                         }
                         c[type] = result;
-                        valueContainer.value = formatDisplayable(preciseValue(type, result));
+                        valueContainer.value = isNaN(result) ? "Impossible" : formatDisplayable(preciseValue(type, result));
 
                         crossPageData = mergeRecursive(crossPageData,{
                             amount: parseFloat(preciseValue("amount", c.amount)),

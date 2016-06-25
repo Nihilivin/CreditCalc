@@ -28,6 +28,8 @@
                     newAmount = parseFloat(newAmount);
                     if (isFinite(newAmount) && newAmount > 0) {
                         amount = newAmount;
+                    } else {
+                        amount = NaN;
                     }
                 }
             },
@@ -46,6 +48,8 @@
                     newRate = parseFloat(newRate);
                     if (isFinite(newRate) && newRate > 0) {
                         rate = newRate;
+                    } else {
+                        rate = NaN;
                     }
                 }
             },
@@ -64,6 +68,8 @@
                     newDuration = parseFloat(newDuration);
                     if (isFinite(newDuration) && newDuration > 0) {
                         duration = newDuration;
+                    } else {
+                        duration = NaN;
                     }
                 }
             },
@@ -82,6 +88,8 @@
                     newPayment = parseFloat(newPayment);
                     if (isFinite(newPayment) && newPayment > 0) {
                         payment = newPayment;
+                    } else {
+                        payment = NaN;
                     }
                 }
             },
@@ -102,6 +110,9 @@
                     if (isFinite(newPaymentYear) && newPaymentYear > 0) {
                         paymentYear = newPaymentYear;
                         paymentTotal = newPaymentYear * duration;
+                    } else {
+                        paymentYear = NaN;
+                        paymentTotal = NaN;
                     }
                 }
             },
@@ -156,7 +167,7 @@
                 exitCount = 0,
                 amount;
             if (self.payment * (self.duration * 12) < self.amount) {
-                return 0;
+                return NaN;
             }
             tempCalc.duration = self.duration;
             tempCalc.payment = self.payment;
@@ -170,10 +181,11 @@
                     step /= 10;
                     rate = lastRate;
                 } else if (amount === self.amout) {
-                    exitCount = 1000;
+                    break;
                 }
             }
-            return rate;
+            console.log(step, rate);
+            return (exitCount < 1000 ? rate : NaN)   ;
         },
         /**
          * @function calc_payment
