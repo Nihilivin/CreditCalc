@@ -1,0 +1,102 @@
+.switch-text {
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+.switch-text,
+.switch-text > span {
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+}
+.switch-text.doing span,
+.switch-text.prepare span {
+  width: 100%;
+  position: absolute;
+}
+.switch-text.doing > span:first-child {
+  opacity: 1;
+}
+.switch-text.doing > span:last-child {
+  opacity: 0;
+}
+.switch-text.prepare > span:first-child {
+  opacity: 0;
+}
+.switch-text.prepare > span:last-child {
+  opacity: 1;
+}
+.switch-text.doing span,
+.switch-text.l_r.doing span,
+.switch-text.r_l.doing span,
+.switch-text.l_l.doing span,
+.switch-text.r_r.doing span,
+.switch-text.prepare span,
+.switch-text.l_r.prepare span,
+.switch-text.r_l.prepare span,
+.switch-text.l_l.prepare span,
+.switch-text.r_r.prepare span {
+  top: 0;
+}
+.switch-text.doing > span:first-child,
+.switch-text.l_r.doing > span:first-child,
+.switch-text.r_l.doing > span:first-child,
+.switch-text.l_l.doing > span:first-child,
+.switch-text.r_r.doing > span:first-child {
+  left: 0;
+}
+.switch-text.prepare > span:last-child,
+.switch-text.l_r.prepare > span:last-child,
+.switch-text.r_l.prepare > span:last-child,
+.switch-text.l_l.prepare > span:last-child,
+.switch-text.r_r.prepare > span:last-child {
+  left: 0;
+}
+.switch-text.prepare > span:first-child,
+.switch-text.l_r.prepare > span:first-child,
+.switch-text.l_l.prepare > span:first-child {
+  left: -100%;
+}
+.switch-text.r_l.prepare > span:first-child,
+.switch-text.r_r.prepare > span:first-child {
+  left: 100%;
+}
+.switch-text.doing > span:last-child,
+.switch-text.l_r.doing > span:last-child,
+.switch-text.r_r.doing > span:last-child {
+  left: 100%;
+}
+.switch-text.r_l.doing > span:last-child,
+.switch-text.l_l.doing > span:last-child {
+  left: -100%;
+}
+.switch-text.t_b.doing span,
+.switch-text.b_t.doing span,
+.switch-text.t_b.prepare span,
+.switch-text.b_t.prepare span {
+  left: 0;
+}
+.switch-text.t_b.doing > span:first-child {
+  top: 0;
+}
+.switch-text.t_b.doing > span:last-child {
+  top: 100%;
+}
+.switch-text.t_b.prepare > span:first-child {
+  top: -100%;
+}
+.switch-text.t_b.prepare > span:last-child {
+  top: 0;
+}
+.switch-text.b_t.doing > span:first-child {
+  top: 0;
+}
+.switch-text.b_t.doing > span:last-child {
+  top: -100%;
+}
+.switch-text.b_t.prepare > span:first-child {
+  top: 100%;
+}
+.switch-text.b_t.prepare > span:last-child {
+  top: 0;
+}

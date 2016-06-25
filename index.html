@@ -3,7 +3,7 @@
         <meta charset="UTF-8">
         <!---->
         <script>console.log("Original global vars:",
-Object.keys( window ));</script>
+                            Object.keys( window ));</script>
         <link rel="stylesheet" type="text/css" href="resources/css/src/style.css" media="all">
         <link rel="stylesheet" type="text/css" href="resources/css/src/style_css.css" media="all">
         <!--
@@ -21,12 +21,29 @@ Object.keys( window ));</script>
 
         <script src="resources/js/src/ithoughts-toolbox.js" defer></script>
         <script src="resources/js/src/base_converter.js" defer></script>
+        <script src="resources/js/src/hash_handler.js" defer></script>
         <script src="resources/js/src/calculator.js" defer></script>
         <script src="resources/js/src/eval.js" defer></script>
     </head>
     <body>
-        <header><h1 class="logo"><span>Calcula</span><span>Pr&ecirc;t</span></h1><div id="menu" aria-role="nav"><a href="/a-propos">&Agrave; propos</a><a href="/mon-compte">Mon compte</a></div></header>
+        <header>
+            <h1 class="logo"><span>Calcula</span><span>Pr&ecirc;t</span></h1>
+            <div id="menu" aria-role="nav"><a href="/a-propos">&Agrave; propos</a><a href="/mon-compte">Mon compte</a></div>
+        </header>
         <section>
+            <noscript id="noscript" class="center-flex">
+                <h2>Attention!</h2>
+                <p>Ce site a été conçu pour fonctionner avec Javascript, qui semble désactivé. Nous avons <a href="">un guide</a> pour vous aider à le réactiver.<br/>
+                    Si Javascript est activé &amp; que vous voyez ce message, <a href="">contactez nous</a>.</p>
+                <p><em><a href="">&Agrave; quoi sert Javascript sur <span class="logo"><span>Calcula</span><span>Pr&ecirc;t</span></span> ?</a></em></p>
+            </noscript>
+            <div id="noflex">
+                <div class="center-absolute">
+                    <h2>Attention!</h2>
+                    <p>Ce site nécessite le module <em>FlexBox</em> pour être affiché correctement, mais votre navigateur semble ne pas le supporter. Veuillez utiliser un navigateur plus récent.</p>
+                    <p>Si votre navigateur est récent &amp; à jour, et que vous voyez ce message, <a href="">contactez nous</a>.</p>
+                </div>
+            </div>
             <div id="basic_data">
                 <div id="calculator-padder">
                     <div id="calculator" class="calculator-data">
@@ -157,13 +174,21 @@ Object.keys( window ));</script>
                                 <p>dont capital remboursé: <span class="selected-text nobreak"><span class="switch-text" id="payback_amount"><span>0</span></span> &euro;</span></p>
                                 <div class="refund">
                                     <div class="graph-elem"></div>
+                                    <div class="graph-elem-hover" id="graph-elem-hover-left"></div>
                                 </div>
                             </div>
                             <div class="right">
                                 <p>dont intérêts: <span class="selected-text nobreak"><span class="switch-text" id="interests_amount"><span>0</span></span> &euro;</span></p>
                                 <div class="interests">
                                     <div class="graph-elem"></div>
+                                    <div class="graph-elem-hover" id="graph-elem-hover-right"></div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="line" id="graph_1-lineinfos-container">
+                            <div id="graph_1-lineinfos">
+                                <p>Capital remboursé</p>
+                                <p>Intérêts payés</p>
                             </div>
                         </div>
                         <div class="line">
@@ -172,6 +197,8 @@ Object.keys( window ));</script>
                         </div>
                         <div class="top-lined line" id="graph_1-scroll_area">
                             <div id="graph_1-scroll_bar">
+                                <div>
+                                </div>
                                 <div id="graph_1-scroll_line"></div>
                                 <div id="graph_1-scroll_cursor"></div>
                             </div>
